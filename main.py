@@ -1,5 +1,5 @@
 from automated_sla_tool.src.SlaFiles import SlaFiles
-from automated_sla_tool.src.GenericUi import GenericUi as UI
+from automated_sla_tool.utilities.GenericUi import GenericUi as UI
 
 
 def main():

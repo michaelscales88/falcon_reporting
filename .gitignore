@@ -92,6 +92,9 @@ ENV/
 
 .idea
 
+# Sensitive Information
 Attachment Archive/
 Output/
 db/
+settings/
+logs/
