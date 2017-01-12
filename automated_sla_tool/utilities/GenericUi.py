@@ -29,9 +29,9 @@ class GenericUi(object):
         #     print(self._data['logger_settings'][key])
         dictConfig(self._data['logger_settings'])
         self._logger = getLogger(self.__class__.__name__)
-        # self._logger.debug('foo')
-        # self._logger.info('bar')
-        # self._logger.warn('baz')
+        self._logger.debug('foo')
+        self._logger.info('bar')
+        self._logger.warn('baz')
         # self._logger.setLevel(logging.INFO)
 
     def run(self):
