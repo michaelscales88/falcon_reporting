@@ -21,7 +21,7 @@ class LoggerSettings(dict):
     @property
     def settings_directory(self):
         settings_dir = None
-        for part in listdir(getcwd()):
+        for part in listdir(getcwd()):  # This does not work if you move cwd for document retrieval
             if path.isdir(part) and 'settings' in listdir(part):
                 settings_dir = part
                 break

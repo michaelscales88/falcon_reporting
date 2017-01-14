@@ -110,7 +110,7 @@ class GenericUi(object):
 
     def display_selection(self, selection):
         print('GenericUI: {0}\n'
-              'Current Mode: {1}'.format(self._data['object'],
+              'Current Mode: {1}'.format(self._data['object'].__class__.__name__,
                                          ('Not Active', 'Safe Active')[self._data['safe_mode']]), flush=True)
         print("\n".join(['{k}: {v}'.format(k=k, v=v) for k, v in sorted(selection.items())]))
 
