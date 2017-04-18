@@ -10,10 +10,10 @@ Welcome to db Reporting Tool's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
-
 Indices and tables
 ==================
+
+.. I want to add a symlink or link /w relative path to ../README.rst
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -9,11 +9,9 @@ from .ReportUtilities import ReportUtilities
 
 class DataWorker(object):
 
-    def __init__(self, target=None):
+    def __init__(self):
         self._commands = {}
         self.fn_lib = FnLib()
-        self.commands(target)
-        self.current_target = target
 
     @staticmethod
     def my_business(obj):
@@ -41,8 +39,9 @@ class DataWorker(object):
         # )
         # print(parsed_commands)
         self._commands[obj.__module__] = parsed_commands
-        for row, cmds in parsed_commands.items():
-            yield row, cmds
+        # for row, cmds in parsed_commands.items():
+        #     yield row, cmds
+        return self._commands[obj.__module__]
 
     # This could be a way for datworker to make reports
     def execute(self, obj):
@@ -53,11 +52,9 @@ class DataWorker(object):
     def _link(self, *words):
         fn = self.fn_lib[words[0]]
         parameters = DataWorker.bind_keyword(words[1], words[2])
-        # print('Inside _link', datetime.today().time(), flush=True)
-        # print([word for word in words[3:]])
         behaviors = tuple(self.fn_lib[word] for word in words[3:])
         return {'fn': fn, 'parameters': parameters, 'behaviors': behaviors}
 
-    def __iter__(self):
-        for row, cmds in self.commands(self.current_target):
+    def __getitem__(self, obj):
+        for row, cmds in self.commands(obj).items():
             yield row, cmds

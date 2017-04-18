@@ -20,7 +20,7 @@ class DataCenter(object):
         self.json_layer = {}
         self._job = None
         self.util = ReportUtilities()
-        self._worker = None
+        self._worker = DataWorker()
 
     @property
     def worker(self):
@@ -33,10 +33,7 @@ class DataCenter(object):
     @job.setter
     def job(self, obj):
         if self.job is None:
-            # self._job = obj.src_files[r'Cradle to Grave']
-            print(obj)
             self._job = obj
-            self._worker = DataWorker(target=obj)
 
     def queue_job(self, next_obj):
         # Idea
@@ -45,12 +42,12 @@ class DataCenter(object):
     def cache(self, key):
         try:
             return_dict = {
-                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker
+                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[]
                 }
         except KeyError:
             self[self.job] = self.get_src(self.job)
             return_dict = {
-                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker
+                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[]
                 }
         return return_dict
         # return {
