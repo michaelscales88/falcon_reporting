@@ -1,15 +1,11 @@
-import os
-import pyexcel as pe
-import re
-from glob import glob
+from os import makedirs
+from os.path import dirname, basename
 
 
 class UtilityObject(object):
 
-    def curr_path(self):
-        return os.getcwd()
-
-    def str_to_bool(self, bool_str):
+    @staticmethod
+    def str_to_bool(bool_str):
         if type(bool_str) is bool:
             return bool_str
         elif bool_str in ('True', 'TRUE', 'true'):
@@ -19,7 +15,8 @@ class UtilityObject(object):
         else:
             raise ValueError("Cannot covert {} to a bool".format(bool_str))
 
-    def get_sec(self, time_string):
+    @staticmethod
+    def get_sec(time_string):
         try:
             h, m, s = [int(float(i)) for i in time_string.split(':')]
         except TypeError:
@@ -30,72 +27,43 @@ class UtilityObject(object):
                 s = 0
             except ValueError:
                 return 0
-        return self.convert_sec(h, m, s)
+        return UtilityObject.convert_sec(h, m, s)
 
-    def convert_sec(self, h, m, s):
+    @staticmethod
+    def convert_sec(h, m, s):
         return (3600 * int(h)) + (60 * int(m)) + int(s)
 
-    def convert_time_stamp(self, convert_seconds):
+    @staticmethod
+    def convert_time_stamp(convert_seconds):
         minutes, seconds = divmod(convert_seconds, 60)
         hours, minutes = divmod(minutes, 60)
         return r"{0}:{1:02d}:{2:02d}".format(hours, minutes, seconds)
 
-    def change_dir(self, the_dir):
+    @staticmethod
+    def make_dir(the_dir):
+        makedirs(the_dir, exist_ok=True)
+
+    @staticmethod
+    def dir(full_path):
         try:
-            os.chdir(the_dir)
-        except FileNotFoundError:
-            try:
-                os.makedirs(the_dir, exist_ok=True)
-                os.chdir(the_dir)
-            except OSError:
-                pass
+            return dirname(full_path)
+        except TypeError:
+            return None
 
-    def load_data(self, file):
-        if type(file) is pe.sheets.sheet.Sheet:
-            return_file = file
-        else:
-            return_file = self.open_pe_file(file)
-        return_file.name_columns_by_row(0)
-        return_file.name_rows_by_column(0)
-        return return_file
-
-    def open_pe_file(self, file):
+    @staticmethod
+    def base(full_path):
         try:
-            return_file = pe.get_sheet(file_name=file)
-        except OSError:
-            print('OSError ->'
-                  'cannot open {}'.format(file))
-        else:
-            return return_file
+            return basename(full_path)
+        except TypeError:
+            return None
 
-    def r_loader(self, unloaded_files, run2=False):
-        if run2 is True:
-            return {}
-        loaded_files = {}
-        self.clean_src_loc()
-        for f_name in reversed(unloaded_files):
-            src_f = glob(r'{0}\{1}*.xlsx'.format(self.src_doc_path, f_name))
-            if len(src_f) is 1:
-                loaded_files[f_name] = src_f[0]
-                unloaded_files.remove(f_name)
-            else:
-                # TODO additional error handling for file names that have not been excluded?
-                pass
-        self.download_documents(files=unloaded_files)
-        return {**loaded_files, **self.r_loader(unloaded_files, True)}
+    @staticmethod
+    def return_true(*args):
+        return [items[1] for items in args if isinstance(items, tuple) and items[0]]
 
-    def clean_src_loc(self):
-        # TODO today test this more... doesn't merge/delete original file
-        import os
-        filelist = [f for f in os.listdir(self.src_doc_path) if f.endswith((".xlsx", ".xls"))]
-        spc_ch = ['-', '_']
-        del_ch = ['%', r'\d+']
-        for f in filelist:
-            f_name, ext = os.path.splitext(f)
-            f_name = re.sub('[{0}]'.format(''.join(spc_ch)), ' ', f_name)
-            f_name = re.sub('[{0}]'.format(''.join(del_ch)), '', f_name)
-            f_name = f_name.strip()
-            os.rename(f, r'{0}{1}'.format(f_name, ext))
-
-    def test(self):
-        return self.__class__.__module__
+    @staticmethod
+    def compare_two(arg1, arg2):
+        return {
+            arg1[0]: arg1[1] if isinstance(arg1, tuple) else False,
+            arg2[0]: arg2[1] if isinstance(arg2, tuple) else False
+            }.get(True, 'Both False')

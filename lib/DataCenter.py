@@ -1,9 +1,8 @@
-from datetime import timedelta
 from json import dumps
 
 
-from automated_sla_tool.src.ReportUtilities import ReportUtilities
-from automated_sla_tool.src.DataWorker import DataWorker
+from .ReportUtilities import ReportUtilities
+from .DataWorker import DataWorker
 
 
 class DataCenter(object):
@@ -57,22 +56,6 @@ class DataCenter(object):
         # return {
         #     row: DataCenter.call(sheet=self.job[key], **cmds) for row, cmds in self.worker
         #     # row: cmds['fn'](self.job[key], **cmds['parameters']) for row, cmds in self.worker
-        # }
-        # return {
-        #     'Call Duration': sum([item for item in self.doc[key].column['Event Duration'] if isinstance(item, timedelta)],
-        #                          timedelta(0)),
-        #     'Start Time': min(self.doc[key].column['Start Time']),
-        #     'End Time': max(self.doc[key].column['End Time']),
-        #     'Answered': 'Talking' in self.doc[key].column['Event Type'],
-        #     'Talking Duration': sum(
-        #         [e_time for e_type, e_time in
-        #          zip(self.doc[key].column['Event Type'], self.doc[key].column['Event Duration']) if
-        #          e_type == 'Talking' and isinstance(e_time, timedelta)],
-        #         timedelta(0)
-        #     ),
-        #     'Receiving Party': self.util.phone_number(self.doc[key].column['Receiving Party'][0]),
-        #     'Calling Party': self.util.phone_number(self.doc[key].column['Calling Party'][0]),
-        #     'Call Direction': 1 if self.doc[key].column['Receiving Party'][0] == 'Ringing' else 2
         # }
 
     # Currently using settings file to control the extension for saving

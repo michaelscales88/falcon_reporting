@@ -95,3 +95,4 @@ ENV/
 Attachment Archive/
 db/
 logs/
+settings/*.json
