@@ -3,8 +3,8 @@ from json import dumps
 from datetime import datetime
 
 
-from .FnLib import FnLib
-from .ReportUtilities import ReportUtilities
+from .fn_lib import FnLib
+from .report_utilities import ReportUtilities
 
 
 class DataWorker(object):

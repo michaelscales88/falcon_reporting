@@ -2,7 +2,7 @@ from os import makedirs
 from os.path import dirname, basename
 
 
-class UtilityObject(object):
+class UtilityBase(object):
 
     @staticmethod
     def str_to_bool(bool_str):
@@ -27,7 +27,7 @@ class UtilityObject(object):
                 s = 0
             except ValueError:
                 return 0
-        return UtilityObject.convert_sec(h, m, s)
+        return UtilityBase.convert_sec(h, m, s)
 
     @staticmethod
     def convert_sec(h, m, s):

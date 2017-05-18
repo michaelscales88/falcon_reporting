@@ -1,8 +1,10 @@
 from json import dumps
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker
 
 
-from .ReportUtilities import ReportUtilities
-from .DataWorker import DataWorker
+from .report_utilities import ReportUtilities
+from .data_worker import DataWorker
 
 
 class DataCenter(object):
@@ -21,35 +23,36 @@ class DataCenter(object):
         self._job = None
         self.util = ReportUtilities()
         self._worker = DataWorker()
+        self._connection_pool = {}
 
-    @property
-    def worker(self):
-        return self._worker
-
-    @property
-    def job(self):
-        return self._job
-        
-    @job.setter
-    def job(self, obj):
-        if self.job is None:
-            self._job = obj
-
-    def queue_job(self, next_obj):
-        # Idea
-        pass
-
-    def cache(self, key):
-        try:
-            return_dict = {
-                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[]
-                }
-        except KeyError:
-            self[self.job] = self.get_src(self.job)
-            return_dict = {
-                row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[]
-                }
-        return return_dict
+    # @property
+    # def worker(self):
+    #     return self._worker
+    #
+    # @property
+    # def job(self):
+    #     return self._job
+    #
+    # @job.setter
+    # def job(self, obj):
+    #     if self.job is None:
+    #         self._job = obj
+    #
+    # def queue_job(self, next_obj):
+    #     # Idea
+    #     pass
+    #
+    # def cache(self, key):
+    #     try:
+    #         return_dict = {
+    #             row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[None]
+    #             }
+    #     except KeyError:
+    #         self[self.job] = self.get_src(self.job)
+    #         return_dict = {
+    #             row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[None]
+    #             }
+    #     return return_dict
         # return {
         #     row: DataCenter.call(sheet=self.job[key], **cmds) for row, cmds in self.worker
         #     # row: cmds['fn'](self.job[key], **cmds['parameters']) for row, cmds in self.worker
@@ -82,31 +85,27 @@ class DataCenter(object):
             print('Trying to open:', target)
             self.util.start(path)
 
-    def __repr__(self):
-        return str(dumps(self.json_layer, indent=4, default=self.util.datetime_handler))
-
     def print_record(self, record):
         print(dumps(record, indent=4, default=self.util.datetime_handler))
 
-    # TODO Modify this to use the __iter__ for the current src
-    # e.g. return <current doc>.__iter__()
-    def __iter__(self):
-        for sheet_name in self.job.sheet_names():
-            data = self.json_layer.get(
-                sheet_name,
-                self.cache(sheet_name)
-            )
-            yield sheet_name, data
+    def make_session(self, target):
+        connection = self.get_connection(target)
+        meta = MetaData()
+        Session = sessionmaker(bind=connection)
+        meta.reflect(bind=connection)
+        for table in reversed(meta.sorted_tables):
+            print(table)
+        return Session
 
-    def __getitem__(self, item):
-        return self.matrix[item]
+    def get_connection(self, target):
+        """Get an engine configured to make an instance of a Session"""
+        connection = self._connection_pool.get(
+            target,
+            self.make_connection(target)
+        )
+        return connection
 
-    def __setitem__(self, key, value):
-        self.matrix[key] = value
-
-    # TODO: this should search Settings for 'Data Sources' and cycle until a data source is successfully retrieved
-    def get_src(self, target):
-        src_files = {}
-        for f_name, file in self.util.load_data(target):
-            src_files[f_name] = file
-        return src_files['Cradle to Grave']
+    def make_connection(self, target):
+        print('Making a connection to', target)
+        self._connection_pool[target] = create_engine(target)
+        return self._connection_pool[target]

@@ -1,6 +1,6 @@
 from logging import RootLogger
 from os import getcwd, path, listdir
-from .LoggerSettings import LoggerSettings
+from .logger_settings import LoggerSettings
 
 
 class SysLog(RootLogger):

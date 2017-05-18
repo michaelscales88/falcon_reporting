@@ -1,9 +1,9 @@
-from automated_sla_toolv3.lib.DataCenter import DataCenter
+from falcon_reporting.lib.data_center import DataCenter
 
 
 def test():
     dc = DataCenter()
-    dc.job =
+    dc.job = None
 
 
 if __name__ == '__main__':
