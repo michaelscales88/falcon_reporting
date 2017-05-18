@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from json import loads, dumps, JSONEncoder
 
 
-from automated_sla_tool.src.report_utilities import ReportUtilities
+from falcon_reporting.lib.report_utilities import ReportUtilities
 
 
 Base = declarative_base()
@@ -60,11 +60,7 @@ class JsonEncodedDict(TypeDecorator):
 
 
 class FlexibleStorage(Base):
-# @declarative.as_declarative() - > won't create tables with the decorator
-# class FlexibleStorage(object):
-# @as_declarative()
-# class Base(object):
-#     @declared_attr.cascading
+
     __tablename__ = 'flexible_storage'
 
     id = Column('id', Integer, primary_key=True)
@@ -109,7 +105,3 @@ class SlaStorage(FlexibleStorage):
     __mapper_args__ = {
         'concrete': True
     }
-
-
-# TODO http://docs.sqlalchemy.org/en/latest/orm/extensions/declarative/api.html?highlight=mapper#sqlalchemy.ext.declarative.declarative_base.params.mapper
-# this will be a polymorphic base system before I implement... do it friday

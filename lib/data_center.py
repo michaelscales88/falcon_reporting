@@ -85,17 +85,16 @@ class DataCenter(object):
             print('Trying to open:', target)
             self.util.start(path)
 
-    def print_record(self, record):
-        print(dumps(record, indent=4, default=self.util.datetime_handler))
+    @staticmethod
+    def print_record(record, **kwargs):
+        print(dumps(record, **kwargs))
 
     def make_session(self, target):
         connection = self.get_connection(target)
         meta = MetaData()
         Session = sessionmaker(bind=connection)
         meta.reflect(bind=connection)
-        for table in reversed(meta.sorted_tables):
-            print(table)
-        return Session
+        return Session()
 
     def get_connection(self, target):
         """Get an engine configured to make an instance of a Session"""
