@@ -24,6 +24,7 @@ class DataCenter(object):
         self.util = ReportUtilities()
         self._worker = DataWorker()
         self._connection_pool = {}
+        self.Session = sessionmaker()
 
     # @property
     # def worker(self):
@@ -92,9 +93,9 @@ class DataCenter(object):
     def make_session(self, target):
         connection = self.get_connection(target)
         meta = MetaData()
-        Session = sessionmaker(bind=connection)
+        self.Session.configure(bind=connection)
         meta.reflect(bind=connection)
-        return Session()
+        return self.Session()
 
     def get_connection(self, target):
         """Get an engine configured to make an instance of a Session"""
@@ -106,5 +107,5 @@ class DataCenter(object):
 
     def make_connection(self, target):
         print('Making a connection to', target)
-        self._connection_pool[target] = create_engine(target)
+        self._connection_pool[target] = create_engine(target, echo=True)
         return self._connection_pool[target]

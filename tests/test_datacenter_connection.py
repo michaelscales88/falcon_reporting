@@ -3,6 +3,7 @@ from datetime import datetime
 
 from falcon_reporting.src.factory import query_statement
 from falcon_reporting.lib.report_utilities import ReportUtilities
+from falcon_reporting.lib.flexible_storage import MyEncoder
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 
@@ -22,7 +23,7 @@ def test(query_date):
     data_src_records = [dict(zip(row.keys(), row)) for row in result]
 
     for record in data_src_records:
-        print(src.print_record(record))
+        print(src.print_record(record, cls=MyEncoder, indent=4))
 
 if __name__ == '__main__':
     from sys import argv

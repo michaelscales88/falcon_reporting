@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from falcon_reporting.src.factory import query_statement
 from falcon_reporting.lib.report_utilities import ReportUtilities
+from falcon_reporting.lib.flexible_storage import MyEncoder
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 
@@ -75,7 +76,7 @@ def test(query_date):
 
     for pk in cached_records.keys():
         print('key', pk)
-        print(src.print_record(cached_records[pk]))
+        print(src.print_record(cached_records[pk], cls=MyEncoder, indent=4))
 
 
 if __name__ == '__main__':

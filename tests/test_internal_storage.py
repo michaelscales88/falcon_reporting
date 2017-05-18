@@ -77,6 +77,9 @@ def test(query_date):
     cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
     print('cached records')
     session = internal_connection('sqlite:///:memory:')
+    # SlaStorage.metadata.bind = session
+    # SlaStorage.metadata.create_all()  # This creates the table information. Needs to happen before session inst
+
     print('got internal connection')
     for pk, call_data_dict in cached_records.items():
         call_data = SlaStorage(
