@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 
 from .report_utilities import ReportUtilities
 from .data_worker import DataWorker
+from falcon_reporting.lib.session_register import SessionRegistry
 
 
 class DataCenter(object):
@@ -21,10 +22,9 @@ class DataCenter(object):
         self.matrix = {}    # This should be a list/matrix 365 days by how many reports **linked list**??
         self.json_layer = {}
         self._job = None
-        self.util = ReportUtilities()
+        self._util = ReportUtilities()
         self._worker = DataWorker()
-        self._connection_pool = {}
-        self.Session = sessionmaker()
+        self._registry = SessionRegistry()
 
     # @property
     # def worker(self):
@@ -66,8 +66,8 @@ class DataCenter(object):
         try:
             file.save_as(filename=full_path)
         except FileNotFoundError:
-            self.util.make_dir(
-                self.util.dir(full_path)
+            self._util.make_dir(
+                self._util.dir(full_path)
             )
             file.save_as(filename=full_path)
         except OSError:
@@ -77,35 +77,35 @@ class DataCenter(object):
     @staticmethod
     def call(sheet=None, fn=None, parameters=None, behaviors=()):
         rtn_val = fn(sheet, **parameters)
-        for behavior in behaviors:  # This should be simplified
+        for behavior in behaviors:  # This might be a good spot for functools.wraps
             rtn_val = behavior(rtn_val)
         return rtn_val
 
     def dispatcher(self, file):
         for target, path in file.settings['Open Targets'].items():
             print('Trying to open:', target)
-            self.util.start(path)
+            self._util.start(path)
 
     @staticmethod
     def print_record(record, **kwargs):
         print(dumps(record, **kwargs))
 
-    def make_session(self, target):
-        connection = self.get_connection(target)
-        meta = MetaData()
-        self.Session.configure(bind=connection)
-        meta.reflect(bind=connection)
-        return self.Session()
+    def get_session(self, target, **kwargs):
+        return self._registry.get(target, **kwargs)
 
-    def get_connection(self, target):
-        """Get an engine configured to make an instance of a Session"""
-        connection = self._connection_pool.get(
-            target,
-            self.make_connection(target)
-        )
-        return connection
-
-    def make_connection(self, target):
-        print('Making a connection to', target)
-        self._connection_pool[target] = create_engine(target, echo=True)
-        return self._connection_pool[target]
+    # def make_session(self, target):
+    #     """Get an engine configured to make an instance of a Session"""
+    #     Session = self._connection_pool.get(
+    #         target,
+    #         self.make_connection(target)
+    #     )
+    #
+    #     return Session
+    #
+    # def make_connection(self, target):
+    #     print('Making a connection to', target)
+    #     self._connection_pool[target] = create_engine(target, echo=True)
+    #     self._meta_data.create_all(self._connection_pool[target])
+    #     self._Session.configure(bind=self._connection_pool[target])
+    #     # return self._connection_pool[target]
+    #     return self._Session

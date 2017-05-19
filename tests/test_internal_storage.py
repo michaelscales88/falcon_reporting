@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
-from sqlalchemy import func
 
-from falcon_reporting.src.factory import query_statement, internal_connection
+from declarative_models.flexible_storage import MyEncoder
+from declarative_models.flexible_storage import SlaStorage
 from falcon_reporting.lib.report_utilities import ReportUtilities
-from falcon_reporting.lib.flexible_storage import SlaStorage
-from falcon_reporting.lib.flexible_storage import MyEncoder
+from falcon_reporting.src.factory import query_statement, internal_connection
+from sqlalchemy import func
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 
@@ -75,8 +75,10 @@ def test(query_date):
     data_src_records = [dict(zip(row.keys(), row)) for row in result]
     print('got data src records')
     cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
+    print(cached_records)
     print('cached records')
-    session = internal_connection('sqlite:///:memory:')
+    session = internal_connection('sqlite:///:memory:', echo=True)
+    # session = internal_connection('sqlite:////tmp/test.db')
     # SlaStorage.metadata.bind = session
     # SlaStorage.metadata.create_all()  # This creates the table information. Needs to happen before session inst
 

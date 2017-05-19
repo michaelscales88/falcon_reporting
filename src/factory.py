@@ -1,11 +1,14 @@
 from falcon_reporting.lib.data_center import DataCenter
 
 
-def query_statement(statement, connection):
-    data_src = DataCenter()
-    session = data_src.make_session(connection)
+data_src = DataCenter()
+
+
+def query_statement(statement, connection, **kwargs):
+    session = data_src.get_session(connection, **kwargs)
     return data_src, session.execute(statement)
 
 
-def internal_connection(connection):
-    return DataCenter().make_session(connection)
+def internal_connection(connection, **kwargs):
+    return data_src.get_session(connection, **kwargs)
+

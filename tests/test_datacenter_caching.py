@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from falcon_reporting.src.factory import query_statement
+from declarative_models.flexible_storage import MyEncoder
 from falcon_reporting.lib.report_utilities import ReportUtilities
-from falcon_reporting.lib.flexible_storage import MyEncoder
+from falcon_reporting.src.factory import query_statement
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 

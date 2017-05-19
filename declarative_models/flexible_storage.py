@@ -6,14 +6,14 @@ from sqlalchemy import (
 from decimal import Decimal
 from dateutil import parser
 from sqlalchemy.ext import mutable
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, DeferredReflection
 from json import loads, dumps, JSONEncoder
 
 
 from falcon_reporting.lib.report_utilities import ReportUtilities
 
 
-Base = declarative_base()
+Base = declarative_base(cls=DeferredReflection)
 
 
 CONVERTERS = {
@@ -92,6 +92,7 @@ class FlexibleStorage(Base):
 class SlaStorage(FlexibleStorage):
 
     __tablename__ = 'sla_storage'
+    __mapper_args__ = {'concrete': True}
 
     id = Column('id', Integer, primary_key=True)
     data = Column('json_data', JsonEncodedDict)
@@ -102,6 +103,4 @@ class SlaStorage(FlexibleStorage):
     unique_id1 = Column('receiving_party', Integer)
     unique_id2 = Column('calling_party', Integer)
 
-    __mapper_args__ = {
-        'concrete': True
-    }
+
