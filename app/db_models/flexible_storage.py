@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base, DeferredReflection
 from json import loads, dumps, JSONEncoder
 
 
-from falcon_reporting.lib.report_utilities import ReportUtilities
+from app.lib.report_utilities import ReportUtilities
 
 
 Base = declarative_base(cls=DeferredReflection)

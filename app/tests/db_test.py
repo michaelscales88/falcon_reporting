@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from collections import defaultdict
 
-from falcon_reporting.lib.data_center import DataCenter
+from app.lib.data_center import DataCenter
 
 
 def test(query_date):

@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
-from declarative_models.flexible_storage import MyEncoder
-from declarative_models.flexible_storage import SlaStorage
-from falcon_reporting.lib.report_utilities import ReportUtilities
-from falcon_reporting.src.factory import query_statement, internal_connection
+from app.db_models.flexible_storage import MyEncoder
+from app.db_models.flexible_storage import SlaStorage
+from app.lib.report_utilities import ReportUtilities
+from app.src.factory import query_statement, internal_connection
 from sqlalchemy import func
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
