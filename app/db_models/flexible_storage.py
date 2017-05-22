@@ -40,7 +40,7 @@ class FlexibleStorage(Base):
             ]
         ]
 
-    # TODO add some means of putting the pk first
+    # TODO explore whether this can handle json.dumps directly -> remove dumps from data_center
     def __repr__(self):
         """Default representation of table"""
         return "{table_name} pk={pk} ({columns})".format(
