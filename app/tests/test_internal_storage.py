@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from app.db_models.flexible_storage import MyEncoder
-from app.db_models.flexible_storage import SlaStorage
+from app.db_models.flexible_storage import FlexibleStorage
 from app.lib.report_utilities import ReportUtilities
 from app.src.factory import query_statement, internal_connection
 from sqlalchemy import func
@@ -77,14 +77,10 @@ def test(query_date):
     cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
     print(cached_records)
     print('cached records')
-    session = internal_connection('sqlite:///:memory:', echo=True)
-    # session = internal_connection('sqlite:////tmp/test.db')
-    # SlaStorage.metadata.bind = session
-    # SlaStorage.metadata.create_all()  # This creates the table information. Needs to happen before session inst
+    session = internal_connection('sqlite:///', echo=True, cls=FlexibleStorage)
 
-    print('got internal connection')
     for pk, call_data_dict in cached_records.items():
-        call_data = SlaStorage(
+        call_data = FlexibleStorage(
             id=pk,
             start=call_data_dict.pop('Start Time'),
             end=call_data_dict.pop('End Time'),
@@ -92,12 +88,14 @@ def test(query_date):
             unique_id2=call_data_dict.pop('Unique Id2'),
             data=call_data_dict
         )
+        # print(call_data.__table__)
         session.add(call_data)
     session.commit()
     print('stored cached events')
-    for row in session.query(SlaStorage).filter(func.date(query_date)).all():
-        print(row.id)
-        print(src.print_record(row.data, cls=MyEncoder, indent=4))
+    for row in session.query(FlexibleStorage).filter(func.date(query_date)).all():
+        # print(row.id)
+        # print(src.print_record(row.data, cls=MyEncoder, indent=4))
+        print(row)
 
 
 if __name__ == '__main__':

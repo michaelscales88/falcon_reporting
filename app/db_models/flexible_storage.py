@@ -1,67 +1,20 @@
-from datetime import datetime, timedelta
-from sqlalchemy import (
-    Column, Integer, String,
-    TypeDecorator, DateTime
-)
-from decimal import Decimal
-from dateutil import parser
+from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.ext import mutable
-from sqlalchemy.ext.declarative import declarative_base, DeferredReflection
-from json import loads, dumps, JSONEncoder
+from sqlalchemy.ext.declarative import declarative_base
 
+from app.lib.json_enconders import *
 
-from app.lib.report_utilities import ReportUtilities
-
-
-Base = declarative_base(cls=DeferredReflection)
-
-
-CONVERTERS = {
-    'datetime': parser.parse,
-    'decimal': Decimal,
-    'timedelta': ReportUtilities.to_td
-}
-
-
-class MyEncoder(JSONEncoder):
-    """Convert non-serializable data into a value which we can store in our dB"""
-    def default(self, obj):
-        if isinstance(obj, (datetime,)):
-            return {"val": obj.isoformat(), "_spec_type": "datetime"}
-        elif isinstance(obj, (Decimal,)):
-            return {"val": str(obj), "_spec_type": "decimal"}
-        elif isinstance(obj, (timedelta,)):
-            return {"val": str(obj), "_spec_type": "timedelta"}
-        else:
-            return super().default(obj)
-
-
-def object_hook(obj):
-    """Convert json data from its serialized value"""
-    _spec_type = obj.get('_spec_type')
-    if not _spec_type:
-        return obj
-
-    if _spec_type in CONVERTERS:
-        return CONVERTERS[_spec_type](obj['val'])
-    else:
-        raise Exception('Unknown {}'.format(_spec_type))
-
-
-class JsonEncodedDict(TypeDecorator):
-    """Enables JSON storage by encoding and decoding on the fly."""
-    impl = String
-
-    def process_bind_param(self, value, dialect):
-        return dumps(value, cls=MyEncoder)
-
-    def process_result_value(self, value, dialect):
-        return loads(value, object_hook=object_hook)
+Base = declarative_base()
 
 
 class FlexibleStorage(Base):
-
     __tablename__ = 'flexible_storage'
+    # __table_args__ = {
+    #     'mysql_engine': 'InnoDB'
+    # }
+    # __mapper_args__ = {
+    #     'concrete': True
+    # }
 
     id = Column('id', Integer, primary_key=True)
     data = Column('json_data', JsonEncodedDict)
@@ -69,6 +22,9 @@ class FlexibleStorage(Base):
     updated_on = Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
     start = Column('start_time', DateTime(timezone=True))
     end = Column('end_time', DateTime(timezone=True))
+
+    unique_id1 = Column('receiving_party', Integer)
+    unique_id2 = Column('calling_party', Integer)
 
     @staticmethod
     def mutable():
@@ -77,30 +33,18 @@ class FlexibleStorage(Base):
     @property
     def columns(self):
         """Return the value in the column, or the data type if no value is set"""
-        return [(p.key, getattr(self, p.key) if getattr(self, p.key) else p.columns[0].type)
-                for p in [self.__mapper__.get_property_by_column(c) for c in self.__mapper__.columns]]
+        return [
+            (p.key, getattr(self, p.key) if getattr(self, p.key) else p.columns[0].type)
+            for p in [
+                self.__mapper__.get_property_by_column(c) for c in self.__mapper__.columns
+            ]
+        ]
 
     # TODO add some means of putting the pk first
     def __repr__(self):
         """Default representation of table"""
-        return "{table_name} ({columns})".format(
+        return "{table_name} pk={pk} ({columns})".format(
             table_name=self.__tablename__ if self.__tablename__ else self.__class__.__name__,
-            columns=', '.join(['{0}={1!r}'.format(*_) for _ in self.columns])
+            pk=getattr(self, 'id'),
+            columns=', '.join(['{0}={1!r}'.format(*_) for _ in self.columns if _ != 'id'])
         )
-
-
-class SlaStorage(FlexibleStorage):
-
-    __tablename__ = 'sla_storage'
-    __mapper_args__ = {'concrete': True}
-
-    id = Column('id', Integer, primary_key=True)
-    data = Column('json_data', JsonEncodedDict)
-    created_on = Column('created_on', DateTime(), default=datetime.now)
-    updated_on = Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
-    start = Column('start_time', DateTime(timezone=True))
-    end = Column('end_time', DateTime(timezone=True))
-    unique_id1 = Column('receiving_party', Integer)
-    unique_id2 = Column('calling_party', Integer)
-
-

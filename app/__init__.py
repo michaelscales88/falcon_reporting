@@ -31,6 +31,7 @@ def show_users(page):
         users=users
     )
 
+
 def url_for_other_page(page):
     args = request.view_args.copy()
     args['page'] = page

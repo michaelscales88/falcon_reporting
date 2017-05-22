@@ -1,4 +1,4 @@
-from falcon_reporting.lib.data_center import DataCenter
+from app.lib.data_center import DataCenter
 
 
 data_src = DataCenter()
