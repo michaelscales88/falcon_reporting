@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.ext import mutable
 from sqlalchemy.ext.declarative import declarative_base
 
-from app.lib.json_enconders import *
+from app.lib.json_encoders import *
 
 Base = declarative_base()
 

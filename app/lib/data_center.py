@@ -83,6 +83,10 @@ class DataCenter(object):
     def print_record(record, **kwargs):
         print(dumps(record, **kwargs))
 
+    @staticmethod
+    def yield_records(record, **kwargs):
+        yield dumps(record, **kwargs)
+
     def get_session(self, target, **kwargs):
         return self._registry.get(target, **kwargs)
 

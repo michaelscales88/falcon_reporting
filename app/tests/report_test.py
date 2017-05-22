@@ -1,18 +1,11 @@
-from datetime import datetime, timedelta, time
-import datetime as dt
+from datetime import timedelta, time
 from pyexcel import Sheet
 from collections import OrderedDict
-from json import dumps
-from itertools import groupby, chain
 
-from automated_sla_tool.test.PG_json_test import session_data
-from automated_sla_tool.test.flexible_storage import MyEncoder
-from automated_sla_tool.src.app_settings import AppSettings
-from automated_sla_tool.src.report_utilities import ReportUtilities
+
+from app.lib.app_settings import AppSettings
 
 _settings = r'C:\Users\mscales\Desktop\Development\automated_sla_tool\automated_sla_tool\settings\db_report_test'
-
-test_client = 7523
 
 
 def chop_microseconds(delta):
@@ -68,7 +61,7 @@ def match(record_list, match_val=None):
     return matched_records
 
 
-def main():
+def report(records):
     output_headers = [
         'I/C Presented',
         'I/C Answered',
@@ -104,7 +97,7 @@ def main():
         )
         test_output.extend_rows(additional_row)
 
-    records = session_data(datetime.today().date().replace(year=2017, month=5, day=17))
+    # records = session_data(datetime.today().date().replace(year=2017, month=5, day=17))
 
     # Filter Step
     try:
@@ -144,8 +137,6 @@ def main():
             wait_duration = call_duration - talking_time - hold_time
             # DO the rest of the output work
             if talking_time > timedelta(0):
-                if record.unique_id1 == test_client:
-                    print('I am an answered call', record.id)
                 test_output[row_name, 'I/C Presented'] += 1
                 test_output[row_name, 'I/C Answered'] += 1
                 test_output[row_name, 'Average Incoming Duration'] += talking_time
@@ -189,8 +180,8 @@ def main():
                     test_output['Summary', 'Longest Waiting Answered'] = wait_duration
 
             elif voicemail_time > timedelta(seconds=20):
-                if record.unique_id1 == test_client:
-                    print('I am a voice mail call', record.id)
+                # if record.unique_id1 == test_client:
+                #     print('I am a voice mail call', record.id)
                 test_output[row_name, 'I/C Presented'] += 1
                 test_output[row_name, 'Voice Mails'] += 1
                 test_output[row_name, 'Average Wait Lost'] += call_duration
@@ -200,8 +191,8 @@ def main():
                 test_output['Summary', 'Average Wait Lost'] += call_duration
 
             elif call_duration > timedelta(seconds=20):
-                if record.unique_id1 == test_client:
-                    print('I am a lost call', record.id)
+                # if record.unique_id1 == test_client:
+                #     print('I am a lost call', record.id)
                 test_output[row_name, 'I/C Presented'] += 1
                 test_output[row_name, 'I/C Lost'] += 1
                 test_output[row_name, 'Average Wait Lost'] += call_duration
@@ -263,8 +254,5 @@ def main():
         except ZeroDivisionError:
             test_output[row, 'PCA'] = 0.0
 
-    print(test_output)
+    return test_output
 
-
-if __name__ == '__main__':
-    main()
