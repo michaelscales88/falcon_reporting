@@ -1,6 +1,10 @@
 from click import command, option
 from flask import Flask, render_template, g, current_app
 from sqlalchemy import func
+from datetime import datetime, timedelta
+from random import randint, sample, randrange
+from math import ceil
+from radar import random_datetime, utils as radar_parse
 
 
 from app.src.factory import (
@@ -15,16 +19,17 @@ app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
+_test_date = datetime.today().replace(year=2017, month=5, day=1, hour=0, minute=0, second=0)
 
 statement = '''
     Select Distinct c_call.call_id, c_call.dialed_party_number, c_call.calling_party_number, c_event.*
     From c_event
         Inner Join c_call on c_event.call_id = c_call.call_id
     where
-        to_char(c_call.start_time, 'YYYY-MM-DD') = '2017-05-01' and
+        to_char(c_call.start_time, 'YYYY-MM-DD') = '{}' and
         c_call.call_direction = 1
     Order by c_call.call_id, c_event.event_id
-    '''
+    '''.format(_test_date.strftime('%Y-%M-%D'))
 
 
 @app.before_request
@@ -80,11 +85,54 @@ def init_db():
     return 'Added {number} records to the database'.format(number=len(cached_records))
 
 
+@app.route('/test_db')
+def test_db():
+    small_to_big = [call_id for call_id in range(2000)]
+    big_to_small = [call_id for call_id in reversed(small_to_big)]
+    half_small_to_big = [ceil(call_id*.5) for call_id in small_to_big]
+    for pk, bts, stb in zip(small_to_big, big_to_small, half_small_to_big):
+        call_start = random_datetime(start='2012-05-24T00:00:00', stop='2013-05-24T23:59:59', parse=radar_parse.parse)
+        call_data_dict = {
+            'Start Time': call_start,
+            'End Time': (
+                call_start
+                + timedelta(seconds=ceil(randint(0, bts) * .8))
+                - timedelta(seconds=ceil(randint(0, stb) * .5))
+            ),
+            'Unique Id1': ceil(
+                (pk * bts + bts * pk + stb * bts)
+                / 2
+            ),
+            'Unique Id2': ceil(
+                (pk * (bts * 4) + pk * 5 + stb * stb)
+                * 2
+                / 4
+            ),
+            'Events': {
+                'Lots{}'.format(bts): 'of{} stuff'.format(stb),
+                'to See': 'here{}'.format(bts+stb)
+            }
+
+        }
+        call_data = FlexibleStorage(
+            id=pk,
+            start=call_data_dict.pop('Start Time'),
+            end=call_data_dict.pop('End Time'),
+            unique_id1=call_data_dict.pop('Unique Id1'),
+            unique_id2=call_data_dict.pop('Unique Id2'),
+            data=call_data_dict
+        )
+        g.session.add(call_data)
+    g.session.commit()
+    # print(call_ids)
+    return '\n'.join([str(call_id) for call_id in small_to_big])
+
+
 @app.route('/run_report')
 def run_report():
     return str(
         report(
-            g.session.query(FlexibleStorage).filter('2017-05-01').all()
+            g.session.query(FlexibleStorage).filter(func.date(_test_date)).all()
         )
     )
 

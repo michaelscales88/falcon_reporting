@@ -1,4 +1,7 @@
-
+"""
+Boiler plate code from another project
+provides pagination for my sqlite mapped objects
+"""
 from __future__ import unicode_literals
 from flask import Flask, redirect
 import sys
@@ -10,16 +13,16 @@ from .db_models.base import Model
 
 PER_PAGE = 20
 
-app = Flask(__name__)
-db = SQLAlchemy(app, Model=Model)
-
-
-@app.route('/')
-def homepage():
-    text = """
-    <h1>SLA REPORT</h1>
-    """
-    return text
+# app = Flask(__name__)
+# db = SQLAlchemy(app, Model=Model)     # this is an alternate spot to instantiate the app
+#
+#
+# @app.route('/')
+# def homepage():
+#     text = """
+#     <h1>SLA REPORT</h1>
+#     """
+#     return text
 
 __version__ = '0.4.5'
 

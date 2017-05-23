@@ -4,8 +4,8 @@ from pyexcel import Book, Sheet, get_book
 from subprocess import Popen
 from re import split
 
-from pywinauto.findwindows import find_window, WindowNotFoundError
-from pywinauto.controls.hwndwrapper import HwndWrapper
+# from pywinauto.findwindows import find_window, WindowNotFoundError
+# from pywinauto.controls.hwndwrapper import HwndWrapper
 
 from .utility_base import UtilityBase
 
