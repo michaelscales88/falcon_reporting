@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.db_models.flexible_storage import MyEncoder
+from app.models.flexible_storage import MyEncoder
 from app.lib.report_utilities import ReportUtilities
 from app.src.factory import query_statement
 

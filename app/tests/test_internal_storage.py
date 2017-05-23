@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from app.db_models.flexible_storage import MyEncoder
-from app.db_models.flexible_storage import FlexibleStorage
+from app.models.flexible_storage import MyEncoder
+from app.models.flexible_storage import FlexibleStorage
 from app.lib.report_utilities import ReportUtilities
 from app.src.factory import query_statement, internal_connection
 from sqlalchemy import func

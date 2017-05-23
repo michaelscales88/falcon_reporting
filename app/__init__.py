@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 from app.src.factory import internal_connection
-from app.db_models.flexible_storage import FlexibleStorage
+from app.models.flexible_storage import FlexibleStorage
 
 app = Flask(__name__)
 app.config.from_pyfile('app.cfg')

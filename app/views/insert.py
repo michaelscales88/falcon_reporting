@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, time
 
 from app.tests.test_internal_storage import cache
 from app.src.factory import get_page_args, get_pagination, query_statement
-from app.db_models.flexible_storage import FlexibleStorage
+from app.models.flexible_storage import FlexibleStorage
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 

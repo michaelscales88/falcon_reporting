@@ -2,7 +2,7 @@ from flask import render_template, g, Blueprint
 
 
 from app.src.factory import get_page_args, get_pagination
-from app.db_models.flexible_storage import FlexibleStorage
+from app.models.flexible_storage import FlexibleStorage
 
 mod = Blueprint('index', __name__, template_folder='templates')
 
