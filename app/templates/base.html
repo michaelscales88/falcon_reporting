@@ -27,15 +27,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">Falcon Reporting</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li id="home-url"><a href="#">Home</a></li>
-            <li id="users-url"><a href="{{ url_for('index') }}">Users</a></li>
-            <li id="users-page-url"><a href="{{ url_for('init_db') }}">Add Users</a></li>
-            <li id="users-page-url2"><a href="{{ url_for('test_db') }}">RNG init dB</a></li>
-            <li id="users-run"><a href="{{ url_for('run_report') }}">Run Report</a></li>
+            <li id="records-url"><a href="{{ url_for('index.index') }}">Records</a></li>
+            <li id="records-page-url"><a href="{{ url_for('records.records') }}">Records Page Views</a></li>
+            <li id="init_db-url"><a href="{{ url_for('init_db.init_db') }}">Add records</a></li>
+            <li id="test_db-url"><a href="{{ url_for('test_db.test_db') }}">RNG init dB</a></li>
             <li id="about-url"><a href="#about">About</a></li>
             <li id="contact-url"><a href="#contact">Contact</a></li>
           </ul>
