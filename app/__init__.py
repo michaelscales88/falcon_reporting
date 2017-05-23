@@ -39,7 +39,11 @@ def not_found(error):
 @app.before_request
 def before_request():
     # Set up our dB connection for pagination
-    g.session = internal_connection(app.config['SQLALCHEMY_DATABASE_URI'], echo=True, cls=FlexibleStorage)
+    g.session = internal_connection(
+        app.config['SQLALCHEMY_DATABASE_URI'],
+        echo=app.config['SQLALCHEMY_ECHO'],
+        cls=FlexibleStorage
+    )
 
 
 @app.teardown_request
@@ -50,7 +54,9 @@ def teardown(error):
 from app.views import index
 from app.views import records
 from app.views import insert
+from app.views import reports
 
 app.register_blueprint(index.mod)
 app.register_blueprint(records.mod)
 app.register_blueprint(insert.mod)
+app.register_blueprint(reports.mod)

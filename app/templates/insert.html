@@ -1,34 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Inserted pagination.total records.{% endblock %}
-
 {% block body %}
-{% if users %}
-  {{ pagination.info }}
-  {{ pagination.links }}
-  <div class="table-responsive">
+<div class="table-responsive">
     <table class="table table-hover">
     <thead>
-      <tr><th>#</th><th>Flexible Storage</th></tr>
+        <tr>Inserted {{ pagination.total }} records.</tr>
     </thead>
     <tbody>
-      {% for user in users %}
-      <tr>
-      <td>{{ loop.index + (page - 1) * per_page }}</td>
-      <td>{{ user.id, user.start, user.end }}</td>
-      </tr>
-      {% endfor %}
+        Redirect to index:
+        <a href="{{ url_for('index.index') }}">Index</a>
     </tbody>
     </table>
   </div>
-  {{ pagination.links }}
-  {% endif %}
-{% endblock %}
-
-{% block js %}
-  {% if active_url %}
-    $('#{{ active_url }}').addClass('active');
-  {% else %}
-  $('#users-url').addClass('active');
-  {% endif %}
 {% endblock %}

@@ -18,8 +18,6 @@ def init_db():
     src, result = query_statement(current_app.statement, current_app.connection)
     data_src_records = [dict(zip(row.keys(), row)) for row in result]
     cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
-    start_rec = min(cached_records.keys())
-    end_rec = max(cached_records.keys())
     for pk, call_data_dict in cached_records.items():
         call_data = FlexibleStorage(
             id=pk,
@@ -31,24 +29,7 @@ def init_db():
         )
         g.session.add(call_data)
     g.session.commit()
-    record_set = g.session.query(FlexibleStorage).filter(FlexibleStorage.id.in_((start_rec, end_rec))).all()
-    page, per_page, offset = get_page_args()
-    pagination = get_pagination(
-        page=page,
-        per_page=per_page,
-        total=len(record_set),
-        record_name='users',
-        format_total=True,
-        format_number=True
-    )
-    return render_template(
-        'insert.html',
-        users=record_set,
-        pagination=pagination,
-        page=page,
-        per_page=per_page,
-        active_url='insert-init_db-url',
-    )
+    return inserted(cached_records.keys())
 
 
 @mod.route('/test_db/')
@@ -97,14 +78,16 @@ def test_db():
         )
         g.session.add(call_data)
     g.session.commit()
-    record_set = g.session.query(FlexibleStorage).order_by(FlexibleStorage.id).slice(
-        small_to_big[0], small_to_big[-1]
-    ).all()
+    return inserted(small_to_big)
+
+
+def inserted(ids):
+    record_set = g.session.query(FlexibleStorage).order_by(FlexibleStorage.id).filter(FlexibleStorage.id.in_(ids))
     page, per_page, offset = get_page_args()
     pagination = get_pagination(
         page=page,
         per_page=per_page,
-        total=len(record_set),
+        total=len(ids),
         record_name='users',
         format_total=True,
         format_number=True
@@ -112,6 +95,7 @@ def test_db():
     return render_template(
         'insert.html',
         users=record_set,
+        total=pagination.total,
         pagination=pagination,
         page=page,
         per_page=per_page,
