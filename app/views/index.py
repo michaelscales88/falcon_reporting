@@ -1,14 +1,12 @@
 from flask import render_template, g, Blueprint
 
 
-from .. import app
 from app.src.factory import get_page_args, get_pagination
 from app.db_models.flexible_storage import FlexibleStorage
 
-mod = Blueprint('index', __name__)
+mod = Blueprint('index', __name__, template_folder='templates')
 
 
-@app.route('/')
 @mod.route('/')
 def index():
     page, per_page, offset = get_page_args()

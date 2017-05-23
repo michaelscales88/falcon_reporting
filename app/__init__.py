@@ -49,10 +49,8 @@ def teardown(error):
 
 from app.views import index
 from app.views import records
-from app.views import init_db
-from app.views import test_db
+from app.views import insert
 
 app.register_blueprint(index.mod)
 app.register_blueprint(records.mod)
-app.register_blueprint(init_db.mod)
-app.register_blueprint(test_db.mod)
+app.register_blueprint(insert.mod)
