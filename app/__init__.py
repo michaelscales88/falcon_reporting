@@ -11,12 +11,12 @@ from app.src.factory import internal_connection
 from app.models.flexible_storage import FlexibleStorage
 
 app = Flask(__name__)
-app.config.from_pyfile('app.cfg')
+app.config.from_pyfile('settings/app.cfg')
 # app.debug = config.DEBUG
 # app.secret_key = config.SECRET_KEY
 
 """
-Remove after for testing.
+Remove after for testing.ß
 """
 app.connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 app.test_date = datetime.today().replace(year=2017, month=5, day=1, hour=0, minute=0, second=0)

@@ -10,7 +10,12 @@ mod = Blueprint('index', __name__, template_folder='templates')
 @mod.route('/')
 def index():
     page, per_page, offset = get_page_args()
-    record_set = g.session.query(FlexibleStorage).order_by(FlexibleStorage.id).limit(per_page).offset(offset).all()
+    record_set = (
+        g.session.query(FlexibleStorage)
+        .order_by(FlexibleStorage.id.desc())
+        .limit(per_page)
+        .offset(offset)
+    ).all()
     pagination = get_pagination(
         page=page,
         per_page=per_page,
