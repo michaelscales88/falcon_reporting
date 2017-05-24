@@ -43,13 +43,7 @@ class Call:
     @property
     def hold_time(self):
         return timedelta(
-            seconds=(
-                (
-                    pow(5 + self._mod, self._mod - 3)
-                ) % (
-                    (1 / self._mod) * 900   # get some small and some large hold times
-                )
-            )
+            seconds=(1 / self._mod) * 900   # get some small and some large hold times
         )
 
     @property
