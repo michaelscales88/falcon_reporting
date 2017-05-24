@@ -1,3 +1,4 @@
+dateutil
 pandas
 radar
 appdirs==1.4.3

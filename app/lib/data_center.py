@@ -19,39 +19,6 @@ class DataCenter(object):
         self._worker = DataWorker()
         self._registry = SessionRegistry()
 
-    # @property
-    # def worker(self):
-    #     return self._worker
-    #
-    # @property
-    # def job(self):
-    #     return self._job
-    #
-    # @job.setter
-    # def job(self, obj):
-    #     if self.job is None:
-    #         self._job = obj
-    #
-    # def queue_job(self, next_obj):
-    #     # Idea
-    #     pass
-    #
-    # def cache(self, key):
-    #     try:
-    #         return_dict = {
-    #             row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[None]
-    #             }
-    #     except KeyError:
-    #         self[self.job] = self.get_src(self.job)
-    #         return_dict = {
-    #             row: DataCenter.call(sheet=self[self.job][key], **cmds) for row, cmds in self.worker[None]
-    #             }
-    #     return return_dict
-        # return {
-        #     row: DataCenter.call(sheet=self.job[key], **cmds) for row, cmds in self.worker
-        #     # row: cmds['fn'](self.job[key], **cmds['parameters']) for row, cmds in self.worker
-        # }
-
     # Currently using settings file to control the extension for saving
     # TODO beef this up to identify the extension type from the file type
     # TODO 2: this + dispatched can be staticmethod-ed with a little work on AReport.save()

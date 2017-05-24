@@ -1,17 +1,32 @@
 {% extends 'base.html' %}
 
-{% block title %}Page Not Found{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock %}
 
-{% block body %}
-<div class="table-responsive">
-    <table class="table table-hover">
-    <thead>
-        <tr>Oh no... 404!</tr>
-    </thead>
-    <tbody>
-        What you were looking for is just not there.
-        <a href="{{ url_for('index.index') }}">go somewhere nice</a>
-    </tbody>
-    </table>
-  </div>
+{% block content %}
+<div class="container">
+
+<header>
+   <h1>Oh no... 404!</h1>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Recent Records</a></li>
+    <li><a href="#">All Records</a></li>
+  </ul>
+</nav>
+
+<article>
+  <img src="{{url_for('static', filename='img/404img.jpg')}}" />
+</article>
+
+<footer>What you're looking for just isn't here.
+        <a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
+
+</div>
 {% endblock %}

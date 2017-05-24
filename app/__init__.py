@@ -33,6 +33,7 @@ app.statement = '''
 
 @app.errorhandler(404)
 def not_found(error):
+    print('i know this is not_found')
     return render_template('404.html'), 404
 
 # This happens for every bp if you set for app instead of mod

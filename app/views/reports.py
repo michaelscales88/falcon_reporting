@@ -43,12 +43,13 @@ def run_report():
         [col for col in test_report_content.items()]
     )
     data.index = test_report_rownames
-    # test_model = custom_model('sla_report', test_report_content)
-    # session = internal_connection(
-    #     current_app.config['SQLALCHEMY_DATABASE_URI'],
-    #     echo=current_app.config['SQLALCHEMY_ECHO'],
-    #     cls=test_model
-    # )
+    test_model = custom_model('sla_report')    # This appears to be working. Need many more mixins
+    session = internal_connection(
+        current_app.config['SQLALCHEMY_DATABASE_URI'],
+        echo=current_app.config['SQLALCHEMY_ECHO'],
+        cls=test_model
+    )
+    print(test_model.__table__.columns.keys())
     # for index, call_data_dict in enumerate(test_report_content.items()):
     #     call_data = test_model(
     #         id=index+1,

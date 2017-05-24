@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.ext import mutable
 from sqlalchemy.ext.declarative import declarative_base
+from datetime import datetime
 
-from app.lib.json_encoders import *
+
+from app.lib.json_encoders import JsonEncodedDict
 
 Base = declarative_base()
 

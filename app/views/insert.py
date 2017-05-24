@@ -94,8 +94,8 @@ def test_db():
             unique_id2=call_data_dict.pop('Unique Id2'),
             data=call_data_dict
         )
-        g.session.add(call_data)
-    g.session.commit()
+        g.db.add(call_data)
+    g.db.commit()
     return inserted(small_to_big)
 
 
