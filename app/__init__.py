@@ -3,12 +3,12 @@
 # provides pagination for my sqlite mapped objects
 # """
 from __future__ import unicode_literals
-from flask import Flask, render_template, g
+from flask import Flask, render_template
 from datetime import datetime
 
 
-from app.src.factory import internal_connection
-from app.models.flexible_storage import FlexibleStorage
+# from app.src.factory import internal_connection
+# from app.models.flexible_storage import FlexibleStorage
 
 app = Flask(__name__)
 app.config.from_pyfile('settings/app.cfg')
@@ -16,7 +16,7 @@ app.config.from_pyfile('settings/app.cfg')
 # app.secret_key = config.SECRET_KEY
 
 """
-Remove after for testing.ß
+Remove after testing.
 """
 app.connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 app.test_date = datetime.today().replace(year=2017, month=5, day=1, hour=0, minute=0, second=0)
@@ -35,21 +35,22 @@ app.statement = '''
 def not_found(error):
     return render_template('404.html'), 404
 
-
-@app.before_request
-def before_request():
-    # Set up our dB connection for pagination
-    g.session = internal_connection(
-        app.config['SQLALCHEMY_DATABASE_URI'],
-        echo=app.config['SQLALCHEMY_ECHO'],
-        cls=FlexibleStorage
-    )
-
-
-@app.teardown_request
-def teardown(error):
-    # Close out whatever for the app to exit
-    g.session.close()
+# This happens for every bp if you set for app instead of mod
+# @app.before_request
+# def before_request():
+#     # Set up our dB connection for pagination
+#     g.session = internal_connection(
+#         app.config['SQLALCHEMY_DATABASE_URI'],
+#         echo=app.config['SQLALCHEMY_ECHO'],
+#         cls=FlexibleStorage
+#     )
+#     print('inside before_request init')
+#
+#
+# @app.teardown_request
+# def teardown(error):
+#     # Close out whatever for the app to exit
+#     g.session.close()
 
 from app.views import index
 from app.views import records

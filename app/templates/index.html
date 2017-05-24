@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% block content %}
 {% if users %}
   {{ pagination.info }}
   {{ pagination.links }}
@@ -27,6 +27,6 @@
   {% if active_url %}
     $('#{{ active_url }}').addClass('active');
   {% else %}
-  $('#users-url').addClass('active');
+  $('#records-url').addClass('active');
   {% endif %}
 {% endblock %}

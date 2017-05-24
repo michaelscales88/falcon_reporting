@@ -1,13 +1,13 @@
-from radar import random_datetime
+from radar import random_datetime, randint
 from datetime import timedelta
-from math import pow
+from math import pow, ceil
 
 
 class Call:
 
     def __init__(self, client, seed):
         self.receiving_party = client
-        self._mod = seed
+        self.mod = seed + 1     # Prevent divide by zero
 
     @property
     def incoming_party(self):
@@ -16,18 +16,18 @@ class Call:
               str(
                   (
                       (
-                          (x + self._mod)   # Mix it up
-                          * pow(-1, x)
-                      ) % 10                # only want integers 0-9
+                          (x + self.mod)  # Mix it up
+                          * pow(-x, x)    # Oscillate
+                      ) % 10              # only want integers 0-9
                   )
-              ) for x in range(0, 7)        # Generate a std length phone number
+              ) for x in range(0, 7)      # Generate a std length phone number
             ]
         )
 
     @property
     def answered(self):
         return not (
-            (self._mod * 3) % 2
+            (self.mod * 3) % 2
         )
 
     @property
@@ -35,15 +35,15 @@ class Call:
         return timedelta(
             seconds=(
                 (
-                    pow(5 + self._mod, self._mod - 3)
-                ) % 900     # Ensure the time is reasonable ~ less than 15 minutes
+                    pow(5 + self.mod, self.mod - 3)
+                ) % 900         # Ensure the time is reasonable ~ less than 15 minutes
             )
         )
 
     @property
     def hold_time(self):
         return timedelta(
-            seconds=(1 / self._mod) * 900   # get some small and some large hold times
+            seconds=(1 / self.mod) * 900   # get some small and some large hold times
         )
 
     @property
@@ -53,20 +53,26 @@ class Call:
     @property
     def voice_mail(self):
         return True if self.answered else (
-            pow(5 + self._mod, self._mod - 3) % 5
-        ) == 2  # could be a voice mail, but not too many
+            pow(5 + self.mod, self.mod - 3) % 3
+        ) == 2                  # could be a voice mail, but not too many
 
 
 class CallCenter:
 
     @staticmethod
-    def example(date):
-        seed = int(
-            date.year() % (
-                date.month() * date.day()
+    def example(date, clients):
+        calls = {}
+        for index, client in enumerate(clients):
+            seed = int(
+                date.year() % (
+                    ceil(
+                        index /
+                        (date.month() * date.day())
+                    ) * 10
+                )
             )
-        )
-        return {}
+            call = Call(client, seed)
+        return calls
 
     @staticmethod
     def date_time(date, seed):

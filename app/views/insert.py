@@ -7,8 +7,26 @@ from datetime import datetime, timedelta, time
 from app.tests.test_internal_storage import cache
 from app.src.factory import get_page_args, get_pagination, query_statement
 from app.models.flexible_storage import FlexibleStorage
+from app.src.factory import internal_connection
 
 mod = Blueprint('insert', __name__, template_folder='templates')
+
+
+@mod.before_request
+def before_request():
+    # Set up our dB connection
+    g.db = internal_connection(
+        current_app.config['SQLALCHEMY_DATABASE_URI'],
+        echo=current_app.config['SQLALCHEMY_ECHO'],
+        cls=FlexibleStorage
+    )
+
+
+@mod.teardown_request
+def teardown(error):
+    db = getattr(g, 'db', None)
+    if db is not None:
+        db.close()
 
 
 @mod.route('/init_db/')
@@ -27,8 +45,8 @@ def init_db():
             unique_id2=call_data_dict.pop('Unique Id2'),
             data=call_data_dict
         )
-        g.session.add(call_data)
-    g.session.commit()
+        g.db.add(call_data)
+    g.db.commit()
     return inserted(cached_records.keys())
 
 
@@ -82,7 +100,7 @@ def test_db():
 
 
 def inserted(ids):
-    record_set = g.session.query(FlexibleStorage).order_by(FlexibleStorage.id).filter(FlexibleStorage.id.in_(ids))
+    record_set = g.db.query(FlexibleStorage).order_by(FlexibleStorage.id).filter(FlexibleStorage.id.in_(ids))
     page, per_page, offset = get_page_args()
     pagination = get_pagination(
         page=page,

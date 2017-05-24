@@ -1,11 +1,25 @@
 {% extends 'base.html' %}
 
-{% block body %}
-<div class="table-responsive">
-    <table class="table table-hover">
-    <thead>
-        <tr>Report is running...</tr>
-    </thead>
-    </table>
-  </div>
+{% block head %}
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='web.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='report_viewer.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class=page>
+  <h1>Reports</h1>
+  {% for table in tables %}
+    <h2>{{titles[loop.index]}}</h2>
+    {{ table|safe }}
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block js %}
+  {% if active_url %}
+    $('#{{ active_url }}').addClass('active');
+  {% else %}
+  $('#run-url').addClass('active');
+  {% endif %}
 {% endblock %}
