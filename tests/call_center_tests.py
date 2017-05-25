@@ -1,54 +1,68 @@
 from radar import random_datetime, randint
 from datetime import timedelta, datetime, time
 from math import pow, ceil
+from json import dumps, JSONEncoder
+from decimal import Decimal
+
+
+class MyEncoder(JSONEncoder):
+    """Convert non-serializable data into a value which we can store in our dB"""
+    def default(self, obj):
+        if isinstance(obj, (datetime,)):
+            return {"val": obj.isoformat(), "_spec_type": "datetime"}
+        elif isinstance(obj, (Decimal,)):
+            return {"val": str(obj), "_spec_type": "decimal"}
+        elif isinstance(obj, (timedelta,)):
+            return {"val": str(obj), "_spec_type": "timedelta"}
+        else:
+            return super().default(obj)
 
 
 class Call:
 
-    def __init__(self, client, seed):
+    def __init__(self, client):
         self._receiving_party = client
-        self.mod = seed + 1     # Prevent divide by zero
+        self.mod = randint(1, 20)   # Prevent divide by zero
 
     @property
     def receiving_party(self):
         return self._receiving_party
 
+    # TODO this doesn't prevent a 0 in the first idx pos
     @property
     def calling_party(self):
         return ''.join(
             [
-              str(
-                  (
-                      (
-                          (x + self.mod)  # Mix it up
-                          * pow(-x, x)    # Oscillate
-                      ) % 10              # only want integers 0-9
-                  )
-              ) for x in range(0, 7)      # Generate a std length phone number
+                str(
+                    ceil(
+                        (
+                            x - randint(-9, 9)
+                            * pow(-1, x)  # Oscillate
+                        ) % 10  # only want integers 0-8
+                    )
+                ) for x in range(0, 10)      # Generate a std length phone number
             ]
         )
 
     @property
     def answered(self):
-        return not (
-            (self.mod * 3) % 2
-        )
+        return self.mod % 2 == 1
 
     @property
     def total_time(self):
         return timedelta(
             seconds=(
                 (
-                    pow(5 + self.mod, self.mod - 3)
+                    pow(randint(0, 5) + self.mod, self.mod - randint(0, 5))
                 ) % 900         # Ensure the time is reasonable ~ less than 15 minutes
             )
         )
 
     @property
     def talking_time(self):
-        return timedelta(0) if self.answered else timedelta(
+        return timedelta(
             seconds=(1 / self.mod) * 900   # get some small and some large hold times
-        )
+        ) if self.answered else timedelta(0)
 
     @property
     def wait_time(self):
@@ -65,20 +79,13 @@ class CallCenter:
 
     @staticmethod
     def example(date, clients):
+        # Use the date to seed our call_id -> we can run multiple examples w/o duplicate pk
+        # This is roughshod right now
+        call_id_seed = int(''.join(str(i) for i in (date.month, date.day, date.year)))
         calls = {}
         num_clients = len(clients)
         for index in range(num_clients*date.month*randint(1, 5)):
-            seed = int(
-                date.year % (
-                    (
-                        ceil(
-                            index /
-                            (date.month * date.day)
-                        ) + .1
-                    ) * 10
-                )
-            )
-            call = Call(clients[(index - randint(0, 7)) % num_clients], seed)
+            call = Call(clients[(index - randint(0, 7)) % num_clients])
             start_time = random_datetime(
                 start=datetime.combine(date, time(0)),
                 stop=datetime.combine(date, time(hour=23, minute=59, second=59))
@@ -93,17 +100,17 @@ class CallCenter:
                 'Voice Mail': call.voice_mail
             }
         return {
-            '{call_id}'.format(call_id=index): calls[key] for index, key in enumerate(sorted(calls.keys()))
+            '{call_id}'.format(call_id=call_id_seed + index): calls[key] for index, key in enumerate(sorted(calls.keys()))
         }
 
 
 def test():
     from datetime import datetime
-
     clients = ['Susy', 'Josh', 'Sally', 'Emily']
     day_of_calls = CallCenter().example(datetime.today().date(), clients)
     for call_id in sorted(day_of_calls.keys()):
-        print(call_id, day_of_calls[call_id])
+        print(call_id)
+        print(dumps(day_of_calls[call_id], cls=MyEncoder, indent=4))
         # yield call_id, day_of_calls[call_id]
 
 

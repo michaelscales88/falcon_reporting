@@ -3,7 +3,7 @@
 {% block head %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
 </nav>
 
 <article>
-  <img src="{{url_for('static', filename='img/gandelf404.jpg')}}"/>
+    <img src="{{url_for('static', filename='img/gandelf404.jpg')}}"/>
 </article>
 
 <footer>What you're looking for just isn't here.
