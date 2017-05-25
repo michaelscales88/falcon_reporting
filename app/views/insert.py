@@ -8,7 +8,7 @@ from random import randint
 from app.models.flexible_storage import FlexibleStorage
 from app.src.factory import get_page_args, get_pagination, query_statement
 from app.src.factory import internal_connection
-from tests import cache
+from app.lib.sla_cache import cache
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 

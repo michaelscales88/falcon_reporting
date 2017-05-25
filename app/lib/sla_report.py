@@ -15,33 +15,16 @@ def chop_microseconds(delta):
 def match(record_list, match_val=None):
     matched_records = []
 
-    # print(
-    #     'Matching to',
-    #     getattr(match_record, 'id'),
-    #     getattr(match_record, 'unique_id2'),
-    #     getattr(match_record, 'unique_id1')
-    # )
     for record in record_list:
-        # print('Comparing', getattr(record, 'id'))
+        # Check match conditions
         match0 = (
             getattr(match_val, 'data')['Event Summary'].get('4', timedelta(0))
             == getattr(record, 'data')['Event Summary'].get('4', timedelta(0))
             == timedelta(0)
         )
-        # print(
-        #     match0,
-        #     getattr(match_val, 'data')['Event Summary'].get('4', timedelta(0)),
-        #     getattr(record, 'data')['Event Summary'].get('4', timedelta(0))
-        # )
-
         match1 = getattr(match_val, 'unique_id2') == getattr(record, 'unique_id2')
-        # print(match1, getattr(record, 'unique_id2'))
-
         match2 = getattr(match_val, 'unique_id1') == getattr(record, 'unique_id1')
-        # print(match2, getattr(record, 'unique_id1'))
-
         match3 = (getattr(record, 'start') - getattr(match_val, 'end')) < timedelta(seconds=61)
-        # print(match3, getattr(record, 'start') - getattr(match_record, 'end'))
 
         all_matched = all(
             [
@@ -52,10 +35,7 @@ def match(record_list, match_val=None):
             ]
         )
 
-        # print(all_matched)
-
         if all_matched:
-            # print('Perform match behavior', getattr(record, 'id'))
             matched_records.append(getattr(record, 'id'))
 
     return matched_records
@@ -96,8 +76,6 @@ def report(records):
             ]
         )
         test_output.extend_rows(additional_row)
-
-    # records = session_data(datetime.today().date().replace(year=2017, month=5, day=17))
 
     # Filter Step
     try:

@@ -5,7 +5,7 @@ from sqlalchemy import func
 from app.models.custom_model import custom_model
 from app.models.flexible_storage import FlexibleStorage
 from app.src.factory import internal_connection
-from tests.report_test import report
+from app.lib.sla_report import report
 
 mod = Blueprint('reports', __name__, template_folder='templates')
 
