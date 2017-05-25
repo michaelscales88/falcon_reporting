@@ -10,23 +10,6 @@ from app.lib.sla_report import report
 mod = Blueprint('reports', __name__, template_folder='templates')
 
 
-@mod.before_request
-def before_request():
-    # Set up our dB connection
-    g.db = internal_connection(
-        current_app.config['SQLALCHEMY_DATABASE_URI'],
-        echo=current_app.config['SQLALCHEMY_ECHO'],
-        cls=FlexibleStorage
-    )
-
-
-@mod.teardown_request
-def teardown(error):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
-
-
 # TODO this is ripe for flask-excel extension for upload/download: http://flask-excel.readthedocs.io/en/latest/
 # TODO 2: Sheet.save_to_database(session, table[, ...])	Save data in sheet to database table
 # # TODO https://sarahleejane.github.io/learning/python/2015/08/09/simple-tables-in-webapps-using-flask-and-pandas-with-python.html

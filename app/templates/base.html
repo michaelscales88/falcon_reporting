@@ -10,6 +10,7 @@
     {% block head %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     {% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,7 +33,7 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li id="home-url"><a href="#">Home</a></li>
+            <li id="home-url"><a href="/">Home</a></li>
             <li id="records-url"><a href="{{ url_for('index.index') }}">Recent Records</a></li>
             <li id="records-page-url"><a href="{{ url_for('records.records') }}">All Records</a></li>
             <li class="dropdown">
@@ -53,7 +54,14 @@
                 </ul>
             </li>
             <li id="about-url"><a href="#about">About</a></li>
-            <li id="contact-url"><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li id="settings-url"><a href="#settings">report settings</a></li>
+                <li class="divider"></li>
+                  <li><a href="#">Preferences</a></li>
+                </ul>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

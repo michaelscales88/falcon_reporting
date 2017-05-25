@@ -1,27 +1,9 @@
-from flask import render_template, g, Blueprint, current_app
+from flask import render_template, g, Blueprint
 
 from app.src.factory import get_page_args, get_pagination
 from app.models.flexible_storage import FlexibleStorage
-from app.src.factory import internal_connection
 
 mod = Blueprint('records', __name__, template_folder='templates')
-
-
-@mod.before_request
-def before_request():
-    # Set up our dB connection
-    g.db = internal_connection(
-        current_app.config['SQLALCHEMY_DATABASE_URI'],
-        echo=current_app.config['SQLALCHEMY_ECHO'],
-        cls=FlexibleStorage
-    )
-
-
-@mod.teardown_request
-def teardown(error):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
 
 
 @mod.route('/records/', defaults={'page': 1})

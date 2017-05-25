@@ -3,13 +3,32 @@
 {% block content %}
 <div class="table-responsive">
     <table class="table table-hover">
-    <thead>
-        <tr>Inserted {{ pagination.total }} records.</tr>
-    </thead>
-    <tbody>
-        Redirect to index:
-        <a href="{{ url_for('index.index') }}">Index</a>
-    </tbody>
+        <thead>
+            <tr>Inserted {{ pagination.total }} records.</tr>
+        </thead>
+        <tbody>
+            Redirect to index: <a href="{{ url_for('index.index') }}">Index</a>
+        </tbody>
     </table>
-  </div>
+</div>
+{% if users %}
+{{ pagination.info }}
+{{ pagination.links }}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr><th>#</th><th>Flexible Storage</th></tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+            <td>{{ loop.index + (page - 1) * per_page }}</td>
+            <td>{{ user.id, user.start, user.end }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ pagination.links }}
+{% endif %}
 {% endblock %}

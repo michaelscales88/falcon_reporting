@@ -7,34 +7,21 @@ from random import randint
 
 from app.models.flexible_storage import FlexibleStorage
 from app.src.factory import get_page_args, get_pagination, query_statement
-from app.src.factory import internal_connection
 from app.lib.sla_cache import cache
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 
 
-@mod.before_request
-def before_request():
-    # Set up our dB connection
-    g.db = internal_connection(
-        current_app.config['SQLALCHEMY_DATABASE_URI'],
-        echo=current_app.config['SQLALCHEMY_ECHO'],
-        cls=FlexibleStorage
-    )
-
-
-@mod.teardown_request
-def teardown(error):
-    db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+# @mod.before_request
+# def before_request():
+#     # Set up a unique dB connection for this blueprint
 
 
 @mod.route('/init_db/')
 @mod.route('/init_db')
 def init_db():
     # Make a connection to the PG dB and execute the query
-    src, result = query_statement(current_app.statement, current_app.connection)
+    src, result = query_statement(current_app.config['TEST_STATEMENT'], current_app.config['EXTERNAL_CONNECTION'])
     data_src_records = [dict(zip(row.keys(), row)) for row in result]
     cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
     for pk, call_data_dict in cached_records.items():

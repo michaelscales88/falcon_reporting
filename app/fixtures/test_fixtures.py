@@ -11,6 +11,7 @@ from flask_fixtures import FixturesMixin
 app.config.from_object('myapp.config.TestConfig')
 
 
+# TODO finish this: https://github.com/croach/Flask-Fixtures
 # Make sure to inherit from the FixturesMixin class
 class TestFoo(unittest.TestCase, FixturesMixin):
 
@@ -21,18 +22,20 @@ class TestFoo(unittest.TestCase, FixturesMixin):
 
     # Specify the Flask app and db we want to use for this set of tests
     app = app
-    db = db
+    # db = db
 
     # Your tests go here
 
     def test_authors(self):
-        authors = Author.query.all()
-        assert len(authors) == Author.query.count() == 1
-        assert len(authors[0].books) == 3
+        # authors = Author.query.all()
+        # assert len(authors) == Author.query.count() == 1
+        # assert len(authors[0].books) == 3
+        pass
 
     def test_books(self):
-        books = Book.query.all()
-        assert len(books) == Book.query.count() == 3
-        gibson = Author.query.filter(Author.last_name=='Gibson').one()
-        for book in books:
-            assert book.author == gibson
+        # books = Book.query.all()
+        # assert len(books) == Book.query.count() == 3
+        # gibson = Author.query.filter(Author.last_name=='Gibson').one()
+        # for book in books:
+        #     assert book.author == gibson
+        pass
