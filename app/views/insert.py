@@ -1,13 +1,14 @@
-from flask import render_template, current_app, Blueprint, g
-from radar import random_datetime, utils as radar_parse
-from random import randint, sample, randrange
-from math import ceil
 from datetime import datetime, timedelta, time
+from math import ceil
 
-from app.tests.test_internal_storage import cache
-from app.src.factory import get_page_args, get_pagination, query_statement
+from flask import render_template, current_app, Blueprint, g
+from radar import random_datetime
+from random import randint
+
 from app.models.flexible_storage import FlexibleStorage
+from app.src.factory import get_page_args, get_pagination, query_statement
 from app.src.factory import internal_connection
+from tests import cache
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 

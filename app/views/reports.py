@@ -1,11 +1,11 @@
 from flask import render_template, g, Blueprint, current_app
-from sqlalchemy import func
 from pandas import DataFrame
+from sqlalchemy import func
 
-from app.models.flexible_storage import FlexibleStorage
 from app.models.custom_model import custom_model
+from app.models.flexible_storage import FlexibleStorage
 from app.src.factory import internal_connection
-from app.tests.report_test import report
+from tests.report_test import report
 
 mod = Blueprint('reports', __name__, template_folder='templates')
 
