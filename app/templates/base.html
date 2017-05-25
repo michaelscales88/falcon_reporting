@@ -46,7 +46,7 @@
                 </ul>
             </li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports<b class="caret"></b></a>
+              <a href="{{ url_for('reports.report_page') }}" class="dropdown-toggle" data-toggle="dropdown">Reports<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                 <li id="run-url"><a href="{{ url_for('reports.run_report') }}">sla_test</a></li>
                 <li class="divider"></li>

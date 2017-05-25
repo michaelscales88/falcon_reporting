@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 from app.lib.app_settings import AppSettings
 
-_settings = r'C:\Users\mscales\Desktop\Development\automated_sla_tool\automated_sla_tool\settings\db_report_test'
+_settings = 'db_report_test'
 
 
 def chop_microseconds(delta):
@@ -67,15 +67,20 @@ def report(records):
         colnames=output_headers
     )
 
-    for client_num in (*settings['Clients'], 'Summary'):
-        additional_row = OrderedDict(
-            [
-                (client_num,
-                 [0, 0, 0, 0, 0, 0, timedelta(0), timedelta(0), timedelta(0), 0, 0, 0, 0, 0, 0, timedelta(0), 0]
-                 )
-            ]
-        )
-        test_output.extend_rows(additional_row)
+    try:
+        for client_num in (*settings['Clients'], 'Summary'):
+            additional_row = OrderedDict(
+                [
+                    (client_num,
+                     [0, 0, 0, 0, 0, 0, timedelta(0), timedelta(0), timedelta(0), 0, 0, 0, 0, 0, 0, timedelta(0), 0]
+                     )
+                ]
+            )
+            test_output.extend_rows(additional_row)
+    except KeyError:
+        from json import dumps
+        print(dumps(settings, indent=4))
+        raise
 
     # Filter Step
     try:

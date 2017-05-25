@@ -100,7 +100,7 @@ def inserted(ids):
     )
     return render_template(
         'insert.html',
-        users=record_set,
+        records=record_set,
         total=pagination.total,
         pagination=pagination,
         page=page,

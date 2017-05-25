@@ -26,7 +26,7 @@ def index():
     )
     return render_template(
         'index.html',
-        users=record_set,
+        records=record_set,
         page=page,
         per_page=per_page,
         pagination=pagination,
