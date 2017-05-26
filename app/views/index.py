@@ -17,17 +17,15 @@ def index():
         .limit(per_page)
         .offset(offset)
     ).all()
-    print(type(record_set), record_set)
-    # test_report = report(record_set)
-    # test_report.name = 'Bitching Baby'
-    # test_report_rownames = test_report.rownames
-    # test_report_content = test_report.to_dict()
-    # TODO 3: This should likely be its own 'pyexcel' model or something of the like
-    data = DataFrame(record_set)
-    # data = DataFrame.from_items(
-    #     [col for col in record_set.items()]
-    # )
-    # data.index = test_report_rownames
+    df = DataFrame(
+        [rec.to_dict() for rec in record_set]
+    )
+    if not df.empty:                      # Protect from KeyError if the dB is empty
+        df.set_index('id', inplace=True)  # inplace = True saves us from having to bind a new dataframe
+        # data.rename_axis(None)          # remove id label <- not working
+        df.name = 'test'
+        del df.index.name                 # remove id label
+        print(df)
     pagination = get_pagination(
         page=page,
         per_page=per_page,
@@ -42,6 +40,6 @@ def index():
         page=page,
         per_page=per_page,
         pagination=pagination,
-        tables=[data.to_html(classes='report')],
-        titles=['na', 'test']
+        tables=[frame.to_html(classes='report') for frame in (df,) if not frame.empty],
+        titles=['na', *[frame.name for frame in (df,) if not frame.empty]]
     )

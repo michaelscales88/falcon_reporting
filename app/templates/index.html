@@ -3,11 +3,11 @@
 {% block head %}
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/report_viewer.css') }}">
 {% endblock %}
 
 {% block content %}
-{% if records %}
+{% if records or tables %}
 {{ pagination.info }}
 {{ pagination.links }}
 <div class="table-responsive">
@@ -16,16 +16,20 @@
         <tr><th>#</th><th>Flexible Storage</th></tr>
         </thead>
         <tbody>
+        {% if records %}
         {% for record in records %}
         <tr>
             <td>{{ loop.index + (page - 1) * per_page }}</td>
             <td>{{ record }}</td>
         </tr>
         {% endfor %}
+        {% endif %}
+        {% if tables %}
         {% for table in tables %}
         <h2>{{titles[loop.index]}}</h2>
         {{ table|safe }}
         {% endfor %}
+        {% endif %}
         </tbody>
     </table>
 </div>

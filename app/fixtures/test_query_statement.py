@@ -1,4 +1,4 @@
-from pandas import DataFrame, read_json
+from pandas import DataFrame
 from falcon_reporting.app.fixtures.base_test import BaseTest
 from falcon_reporting.app.src.factory import query_statement, internal_connection
 from falcon_reporting.app.lib.sla_cache import cache
@@ -51,5 +51,7 @@ class TestQueryStatement(BaseTest):
             [rec.to_dict() for rec in record_set]
         )
         data.set_index('id', inplace=True)      # inplace = True saves us from having to bind a new frame
+        # data.rename_axis(None, inplace=True)  # this doesn't work
+        del data.index.name
         print(data)
         self.assertTrue(True)
