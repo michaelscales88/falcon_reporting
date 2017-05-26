@@ -95,9 +95,10 @@ class CallCenter:
                 'End Time': start_time + call.total_time,
                 'Talking Duration': call.talking_time,
                 'Hold Time': call.wait_time,
-                'Calling Party': call.calling_party,
-                'Receiving Party': call.receiving_party,
-                'Voice Mail': call.voice_mail
+                'Unique Id2': call.calling_party,      # Calling party
+                'Unique Id1': call.receiving_party,    # Receiving Party
+                'Voice Mail': call.voice_mail,
+                'Events': {}
             }
         return {
             '{call_id}'.format(call_id=call_id_seed + index): calls[key] for index, key in enumerate(sorted(calls.keys()))

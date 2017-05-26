@@ -1,0 +1,152 @@
+- Clients:
+  - 2029:
+    CLIENT_NAME: AMI French
+    FULL_SERVICE: False
+
+  - 7506:
+    CLIENT_NAME: AAP
+    FULL_SERVICE: FALSE
+
+  - 7508:
+    CLIENT_NAME: TMK
+    FULL_SERVICE: FALSE
+
+  - 7509:
+    CLIENT_NAME: Assoc Materials
+    FULL_SERVICE: FALSE
+
+  - 7512:
+    CLIENT_NAME: Fortive
+    FULL_SERVICE: FALSE
+
+  - 7513:
+    CLIENT_NAME: Amedisys
+    FULL_SERVICE: FALSE
+
+  - 7515:
+    CLIENT_NAME: BMW NoAm
+    FULL_SERVICE: FALSE
+
+  - 7516:
+    CLIENT_NAME: BBA Aviation
+    FULL_SERVICE: FALSE
+
+  - 7517:
+    CLIENT_NAME: Humana
+    FULL_SERVICE: FALSE
+
+  - 7521:
+    CLIENT_NAME: SWS
+    FULL_SERVICE: TRUE
+
+  - 7523:
+    CLIENT_NAME: Carlson
+    FULL_SERVICE: FALSE
+
+  - 7524:
+    CLIENT_NAME: ClearwaterPaper
+    FULL_SERVICE: FALSE
+
+  - 7527:
+    CLIENT_NAME: AlliedUniversal
+    FULL_SERVICE: FALSE
+
+  - 7529:
+    CLIENT_NAME: Acushnet
+    FULL_SERVICE: FALSE
+
+  - 7539:
+    CLIENT_NAME: Nordstrom
+    FULL_SERVICE: FALSE
+
+  - 7543:
+    CLIENT_NAME: Strategic Matls
+    FULL_SERVICE: FALSE
+
+  - 7544:
+    CLIENT_NAME: CBI
+    FULL_SERVICE: FALSE
+
+  - 7545:
+    CLIENT_NAME: Danaher
+    FULL_SERVICE: FALSE
+
+  - 7547:
+    CLIENT_NAME: ULA
+    FULL_SERVICE: FALSE
+
+  - 7548:
+    CLIENT_NAME: Ecova
+    FULL_SERVICE: FALSE
+
+  - 7549:
+    CLIENT_NAME: Willbros
+    FULL_SERVICE: FALSE
+
+  - 7551:
+    CLIENT_NAME: EGS
+    FULL_SERVICE: FALSE
+
+  - 7553:
+    CLIENT_NAME: Infosys
+    FULL_SERVICE: FALSE
+
+  - 7557:
+    CLIENT_NAME: Lehigh Hanson
+    FULL_SERVICE: FALSE
+
+  - 7558:
+    CLIENT_NAME: LVMH
+    FULL_SERVICE: FALSE
+
+  - 7561:
+    CLIENT_NAME: Netscout
+    FULL_SERVICE: FALSE
+
+  - 7567:
+    CLIENT_NAME: Forterra
+    FULL_SERVICE: FALSE
+
+  - 7576:
+    CLIENT_NAME: Michaels
+    FULL_SERVICE: FALSE
+
+  - 7577:
+    CLIENT_NAME: Oshkosh
+    FULL_SERVICE: FALSE
+
+  - 7578:
+    CLIENT_NAME: Pinnacle Foods
+    FULL_SERVICE: FALSE
+
+  - 7579:
+    CLIENT_NAME: Plains
+    FULL_SERVICE: FALSE
+
+  - 7589:
+    CLIENT_NAME: Tokyo Electron
+    FULL_SERVICE: FALSE
+
+  - 7590:
+    CLIENT_NAME: CCSWB
+    FULL_SERVICE: FALSE
+
+  - 7595:
+      CLIENT_NAME: CocaColaBottler
+    FULL_SERVICE: FALSE
+
+  - 7591:
+    CLIENT_NAME: CocaColaTCCC
+    FULL_SERVICE: FALSE
+
+  - 7592:
+    CLIENT_NAME: CocaColaCCR
+    FULL_SERVICE: FALSE
+
+  - 7593:
+    CLIENT_NAME: CocaColaCanada
+    FULL_SERVICE: FALSE
+
+  - 7594:
+    CLIENT_NAME: CCCanadaFrench
+    FULL_SERVICE: ' FALSE
