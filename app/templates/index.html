@@ -16,7 +16,7 @@
         <tr><th>#</th><th>Flexible Storage</th></tr>
         </thead>
         <tbody>
-        {% if records %}
+        {% if records and not tables %}
         {% for record in records %}
         <tr>
             <td>{{ loop.index + (page - 1) * per_page }}</td>

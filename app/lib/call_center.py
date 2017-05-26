@@ -83,7 +83,8 @@ class CallCenter:
                 'Unique Id2': call.calling_party,      # Calling party
                 'Unique Id1': call.receiving_party,    # Receiving Party
                 'Voice Mail': call.voice_mail,
-                'Events': {}
+                'Events': {},
+                'Event Summary': {}
             }
         return {
             '{call_id}'.format(call_id=call_id_seed + index): calls[key] for index, key in enumerate(sorted(calls.keys()))

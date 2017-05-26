@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.ext import mutable
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from datetime import datetime
 
 
@@ -10,13 +10,17 @@ Base = declarative_base()
 
 
 class FlexibleStorage(Base):
-    __tablename__ = 'flexible_storage'
     # __table_args__ = {
     #     'mysql_engine': 'InnoDB'
     # }
     # __mapper_args__ = {
     #     'concrete': True
     # }
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
+
+    # __tablename__ = 'flexible_storage'  # declared_attr may have uniqueness issues in the future
 
     id = Column('id', Integer, primary_key=True)
     data = Column('json_data', JsonEncodedDict)

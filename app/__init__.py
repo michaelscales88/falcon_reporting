@@ -8,7 +8,8 @@ from sqlalchemy.exc import OperationalError
 from os.path import join
 
 from falcon_reporting.app.lib.flask_extended import Flask
-from falcon_reporting.app.src.factory import internal_connection
+from falcon_reporting.app.lib.data_center import DataCenter
+from falcon_reporting.app.src.factory import internal_connection, run_logger
 from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 app = Flask(__name__)
@@ -17,11 +18,46 @@ app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 # app.debug = config.DEBUG
 # app.secret_key = config.SECRET_KEY
 
+with app.app_context():
+    # call set up functions which need to bind to app
+    run_logger(__name__)
+
+# try:
+#     # Configure logger
+#     LOG_FILE_NAME = 'app/logs/{application}.log'.format(application=__name__)
+#     handler = RotatingFileHandler(LOG_FILE_NAME, maxBytes=10000, backupCount=5)
+#     handler.setLevel(logging.INFO)
+#     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+#     handler.setFormatter(formatter)
+#     app.logger.addHandler(handler)
+#
+#     # Include emitted Werkzeug messages in our log file
+#     log = logging.getLogger('werkzeug')
+#     log.setLevel(logging.DEBUG)
+#     log.addHandler(handler)
+# except FileNotFoundError:
+#     from os import path, makedirs
+#     if not path.exists("logs/"):
+#         makedirs("logs/", exist_ok=True)
+#     # Configure logger
+#     LOG_FILE_NAME = 'app/logs/{application}.log'.format(application=__name__)
+#     handler = RotatingFileHandler(LOG_FILE_NAME, maxBytes=10000, backupCount=5)
+#     handler.setLevel(logging.INFO)
+#     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+#     handler.setFormatter(formatter)
+#     app.logger.addHandler(handler)
+#
+#     # Include emitted Werkzeug messages in our log file
+#     log = logging.getLogger('werkzeug')
+#     log.setLevel(logging.DEBUG)
+#     log.addHandler(handler)
+
 """
 Remove after testing.
 """
 app.test_date = datetime.today().replace(year=2017, month=5, day=1, hour=0, minute=0, second=0)
 app.config['TEST_STATEMENT'] = app.config['TEST_STATEMENT'].format(date=str(app.test_date.date()))
+app.data_src = DataCenter()     # Holds session registry, metadata, etc -> needs to have a model registry
 
 
 @app.before_request

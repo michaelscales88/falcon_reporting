@@ -1,20 +1,50 @@
+import logging
+from logging.handlers import RotatingFileHandler
 from flask_paginate import Pagination
 from flask import current_app, request
 
 
-from falcon_reporting.app.lib.data_center import DataCenter
+def run_logger(app_name):
+    try:
+        # Configure logger
+        LOG_FILE_NAME = 'app/logs/{application}.log'.format(application=app_name)
+        handler = RotatingFileHandler(LOG_FILE_NAME, maxBytes=10000, backupCount=5)
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        handler.setFormatter(formatter)
+        current_app.logger.addHandler(handler)
 
+        # Include emitted Werkzeug messages in our log file
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.DEBUG)
+        log.addHandler(handler)
 
-data_src = DataCenter()
+    except FileNotFoundError:
+        from os import path, makedirs
+        if not path.exists("logs/"):
+            makedirs("logs/", exist_ok=True)
+
+        # Configure logger
+        LOG_FILE_NAME = 'app/logs/{application}.log'.format(application=app_name)
+        handler = RotatingFileHandler(LOG_FILE_NAME, maxBytes=10000, backupCount=5)
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        handler.setFormatter(formatter)
+        current_app.logger.addHandler(handler)
+
+        # Include emitted Werkzeug messages in our log file
+        log = logging.getLogger('werkzeug')
+        log.setLevel(logging.DEBUG)
+        log.addHandler(handler)
 
 
 def query_statement(statement, connection, **kwargs):
-    session = data_src.get_session(connection, **kwargs)
-    return data_src, session.execute(statement)
+    session = current_app.data_src.get_session(connection, **kwargs)
+    return current_app.data_src, session.execute(statement)
 
 
 def internal_connection(connection, **kwargs):
-    return data_src.get_session(connection, **kwargs)
+    return current_app.data_src.get_session(connection, **kwargs)
 
 
 def get_css_framework():

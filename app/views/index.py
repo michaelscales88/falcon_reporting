@@ -25,7 +25,7 @@ def index():
         # data.rename_axis(None)          # remove id label <- not working
         df.name = 'test'
         del df.index.name                 # remove id label
-        print(df)
+        # print(df)
     pagination = get_pagination(
         page=page,
         per_page=per_page,
