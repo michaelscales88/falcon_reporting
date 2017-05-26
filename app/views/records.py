@@ -18,13 +18,13 @@ def records(page):
         page=page,
         per_page=per_page,
         total=total_records,
-        record_name='users',
+        record_name='records',
         format_total=True,
         format_number=True
     )
     return render_template(
         'index.html',
-        users=record_set,
+        records=record_set,
         page=page,
         per_page=per_page,
         pagination=pagination,

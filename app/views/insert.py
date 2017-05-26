@@ -68,7 +68,7 @@ def test_db():
                 * 2
                 / 4
             ),
-            'Events': {
+            'Event Summary': {
                 'Lots{}'.format(bts): 'of{} stuff'.format(stb),
                 'to See': 'here{}'.format(bts+stb)
             }
