@@ -11,9 +11,7 @@ from app.lib.flask_extended import Flask
 from app.src.factory import internal_connection
 from app.models.flexible_storage import FlexibleStorage
 
-from os import getcwd
 app = Flask(__name__)
-print(getcwd())
 app.config.from_pyfile('settings/app.cfg')
 app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 # app.debug = config.DEBUG

@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="container">
 
-<header>
-   <h1>Oh no... 404!</h1>
-</header>
+    <header>
+        <h1>Oh no... 404!</h1>
+    </header>
 
-<nav>
-  <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Recent Records</a></li>
-    <li><a href="#">All Records</a></li>
-  </ul>
-</nav>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Recent Records</a></li>
+            <li><a href="#">All Records</a></li>
+        </ul>
+    </nav>
 
-<article>
-    <img src="{{url_for('static', filename='img/gandelf404.jpg')}}"/>
-</article>
+    <article>
+        <img src="{{url_for('static', filename='img/gandelf404.jpg')}}"/>
+    </article>
 
-<footer>What you're looking for just isn't here.
+    <footer>What you're looking for just isn't here.
         <a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
 
 </div>

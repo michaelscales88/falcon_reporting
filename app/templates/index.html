@@ -1,32 +1,64 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">
+{% endblock %}
+
 {% block content %}
 {% if records %}
-  {{ pagination.info }}
-  {{ pagination.links }}
-  <div class="table-responsive">
+{{ pagination.info }}
+{{ pagination.links }}
+<div class="table-responsive">
     <table class="table table-hover">
-    <thead>
-      <tr><th>#</th><th>Flexible Storage</th></tr>
-    </thead>
-    <tbody>
-      {% for record in records %}
-      <tr>
-      <td>{{ loop.index + (page - 1) * per_page }}</td>
-      <td>{{ record.id, record.start, record.end }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
+        <thead>
+        <tr><th>#</th><th>Flexible Storage</th></tr>
+        </thead>
+        <tbody>
+        {% for record in records %}
+        <tr>
+            <td>{{ loop.index + (page - 1) * per_page }}</td>
+            <td>{{ record }}</td>
+        </tr>
+        {% endfor %}
+        {% for table in tables %}
+        <h2>{{titles[loop.index]}}</h2>
+        {{ table|safe }}
+        {% endfor %}
+        </tbody>
     </table>
-  </div>
-  {{ pagination.links }}
-  {% endif %}
+</div>
+{{ pagination.links }}
+{% else %}
+<div class="container">
+
+    <header>
+        <h1>No records currently.</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Recent Records</a></li>
+            <li><a href="#">All Records</a></li>
+        </ul>
+    </nav>
+
+    <article>
+        Add some examples: <a href="{{ url_for('insert.test_db') }}">Add RNG call records.</a>
+    </article>
+
+    <footer><a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
+
+</div>
+{% endif %}
 {% endblock %}
 
 {% block js %}
-  {% if active_url %}
-    $('#{{ active_url }}').addClass('active');
-  {% else %}
-  $('#records-url').addClass('active');
-  {% endif %}
+{% if active_url %}
+$('#{{ active_url }}').addClass('active');
+{% else %}
+$('#records-url').addClass('active');
+{% endif %}
 {% endblock %}
