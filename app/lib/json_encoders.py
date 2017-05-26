@@ -5,7 +5,7 @@ from decimal import Decimal
 from dateutil import parser
 
 
-from app.lib.report_utilities import ReportUtilities
+from falcon_reporting.app.lib.report_utilities import ReportUtilities
 
 
 CONVERTERS = {

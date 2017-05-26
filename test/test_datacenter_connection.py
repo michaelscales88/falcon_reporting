@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.models.flexible_storage import MyEncoder
+# from app.models.flexible_storage import MyEncoder
 from app.lib.report_utilities import ReportUtilities
 from app.src.factory import query_statement
 
@@ -21,8 +21,8 @@ def test(query_date):
     src, result = query_statement(statement, _connection)   # Make a connection to the PG dB and execute the query
     data_src_records = [dict(zip(row.keys(), row)) for row in result]
 
-    for record in data_src_records:
-        print(src.print_record(record, cls=MyEncoder, indent=4))
+    # for record in data_src_records:
+    #     print(src.print_record(record, cls=MyEncoder, indent=4))
 
 if __name__ == '__main__':
     from sys import argv

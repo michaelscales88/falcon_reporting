@@ -20,11 +20,11 @@ class TestFoo(unittest.TestCase, FixturesMixin):
     # file using YAML instead of JSON.
     fixtures = ['data_center.yaml']
 
-    # Specify the Flask app and db we want to use for this set of tests
+    # Specify the Flask app and db we want to use for this set of test
     app = app
     # db = db
 
-    # Your tests go here
+    # Your test go here
 
     def test_authors(self):
         # authors = Author.query.all()

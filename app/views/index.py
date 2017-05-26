@@ -2,8 +2,8 @@ from flask import render_template, g, Blueprint
 from pandas import DataFrame
 
 
-from app.src.factory import get_page_args, get_pagination
-from app.models.flexible_storage import FlexibleStorage
+from falcon_reporting.app.src.factory import get_page_args, get_pagination
+from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 mod = Blueprint('index', __name__, template_folder='templates')
 

@@ -2,7 +2,7 @@ from flask_paginate import Pagination
 from flask import current_app, request
 
 
-from app.lib.data_center import DataCenter
+from falcon_reporting.app.lib.data_center import DataCenter
 
 
 data_src = DataCenter()

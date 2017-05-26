@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
 
-from app.lib.json_encoders import JsonEncodedDict
+from falcon_reporting.app.lib.json_encoders import JsonEncodedDict
 
 Base = declarative_base()
 

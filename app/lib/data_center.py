@@ -1,9 +1,9 @@
 from json import dumps
 
 
-from .report_utilities import ReportUtilities
-from .data_worker import DataWorker
-from app.lib.session_register import SessionRegistry
+from falcon_reporting.app.lib.report_utilities import ReportUtilities
+from falcon_reporting.app.lib.data_worker import DataWorker
+from falcon_reporting.app.lib.session_register import SessionRegistry
 
 
 class DataCenter(object):

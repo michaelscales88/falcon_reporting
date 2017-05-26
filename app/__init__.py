@@ -7,9 +7,9 @@ from datetime import datetime
 from sqlalchemy.exc import OperationalError
 from os.path import join
 
-from app.lib.flask_extended import Flask
-from app.src.factory import internal_connection
-from app.models.flexible_storage import FlexibleStorage
+from falcon_reporting.app.lib.flask_extended import Flask
+from falcon_reporting.app.src.factory import internal_connection
+from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 app = Flask(__name__)
 app.config.from_pyfile('settings/app.cfg')
@@ -47,10 +47,10 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-from app.views import index
-from app.views import records
-from app.views import insert
-from app.views import reports
+from falcon_reporting.app.views import index
+from falcon_reporting.app.views import records
+from falcon_reporting.app.views import insert
+from falcon_reporting.app.views import reports
 
 
 app.register_blueprint(index.mod)

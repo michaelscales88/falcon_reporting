@@ -3,7 +3,7 @@ from pyexcel import Sheet
 from collections import OrderedDict
 
 
-from app.lib.app_settings import AppSettings
+from falcon_reporting.app.lib.app_settings import AppSettings
 
 _settings = 'db_report_test'
 
