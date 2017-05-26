@@ -1,4 +1,5 @@
 # myapp/fixtures/test_fixtures.py
+# this is an example of how to test my mixins for custom models
 
 import unittest
 
@@ -10,7 +11,7 @@ from flask_fixtures import FixturesMixin
 # Configure the app with the testing configuration
 app.config.from_object('myapp.config.TestConfig')
 
-
+# http://pythontesting.net/framework/unittest/unittest-fixtures/
 # TODO finish this: https://github.com/croach/Flask-Fixtures
 # Make sure to inherit from the FixturesMixin class
 class TestFoo(unittest.TestCase, FixturesMixin):

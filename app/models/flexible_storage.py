@@ -50,3 +50,8 @@ class FlexibleStorage(Base):
             pk=getattr(self, 'id'),
             columns=', '.join(['{0}={1!r}'.format(*_) for _ in self.columns if _ != 'id'])
         )
+
+    def to_dict(self):
+        return {
+            k: v for k, v in self.columns
+        }
