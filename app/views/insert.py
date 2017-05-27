@@ -40,10 +40,10 @@ def init_db():
 @mod.route('/test_db/')
 @mod.route('/test_db')
 def test_db():
-    # Sample data from lib/call_center.py
+    # Sample data from app/lib/call_center.py
     cached_records = CallCenter().example(
         current_app.test_date,
-        [client_data['CLIENT_NAME'] for client, client_data in current_app.config['CLIENTS'].items()]
+        [client for client in current_app.config['CLIENTS'].keys()]
     )
     return insert_records(cached_records)
 

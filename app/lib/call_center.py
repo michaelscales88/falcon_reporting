@@ -83,8 +83,16 @@ class CallCenter:
                 'Unique Id2': call.calling_party,      # Calling party
                 'Unique Id1': call.receiving_party,    # Receiving Party
                 'Voice Mail': call.voice_mail,
-                'Events': {},
-                'Event Summary': {}
+                'Events': {
+                    'dummy_key{}'.format(start_time): 'This information is being simulated in event summary'
+                },
+                'Event Summary': {
+                    '4': call.talking_time,                 # Talking Time
+                    '10': timedelta(randint(15, 300)) if call.voice_mail else timedelta(0),  # Voice mail
+                    '5': call.wait_time,                    # Hold time
+                    '6': timedelta(0),                      # Hold time
+                    '7': timedelta(0)                       # Hold time
+                }
             }
         return {
             '{call_id}'.format(call_id=call_id_seed + index): calls[key] for index, key in enumerate(sorted(calls.keys()))

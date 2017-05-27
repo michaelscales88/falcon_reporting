@@ -9,9 +9,10 @@ else:
 
 
 @command()
+@option('--host', '-h', default='0.0.0.0', help='host ip')
 @option('--port', '-p', default=5000, help='listening port')
-def run(port):
-    app.run(host='0.0.0.0', port=port)
+def run(host, port):
+    app.run(host=host, port=port)
 
 if __name__ == '__main__':
     run()
