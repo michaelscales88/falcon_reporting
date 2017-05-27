@@ -2,6 +2,7 @@
 # https://gist.github.com/mattupstate/2046115: extended flask with yaml support
 from __future__ import unicode_literals
 
+from os import chdir, getcwd
 from flask import render_template, g
 from datetime import datetime
 from sqlalchemy.exc import OperationalError
@@ -9,7 +10,10 @@ from os.path import join
 from platform import system
 
 if system() in ('Darwin', 'Linux'):
-    from app.lib.flask_extended import Flask
+    print(getcwd())
+    chdir('..')
+    print(getcwd())
+    from falcon_reporting.app.lib.flask_extended import Flask
     from app.lib.data_center import DataCenter
     from app.src.factory import internal_connection, run_logger
     from app.models.flexible_storage import FlexibleStorage

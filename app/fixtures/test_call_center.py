@@ -1,8 +1,17 @@
+#!/Users/michaelscales/Desktop/local/environments/flask_venv/bin/python3.5
 from datetime import datetime
 from json import dumps
-from falcon_reporting.app.fixtures.base_test import BaseTest
-from falcon_reporting.app.lib.call_center import CallCenter
-from falcon_reporting.app.lib.json_encoders import MyEncoder
+from platform import system
+from os import chdir
+
+if system() in ('Darwin', 'Linux'):
+    from app.fixtures.base_test import BaseTest
+    from app.lib.call_center import CallCenter
+    from app.lib.json_encoders import MyEncoder
+else:
+    from falcon_reporting.app.fixtures.base_test import BaseTest
+    from falcon_reporting.app.lib.call_center import CallCenter
+    from falcon_reporting.app.lib.json_encoders import MyEncoder
 
 
 class TestCallCenter(BaseTest):
@@ -20,3 +29,4 @@ class TestCallCenter(BaseTest):
             pass
 
         self.assertTrue(True)
+
