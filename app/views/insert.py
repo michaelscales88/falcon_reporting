@@ -5,10 +5,19 @@ from flask import render_template, current_app, Blueprint, g
 from radar import random_datetime
 from random import randint
 
-from falcon_reporting.app.models.flexible_storage import FlexibleStorage
-from falcon_reporting.app.src.factory import get_page_args, get_pagination, query_statement
-from falcon_reporting.app.lib.sla_cache import cache
-from falcon_reporting.app.lib.call_center import CallCenter
+from platform import system
+
+if system() in ('Darwin', 'Linux'):
+    from app.models.flexible_storage import FlexibleStorage
+    from app.src.factory import get_page_args, get_pagination, query_statement
+    from app.lib.sla_cache import cache
+    from app.lib.call_center import CallCenter
+
+else:
+    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+    from falcon_reporting.app.src.factory import get_page_args, get_pagination, query_statement
+    from falcon_reporting.app.lib.sla_cache import cache
+    from falcon_reporting.app.lib.call_center import CallCenter
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 

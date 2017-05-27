@@ -3,8 +3,12 @@ from sqlalchemy.ext import mutable
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from datetime import datetime
 
+from platform import system
 
-from falcon_reporting.app.lib.json_encoders import JsonEncodedDict
+if system() in ('Darwin', 'Linux'):
+    from app.lib.json_encoders import JsonEncodedDict
+else:
+    from falcon_reporting.app.lib.json_encoders import JsonEncodedDict
 
 Base = declarative_base()
 

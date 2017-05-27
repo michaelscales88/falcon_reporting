@@ -3,10 +3,18 @@ from pandas import DataFrame
 from sqlalchemy import func
 import flask_excel as excel
 
-from falcon_reporting.app.models.custom_model import custom_model
-from falcon_reporting.app.models.flexible_storage import FlexibleStorage
-from falcon_reporting.app.src.factory import internal_connection
-from falcon_reporting.app.lib.sla_report import report
+from platform import system
+
+if system() in ('Darwin', 'Linux'):
+    from app.models.custom_model import custom_model
+    from app.models.flexible_storage import FlexibleStorage
+    from app.src.factory import internal_connection
+    from app.lib.sla_report import report
+else:
+    from falcon_reporting.app.models.custom_model import custom_model
+    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+    from falcon_reporting.app.src.factory import internal_connection
+    from falcon_reporting.app.lib.sla_report import report
 
 mod = Blueprint('reports', __name__, template_folder='templates')
 

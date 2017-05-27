@@ -1,6 +1,11 @@
 from click import command, option
 
-from app import app
+from platform import system
+
+if system() in ('Darwin', 'Linux'):
+    from app import app
+else:
+    from falcon_reporting.app import app
 
 
 @command()

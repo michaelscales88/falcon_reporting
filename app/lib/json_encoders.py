@@ -4,8 +4,12 @@ from json import loads, dumps, JSONEncoder
 from decimal import Decimal
 from dateutil import parser
 
+from platform import system
 
-from falcon_reporting.app.lib.report_utilities import ReportUtilities
+if system() in ('Darwin', 'Linux'):
+    from app.lib.report_utilities import ReportUtilities
+else:
+    from falcon_reporting.app.lib.report_utilities import ReportUtilities
 
 
 CONVERTERS = {

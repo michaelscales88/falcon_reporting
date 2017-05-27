@@ -1,7 +1,14 @@
 from flask import render_template, g, Blueprint
 
-from falcon_reporting.app.src.factory import get_page_args, get_pagination
-from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+from platform import system
+
+if system() in ('Darwin', 'Linux'):
+    from app.src.factory import get_page_args, get_pagination
+    from app.models.flexible_storage import FlexibleStorage
+else:
+    from falcon_reporting.app.src.factory import get_page_args, get_pagination
+    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+
 
 mod = Blueprint('records', __name__, template_folder='templates')
 
