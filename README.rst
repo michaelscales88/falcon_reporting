@@ -9,6 +9,13 @@ import <project name placeholder>
 
    Currently in early development.
 
+To Run
+------------
+
+Assuming you pulled the project and installed the necessary docker components for your machine:
+
+    docker-compose up or docker-comppose up --build (if you want to rebuild the image)
+
 Features
 --------
 
