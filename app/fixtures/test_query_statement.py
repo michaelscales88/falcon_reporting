@@ -19,15 +19,16 @@ class TestQueryStatement(BaseTest):
     def setUp(self):
         super().setUp()
         self.query_func = query_statement
-        self.internal_connection = internal_connection(
-            TestQueryStatement.app.config['SQLALCHEMY_DATABASE_URI'],
-            echo=TestQueryStatement.app.config['SQLALCHEMY_ECHO'],
-            cls=FlexibleStorage
-        )
-        src, result = self.query_func(
-            TestQueryStatement.app.config['TEST_STATEMENT'],
-            TestQueryStatement.app.config['EXTERNAL_CONNECTION']
-        )
+        with TestQueryStatement.app.app_context():
+            self.internal_connection = internal_connection(
+                TestQueryStatement.app.config['SQLALCHEMY_DATABASE_URI'],
+                echo=TestQueryStatement.app.config['SQLALCHEMY_ECHO'],
+                cls=FlexibleStorage
+            )
+            src, result = self.query_func(
+                TestQueryStatement.app.config['TEST_STATEMENT'],
+                TestQueryStatement.app.config['EXTERNAL_CONNECTION']
+            )
         self.data_src_records = [dict(zip(row.keys(), row)) for row in result]
         self.cached_records = cache(self.data_src_records, pk='call_id', subkey='event_id')
 

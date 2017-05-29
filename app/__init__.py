@@ -10,9 +10,6 @@ from os.path import join
 from platform import system
 
 if system() in ('Darwin', 'Linux'):
-    print(getcwd())
-    chdir('..')
-    print(getcwd())
     from falcon_reporting.app.lib.flask_extended import Flask
     from app.lib.data_center import DataCenter
     from app.src.factory import internal_connection, run_logger
@@ -33,7 +30,7 @@ app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 from platform import system
 
 if system() not in ('Darwin', 'Linux'):
-    # need to figure out why this doesn't work on mac
+    # Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
     with app.app_context():
         # call set up functions which need to bind to app
         run_logger(__name__)
