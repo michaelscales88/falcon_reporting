@@ -44,6 +44,22 @@ app.config['TEST_STATEMENT'] = app.config['TEST_STATEMENT'].format(date=str(app.
 app.data_src = DataCenter()     # Holds session registry, metadata, etc -> needs to have a model registry
 
 
+# read the SO below -> extending html templates with "partials" without using include
+# def prepare(self):
+#     if self.navigation:
+#         self.context['navigation'] = {
+#             # building navigation
+#             # in your case based on request.args.get('page')
+#         }
+#     else:
+#         self.context['navigation'] = None
+#     # added another if to point on changes, but you can combine with previous one
+#     if self.navigation:
+#         self.context['extends_with'] = "templates/page_with_navigation.html"
+#     else:
+#         self.context['extends_with'] = "templates/main_page.html"
+
+
 @app.before_request
 def before_request():
     # Set up our dB connection
@@ -85,4 +101,6 @@ app.register_blueprint(records.mod)
 app.register_blueprint(insert.mod)
 app.register_blueprint(reports.mod)
 
+# read the SO below -> modify views and how they're being rendered
+# https://stackoverflow.com/questions/15501518/dynamic-navigation-in-flask/15525226#15525226
 # TODO extending blueprints: http://flask.pocoo.org/docs/0.12/patterns/appfactories/
