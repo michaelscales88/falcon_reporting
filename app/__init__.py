@@ -33,7 +33,10 @@ if system() not in ('Darwin', 'Linux'):
     # Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
     with app.app_context():
         # call set up functions which need to bind to app
-        run_logger(__name__)
+        try:
+            run_logger(__name__)
+        except FileNotFoundError:
+            pass
 
 
 """
