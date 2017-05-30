@@ -1,0 +1,262 @@
+REPORT_NAME: SLA Report
+CACHE_TEMPLATE:               # Implement cache strategy to simplify report mapping
+  KEYS:
+    PK: call_id               # any query should have a key constraint
+    SUB_KEY: event_id         # Need a way to make this *args
+  COLUMNS:
+    0:
+      COLUMN: Start Time      # These look like proto mixins
+      GROUP_BY: PK
+      VALUE: start_time
+      CONDITION: Min
+    1:
+      COLUMN: End Time
+      GROUP_BY: PK
+      VALUE: end_time
+      CONDITION: Max
+    2:
+      COLUMN: Unique Id1
+      GROUP_BY: PK
+      VALUE: dailed_party_number
+      CONDITION: Not Set
+    3:
+      COLUMN: Unique Id2
+      GROUP_BY: PK
+      VALUE: calling_party_number
+      CONDITION: Not Set
+    4:
+      COLUMN: Events
+      GROUP_BY: SUB_KEY
+      DEFAULT: {}
+    5:
+      COLUMN: Event Summary
+      GROUP_BY: event_type
+      GROUP_VALUE: EVENT_DURATION
+      DEFAULT: {}
+
+REPORT_TEMPLATE:              # Set report mapping
+    0:
+      NAME: I/C Presented
+      BEHAVIOR: SUM
+      TYPE: INT
+      PROCESS:
+        0: I/C Answered
+        1: I/C Lost
+        2: Voice Mails
+    1:
+      NAME: I/C Answered
+      BEHAVIOR: SUM
+      TYPE: INT
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: 1
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+          CONDITION: 0
+    2:
+      NAME: I/C Lost
+      BEHAVIOR: SUM
+      TYPE: INT
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: 1
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: EQUALS
+          CONDITION: 0
+        1:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: EQUALS
+          CONDITION: 0
+    3:
+      NAME: Voice Mails
+      BEHAVIOR: SUM
+      TYPE: INT
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: 1
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 10
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+          CONDITION: 20
+
+    4:
+      NAME: Incoming Answered (%)
+      BEHAVIOR: PERCENTAGE
+      TYPE: DECIMAL
+      PROCESS:
+        TYPE: BUILD
+        NUMERATOR: I/C Answered
+        DENOMINATOR: I/C Presented
+    5:
+      NAME: Incoming Lost (%)
+      BEHAVIOR: PERCENTAGE
+      TYPE: DECIMAL
+      PROCESS:
+        TYPE: BUILD
+        NUMERATOR: I/C Lost + Voice Mails
+        DENOMINATOR: I/C Presented
+    6:
+      NAME: Average Incoming Duration
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+          CONDITION: 0
+    7:
+      NAME: Average Wait Answered
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+          CONDITION: 0
+    8:
+      NAME: Average Wait Lost
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+    9:
+      NAME: Calls Ans Within 15
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+    9:
+      NAME: Calls Ans Within 30
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    9:
+      NAME: Calls Ans Within 45
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    9:
+      NAME: Calls Ans Within 60
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    10:
+      NAME: Calls Ans Within 999
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    11:
+      NAME: Call Ans + 999
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    11:
+      NAME: Longest Waiting Answered
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+
+    11:
+      NAME: PCA
+      BEHAVIOR: AVERAGE
+      TYPE: TIME
+      CONDITION_MET:
+        ACTION: INCREMENT
+        STEP: MATCHED_VALUE
+      CHECK:
+        0:
+          CATEGORY: event_type
+          VALUE: 4
+          VALUE_TYPE: TIME
+          CRITERIA: G_THAN
+SUMMARIZE: True
