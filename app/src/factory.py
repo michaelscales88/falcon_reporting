@@ -4,6 +4,14 @@ from flask_paginate import Pagination
 from flask import current_app, request
 
 
+def manifest_reader(manifest=None):
+    # Test Values
+    read_manifest = {
+        'REPORT_NAME': 'SLA Report'
+    }
+    return read_manifest
+
+
 def run_logger(app_name):
     try:
         # Configure logger

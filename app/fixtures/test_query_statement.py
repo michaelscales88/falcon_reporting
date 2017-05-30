@@ -55,13 +55,13 @@ class TestQueryStatement(BaseTest):
                 .limit(per_page)
                 .offset(offset)
         ).all()
-        print(len(record_set), type(record_set))
-        print(len(record_set), type(record_set))
+        # print(len(record_set), type(record_set))
+        # print(len(record_set), type(record_set))
         data = DataFrame(
             [rec.to_dict() for rec in record_set]
         )
         data.set_index('id', inplace=True)      # inplace = True saves us from having to bind a new frame
         # data.rename_axis(None, inplace=True)  # this doesn't work
         del data.index.name
-        print(data)
+        # print(data)
         self.assertTrue(True)

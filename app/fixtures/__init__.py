@@ -1,1 +1,0 @@
-#!/Users/michaelscales/Desktop/local/environments/flask_venv/bin/python3.5

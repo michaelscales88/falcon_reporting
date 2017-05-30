@@ -1,0 +1,1 @@
+nosetests app/fixtures/ %*
