@@ -63,3 +63,19 @@ class FnLib(object):
     @staticmethod
     def custom_voicemail():
         pass
+
+
+class Average(object):
+    pass
+
+
+class Percentage(object):
+    pass
+
+
+class Time(object):
+    pass
+
+
+class Limit(object):
+    pass

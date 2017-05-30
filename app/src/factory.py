@@ -7,7 +7,65 @@ from flask import current_app, request
 def manifest_reader(manifest=None):
     # Test Values
     read_manifest = {
-        'REPORT_NAME': 'SLA Report'
+        'REPORT_NAME': 'SLA Report',
+        'HEADERS': [
+            'I/C Presented',
+            'I/C Answered',
+            'I/C Lost',
+            'Voice Mails',
+            'Incoming Answered (%)',
+            'Incoming Lost (%)',
+            'Average Incoming Duration',
+            'Average Wait Answered',
+            'Average Wait Lost',
+            'Calls Ans Within 15',
+            'Calls Ans Within 30',
+            'Calls Ans Within 45',
+            'Calls Ans Within 60',
+            'Calls Ans Within 999',
+            'Call Ans + 999',
+            'Longest Waiting Answered',
+            'PCA'
+        ],
+        'BEHAVIORS': {
+            'I/C Presented': 'Sum',
+            'I/C Answered': 'Sum',
+            'I/C Lost': 'Sum',
+            'Voice Mails': 'Sum',
+            'Incoming Answered (%)': 'Percentage',
+            'Incoming Lost (%)': 'Percentage',
+            'Average Incoming Duration': 'Average',
+            'Average Wait Answered': 'Average',
+            'Average Wait Lost': 'Average',
+            'Calls Ans Within 15': 'Sum',
+            'Calls Ans Within 30': 'Sum',
+            'Calls Ans Within 45': 'Sum',
+            'Calls Ans Within 60': 'Sum',
+            'Calls Ans Within 999': 'Sum',
+            'Call Ans + 999': 'Sum',
+            'Longest Waiting Answered': 'Max/Min',
+            'PCA': 'Percentage'
+        },
+        'CONDITIONS': {
+            'I/C Presented': 'Sum',
+            'I/C Answered': 'Sum',
+            'I/C Lost': 'Sum',
+            'Voice Mails': 'Sum',
+            'Incoming Answered (%)': 'Percentage',
+            'Incoming Lost (%)': 'Percentage',
+            'Average Incoming Duration': 'Average',
+            'Average Wait Answered': 'Average',
+            'Average Wait Lost': 'Average',
+            'Calls Ans Within 15': 'Sum',
+            'Calls Ans Within 30': 'Sum',
+            'Calls Ans Within 45': 'Sum',
+            'Calls Ans Within 60': 'Sum',
+            'Calls Ans Within 999': 'Sum',
+            'Call Ans + 999': 'Sum',
+            'Longest Waiting Answered': 'Max/Min',
+            'PCA': 'Percentage'
+        },
+        'SUMMARIZE': True,
     }
     return read_manifest
 
