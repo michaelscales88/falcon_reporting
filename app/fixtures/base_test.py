@@ -2,7 +2,7 @@ from unittest import TestCase, TestLoader, TestSuite
 from click import command, option, pass_context
 
 
-from falcon_reporting.app import app
+from app import app
 
 
 class BaseTest(TestCase):
@@ -29,7 +29,7 @@ class BaseTest(TestCase):
 
     def setUp(self):
         # Set up test configuration
-        app.config.from_object('falcon_reporting.app.test_config.TestConfig')
+        app.config.from_object('app.test_config.TestConfig')
         # app.config['DEBUG'] = self.param['DEBUG']
         # app.config['SQLALCHEMY_ECHO'] = self.param['ECHO']
 

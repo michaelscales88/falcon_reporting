@@ -4,6 +4,7 @@ from json import dumps
 from platform import system
 from os import chdir
 
+
 if system() in ('Darwin', 'Linux'):
     from app.fixtures.base_test import BaseTest
     from app.lib.call_center import CallCenter

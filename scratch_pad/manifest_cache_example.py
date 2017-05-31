@@ -1,10 +1,10 @@
 from json import dumps
 from datetime import datetime
 
-from falcon_reporting.app import app
-from falcon_reporting.scratch_pad.manifest_example import manifest_reader
-from falcon_reporting.app.src.factory import query_statement
-from falcon_reporting.app.lib.json_encoders import MyEncoder
+from app import app
+from scratch_pad.manifest_example import manifest_reader
+from app.src.factory import query_statement
+from app.lib.json_encoders import MyEncoder
 
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
