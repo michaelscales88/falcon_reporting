@@ -91,16 +91,21 @@ def not_found(error):
 
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.views import index
-    from app.views import records
-    from app.views import insert
-    from app.views import reports
-else:
-    from falcon_reporting.app.views import index
-    from falcon_reporting.app.views import records
-    from falcon_reporting.app.views import insert
-    from falcon_reporting.app.views import reports
+from app.views import index
+from app.views import records
+from app.views import insert
+from app.views import reports
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.views import index
+#     from app.views import records
+#     from app.views import insert
+#     from app.views import reports
+# else:
+#     from falcon_reporting.app.views import index
+#     from falcon_reporting.app.views import records
+#     from falcon_reporting.app.views import insert
+#     from falcon_reporting.app.views import reports
 
 
 app.register_blueprint(index.mod)
