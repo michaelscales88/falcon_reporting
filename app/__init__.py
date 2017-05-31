@@ -1,28 +1,17 @@
+from __future__ import unicode_literals
 # app/__init__.py
 # https://gist.github.com/mattupstate/2046115: extended flask with yaml support
-from __future__ import unicode_literals
 
 from flask import render_template, g
 from datetime import datetime
 from sqlalchemy.exc import OperationalError
 from os.path import join
-from platform import system
+
 
 from app.lib.flask_extended import Flask
 from app.lib.data_center import DataCenter
 from app.src.factory import internal_connection, run_logger
 from app.models.flexible_storage import FlexibleStorage
-
-# if system() in ('Windows', 'Darwin', 'Linux'):
-#     from app.lib.flask_extended import Flask
-#     from app.lib.data_center import DataCenter
-#     from app.src.factory import internal_connection, run_logger
-#     from app.models.flexible_storage import FlexibleStorage
-# else:
-#     from falcon_reporting.app.lib.flask_extended import Flask
-#     from falcon_reporting.app.lib.data_center import DataCenter
-#     from falcon_reporting.app.src.factory import internal_connection, run_logger
-#     from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 
 app = Flask(__name__)
@@ -31,16 +20,13 @@ app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 # app.debug = config.DEBUG
 # app.secret_key = config.SECRET_KEY
 
-from platform import system
-
-if system() not in ('Darwin', 'Linux'):
-    # Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
-    with app.app_context():
-        # call set up functions which need to bind to app
-        try:
-            run_logger(__name__)
-        except FileNotFoundError:
-            pass
+# Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
+with app.app_context():
+    # call set up functions which need to bind to app
+    try:
+        run_logger(__name__)
+    except FileNotFoundError:
+        print('failed to open logger')
 
 
 """
@@ -89,23 +75,10 @@ def teardown(error):
 def not_found(error):
     return render_template('404.html'), 404
 
-from platform import system
-
 from app.views import index
 from app.views import records
 from app.views import insert
 from app.views import reports
-
-# if system() in ('Darwin', 'Linux'):
-#     from app.views import index
-#     from app.views import records
-#     from app.views import insert
-#     from app.views import reports
-# else:
-#     from falcon_reporting.app.views import index
-#     from falcon_reporting.app.views import records
-#     from falcon_reporting.app.views import insert
-#     from falcon_reporting.app.views import reports
 
 
 app.register_blueprint(index.mod)
