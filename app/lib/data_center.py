@@ -1,14 +1,19 @@
 from json import dumps
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.lib.report_utilities import ReportUtilities
-    from app.lib.data_worker import DataWorker
-    from app.lib.session_register import SessionRegistry
-else:
-    from falcon_reporting.app.lib.report_utilities import ReportUtilities
-    from falcon_reporting.app.lib.data_worker import DataWorker
-    from falcon_reporting.app.lib.session_register import SessionRegistry
+from app.lib.report_utilities import ReportUtilities
+from app.lib.data_worker import DataWorker
+from app.lib.session_register import SessionRegistry
+
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.lib.report_utilities import ReportUtilities
+#     from app.lib.data_worker import DataWorker
+#     from app.lib.session_register import SessionRegistry
+# else:
+#     from falcon_reporting.app.lib.report_utilities import ReportUtilities
+#     from falcon_reporting.app.lib.data_worker import DataWorker
+#     from falcon_reporting.app.lib.session_register import SessionRegistry
 
 
 class DataCenter(object):

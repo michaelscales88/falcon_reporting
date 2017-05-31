@@ -1,17 +1,23 @@
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.fixtures.base_test import BaseTest
-    from app.src.factory import internal_connection
-    from app.models.flexible_storage import FlexibleStorage
-    from app.lib.call_center import CallCenter
-    from app.lib.report_builder import ReportBuilder
-else:
-    from falcon_reporting.app.fixtures.base_test import BaseTest
-    from falcon_reporting.app.src.factory import query_statement, internal_connection
-    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
-    from falcon_reporting.app.lib.call_center import CallCenter
-    from falcon_reporting.app.lib.report_builder import ReportBuilder
+from app.fixtures.base_test import BaseTest
+from app.src.factory import internal_connection
+from app.models.flexible_storage import FlexibleStorage
+from app.lib.call_center import CallCenter
+from app.lib.report_builder import ReportBuilder
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.fixtures.base_test import BaseTest
+#     from app.src.factory import internal_connection
+#     from app.models.flexible_storage import FlexibleStorage
+#     from app.lib.call_center import CallCenter
+#     from app.lib.report_builder import ReportBuilder
+# else:
+#     from falcon_reporting.app.fixtures.base_test import BaseTest
+#     from falcon_reporting.app.src.factory import query_statement, internal_connection
+#     from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+#     from falcon_reporting.app.lib.call_center import CallCenter
+#     from falcon_reporting.app.lib.report_builder import ReportBuilder
 
 
 class ReportBuilderTest(BaseTest):

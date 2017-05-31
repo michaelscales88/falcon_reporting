@@ -8,16 +8,21 @@ from sqlalchemy.exc import OperationalError
 from os.path import join
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.lib.flask_extended import Flask
-    from app.lib.data_center import DataCenter
-    from app.src.factory import internal_connection, run_logger
-    from app.models.flexible_storage import FlexibleStorage
-else:
-    from falcon_reporting.app.lib.flask_extended import Flask
-    from falcon_reporting.app.lib.data_center import DataCenter
-    from falcon_reporting.app.src.factory import internal_connection, run_logger
-    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+from app.lib.flask_extended import Flask
+from app.lib.data_center import DataCenter
+from app.src.factory import internal_connection, run_logger
+from app.models.flexible_storage import FlexibleStorage
+
+# if system() in ('Windows', 'Darwin', 'Linux'):
+#     from app.lib.flask_extended import Flask
+#     from app.lib.data_center import DataCenter
+#     from app.src.factory import internal_connection, run_logger
+#     from app.models.flexible_storage import FlexibleStorage
+# else:
+#     from falcon_reporting.app.lib.flask_extended import Flask
+#     from falcon_reporting.app.lib.data_center import DataCenter
+#     from falcon_reporting.app.src.factory import internal_connection, run_logger
+#     from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 
 app = Flask(__name__)

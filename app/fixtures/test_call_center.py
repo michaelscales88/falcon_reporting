@@ -5,14 +5,18 @@ from platform import system
 from os import chdir
 
 
-if system() in ('Darwin', 'Linux'):
-    from app.fixtures.base_test import BaseTest
-    from app.lib.call_center import CallCenter
-    from app.lib.json_encoders import MyEncoder
-else:
-    from falcon_reporting.app.fixtures.base_test import BaseTest
-    from falcon_reporting.app.lib.call_center import CallCenter
-    from falcon_reporting.app.lib.json_encoders import MyEncoder
+from app.fixtures.base_test import BaseTest
+from app.lib.call_center import CallCenter
+from app.lib.json_encoders import MyEncoder
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.fixtures.base_test import BaseTest
+#     from app.lib.call_center import CallCenter
+#     from app.lib.json_encoders import MyEncoder
+# else:
+#     from falcon_reporting.app.fixtures.base_test import BaseTest
+#     from falcon_reporting.app.lib.call_center import CallCenter
+#     from falcon_reporting.app.lib.json_encoders import MyEncoder
 
 
 class TestCallCenter(BaseTest):

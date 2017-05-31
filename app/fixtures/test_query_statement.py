@@ -2,16 +2,21 @@
 from pandas import DataFrame
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.fixtures.base_test import BaseTest
-    from app.src.factory import query_statement, internal_connection
-    from app.lib.sla_cache import cache
-    from app.models.flexible_storage import FlexibleStorage
-else:
-    from falcon_reporting.app.fixtures.base_test import BaseTest
-    from falcon_reporting.app.src.factory import query_statement, internal_connection
-    from falcon_reporting.app.lib.sla_cache import cache
-    from falcon_reporting.app.models.flexible_storage import FlexibleStorage
+from app.fixtures.base_test import BaseTest
+from app.src.factory import query_statement, internal_connection
+from app.lib.sla_cache import cache
+from app.models.flexible_storage import FlexibleStorage
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.fixtures.base_test import BaseTest
+#     from app.src.factory import query_statement, internal_connection
+#     from app.lib.sla_cache import cache
+#     from app.models.flexible_storage import FlexibleStorage
+# else:
+#     from falcon_reporting.app.fixtures.base_test import BaseTest
+#     from falcon_reporting.app.src.factory import query_statement, internal_connection
+#     from falcon_reporting.app.lib.sla_cache import cache
+#     from falcon_reporting.app.models.flexible_storage import FlexibleStorage
 
 
 class TestQueryStatement(BaseTest):

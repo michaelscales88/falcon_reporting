@@ -5,10 +5,12 @@ from datetime import datetime
 
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.lib.json_encoders import JsonEncodedDict
-else:
-    from falcon_reporting.app.lib.json_encoders import JsonEncodedDict
+from app.lib.json_encoders import JsonEncodedDict
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.lib.json_encoders import JsonEncodedDict
+# else:
+#     from falcon_reporting.app.lib.json_encoders import JsonEncodedDict
 
 Base = declarative_base()
 

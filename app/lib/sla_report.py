@@ -4,10 +4,12 @@ from collections import OrderedDict
 
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.lib.app_settings import AppSettings
-else:
-    from falcon_reporting.app.lib.app_settings import AppSettings
+from app.lib.app_settings import AppSettings
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.lib.app_settings import AppSettings
+# else:
+#     from falcon_reporting.app.lib.app_settings import AppSettings
 
 _settings = 'db_report_test'
 

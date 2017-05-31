@@ -2,10 +2,11 @@ from click import command, option
 
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app import app
-else:
-    from falcon_reporting.app import app
+from app import app
+# if system() in ('Darwin', 'Linux'):
+#     from app import app
+# else:
+#     from falcon_reporting.app import app
 
 
 @command()

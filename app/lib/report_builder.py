@@ -1,9 +1,11 @@
 from platform import system
 
-if system() in ('Darwin', 'Linux'):
-    from app.src.factory import manifest_reader
-else:
-    from falcon_reporting.app.src.factory import manifest_reader
+from app.src.factory import manifest_reader
+
+# if system() in ('Darwin', 'Linux'):
+#     from app.src.factory import manifest_reader
+# else:
+#     from falcon_reporting.app.src.factory import manifest_reader
 
 
 class ReportBuilder:
