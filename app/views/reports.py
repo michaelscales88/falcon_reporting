@@ -50,6 +50,10 @@ def report_page():
 @mod.route('/report/run/')
 @mod.route('/report/run')
 def run_report():
+    # df = pd.read_sql(query.statement, query.session.bind)  # this may be the way to read dataframes
+    # pd.read_sql(session.query(Complaint).filter(Complaint.id == 2).statement,session.bind)
+    # use this https://github.com/amancevice/redpanda/blob/master/notebooks/python35/notebook.ipynb redpandas
+    # need to have custom models before this will work though
     record_set = g.db.query(FlexibleStorage).order_by(FlexibleStorage.id).filter(func.date(current_app.test_date)).all()
     test_report = report(record_set)
     test_report.name = 'Bitching Baby'
@@ -60,6 +64,7 @@ def run_report():
         [col for col in test_report_content.items()]
     )
     data.index = test_report_rownames
+    data.to_sql('sla_report', g.db, if_exists='replace')
     # test_model = custom_model('sla_report')  # This appears to be working. Need many more mixins
     # session = internal_connection(
     #     current_app.config['SQLALCHEMY_DATABASE_URI'],

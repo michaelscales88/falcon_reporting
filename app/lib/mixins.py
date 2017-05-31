@@ -1,4 +1,8 @@
 from datetime import timedelta
+from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from datetime import datetime
+from sqlalchemy_utils import Timestamp
 
 
 class FnLib(object):
@@ -63,6 +67,12 @@ class FnLib(object):
     @staticmethod
     def custom_voicemail():
         pass
+
+#
+# class TimeStamp(object):
+#
+#     created_on = Column('created_on', DateTime(), default=datetime.now)
+#     updated_on = Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
 
 
 class Average(object):

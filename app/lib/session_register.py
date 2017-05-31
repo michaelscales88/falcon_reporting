@@ -18,7 +18,7 @@ class SessionRegistry(object):
             if mapped_cls:
                 mapped_cls.metadata.create_all(engine)  # This creates the declarative base tables
             session_factory = sessionmaker(bind=engine)
-            session = scoped_session(session_factory)
-            self._registry[url] = session
+            Session = scoped_session(session_factory)
+            self._registry[url] = Session
         return self._registry[url]
 

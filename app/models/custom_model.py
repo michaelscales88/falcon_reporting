@@ -3,12 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from datetime import datetime
 
 
+from app.lib.mixins import *
+
 # TODO I need mixins for every kind of column I want at a minimum
 # TODO make mixin registry
-class TimeStamp(object):
-
-    created_on = Column('created_on', DateTime(), default=datetime.now)
-    updated_on = Column('updated_on', DateTime(), default=datetime.now, onupdate=datetime.now)
 
 
 class Base(object):
@@ -26,5 +24,5 @@ Base = declarative_base(cls=Base)
 
 
 def custom_model(name, **attrs):
-    mixins = (TimeStamp,)
+    mixins = (Timestamp,)
     return type(name, (Base, *mixins), {})

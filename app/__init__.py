@@ -61,13 +61,14 @@ def before_request():
         echo=app.config['SQLALCHEMY_ECHO'],
         cls=FlexibleStorage
     )
+    print(g.db)
 
 
 @app.teardown_request
 def teardown(error):
     db = getattr(g, 'db', None)
-    if db is not None:
-        db.close()
+    if db:
+        db.remove()     # Close scoped session
 
 
 @app.errorhandler(OperationalError)     # Give this it's own page eventually
