@@ -3,6 +3,8 @@ from click import command, option, pass_context
 
 
 from app import app
+from app.src.factory import query_statement, internal_connection
+from app.lib.call_center import CallCenter
 
 
 class BaseTest(TestCase):
@@ -11,9 +13,13 @@ class BaseTest(TestCase):
     """
     app = app
 
-    # def __init__(self, methodName='runTest', params=None):
-    #     super().__init__(methodName)
-    #     self.param = params
+    def __init__(self, methodName='runTest'):
+        super().__init__(methodName)
+        # Make connections available to Fixtures
+        self.internal_connection = internal_connection
+        self.query_statement = query_statement
+        self.example_data_src = CallCenter
+
     #
     # @staticmethod
     # def parametrize(testcase_klass, param=None):

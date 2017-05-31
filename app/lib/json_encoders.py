@@ -11,7 +11,8 @@ from app.lib.report_utilities import ReportUtilities
 CONVERTERS = {
     'datetime': parser.parse,
     'decimal': Decimal,
-    'timedelta': ReportUtilities.to_td
+    'timedelta': ReportUtilities.to_td,
+    'string': str
 }
 
 
@@ -24,6 +25,8 @@ class MyEncoder(JSONEncoder):
             return {"val": str(obj), "_spec_type": "decimal"}
         elif isinstance(obj, (timedelta,)):
             return {"val": str(obj), "_spec_type": "timedelta"}
+        elif isinstance(obj, (String,)):
+            return {"val": str(obj), "_spec_type": "string"}
         else:
             return super().default(obj)
 

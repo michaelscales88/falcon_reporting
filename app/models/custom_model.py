@@ -1,28 +1,23 @@
-from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy import Column, Integer, DateTime, String
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from datetime import datetime
 
 
 from app.lib.mixins import *
 
-# TODO I need mixins for every kind of column I want at a minimum
 # TODO make mixin registry
 
 
-class Base(object):
-
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
-
-    __table_args__ = {'mysql_engine': 'sqlite'}
+@generic_repr       # This adds a default to columns without data for __repr__
+class BaseMixin(object):
 
     id = Column(Integer, primary_key=True)
 
 
-Base = declarative_base(cls=Base)
+# All custom models that inherit from Base get an id, created_on, updated_on
+Base = declarative_base(cls=(BaseMixin, Timestamp))
 
 
-def custom_model(name, **attrs):
-    mixins = (Timestamp,)
-    return type(name, (Base, *mixins), {})
+def custom_model(name, attrib):
+    mixins = ()
+    return type(name, (Base, *mixins), attrib)
