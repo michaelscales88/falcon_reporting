@@ -4,7 +4,7 @@ from json import dumps
 from pandas import DataFrame
 
 from app.fixtures.base_test import BaseTest
-from app.models.custom_model import custom_model
+from app.src.factory import model_factory
 from app.lib.json_encoders import MyEncoder
 
 
@@ -15,12 +15,13 @@ class TestCustomModel(BaseTest):
     def test_columns(self):
         table_info = {'__tablename__': 'sla_report',
                       '__table_args__': {'autoload': False}, }
-        model = custom_model('sla_report', table_info)  # This appears to be working. Need many more mixins
-        # print(model)
-        # print(model.__base__)
-        # print(model.__tablename__)
-        # print(model.__table_args__)
-        # print(model.__table__.columns.keys())
+        # model = custom_model('sla_report', table_info)  # This appears to be working. Need many more mixins
+        model = model_factory()
+        print(model)
+        print(model.__base__)
+        print(model.__tablename__)
+        print(model.__table_args__)
+        print(model.__table__.columns.keys())
         with TestCustomModel.app.app_context():
             conn = self.internal_connection(
                 TestCustomModel.app.config['SQLALCHEMY_DATABASE_URI'],
@@ -37,7 +38,7 @@ class TestCustomModel(BaseTest):
     def test_identify_columns(self):
         clients = ['Susy', 'Josh', 'Sally', 'Emily']
         all_call_data = self.example_data_src.example(datetime.today().date(), clients)
-        print(all_call_data[0])
+        # print(all_call_data[0])
         data = DataFrame(
             all_call_data
         )

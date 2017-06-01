@@ -5,19 +5,24 @@ from datetime import datetime
 
 from app.lib.mixins import *
 
-# TODO make mixin registry
 
-
-@generic_repr       # This adds a default to columns without data for __repr__
 class BaseMixin(object):
-
     id = Column(Integer, primary_key=True)
 
 
-# All custom models that inherit from Base get an id, created_on, updated_on
-Base = declarative_base(cls=(BaseMixin, Timestamp))
+def apply_mixins(cls, column_data):
+    for name, value in column_data.items():             # bind as class attributes before inst
+        setattr(cls, name, value)
+    return cls
 
 
-def custom_model(name, attrib):
-    mixins = ()
-    return type(name, (Base, *mixins), attrib)
+class MixedModel(object):
+    pass
+
+
+Base = declarative_base(cls=BaseMixin)
+
+
+def get_model(name, columns, table_info):
+    my_mixin = apply_mixins(MixedModel, columns)        # get a mixed model with specified model
+    return type(name, (Base, my_mixin), table_info)     # return Model object

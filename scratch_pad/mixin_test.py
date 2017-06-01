@@ -1,45 +1,21 @@
 from sqlalchemy import Column, String, Integer
 from sqlalchemy_utils import Timestamp
-from functools import wraps
 
 
 from sqlalchemy.ext.declarative import declarative_base
-
-
-# Base = declarative_base()
 
 
 class BaseMixin(object):
     id = Column(Integer, primary_key=True)
 
 
-# def apply_mixins(cls):                        # not working
-#     @wraps(cls)
-#     def wrapper(*args, **kwds):               # ideally this allows me to pass defaults within a scope
-#         default = kwds.get('defaults', {})
-#         for name, value in default.items():
-#             setattr(cls, name, value)
-#         return cls
-#
-#     return wrapper
-
-def apply_mixins(cls):                          # this works
-    defaults = {
-        'string': Column('string', String(20)),
-        'integer': Column('integer', Integer())
-    }
-    for name, value in defaults.items():        # bind as class attributes before inst
+def apply_mixins(cls, attribs):
+    for name, value in attribs.items():        # bind as class attributes before inst
         setattr(cls, name, value)
     return cls
 
 
-def add_default(cls, name, defaults):           # attempt to add defaults and push/pop
-    setattr(cls, name, defaults)
-    return cls
-
-
-@apply_mixins
-class SomeMixin(object):
+class MixedModel(object):
     pass
 
 
@@ -53,12 +29,12 @@ def test():
             'autoload': False
         }
     }
-    defaults = {
+    columns = {
         'string': Column('string', String(20)),
         'integer': Column('integer', Integer())
     }
-    obj = type('Sample', (Base, SomeMixin), table_info)                 # this works
-    # obj = type('Sample', (Base, SomeMixin(defaults)), table_info)     # this doesn't
+    my_mixin = apply_mixins(MixedModel, columns)
+    obj = type('Sample', (Base, my_mixin), table_info)                 # this works
     print(obj)
     print(obj.__base__)
     print(obj.__tablename__)
