@@ -93,6 +93,5 @@ class TimeStamp(Timestamp):
 COLUMNS = {
     np.object_: String,
     int64: Integer,
-    np.datetime64: DateTime,
-    'string': str
+    np.datetime64: DateTime
 }

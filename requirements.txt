@@ -7,5 +7,6 @@ flask_excel
 flask_fixtures
 radar
 pyexcel
+pyexcel-text
 flask_paginate
 psycopg2

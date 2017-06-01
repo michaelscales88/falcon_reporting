@@ -107,14 +107,14 @@ def run_logger(app_name):
         log.addHandler(handler)
 
 
-def model_factory(columns=None, table_info=None):
+def model_factory(columns=None, table_info=None, name='Sample'):
     # make name, build columns and table info
 
     # name, table_info = fn
 
     # columns = fn
 
-    return get_model('Sample', columns, table_info)
+    return get_model(name, columns, table_info)
 
 
 def query_statement(statement, connection, **kwargs):
