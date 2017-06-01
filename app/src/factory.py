@@ -2,7 +2,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 from flask_paginate import Pagination
 from flask import current_app, request
-from sqlalchemy import Column, String, Integer
 
 
 from app.models.custom_model import get_model
@@ -108,17 +107,13 @@ def run_logger(app_name):
         log.addHandler(handler)
 
 
-def model_factory(meta_data=None, columns=None):
-    table_info = {
-        '__tablename__': 'sla_report',
-        '__table_args__': {
-            'autoload': False
-        }
-    }
-    columns = {
-        'string': Column('string', String(20)),
-        'integer': Column('integer', Integer())
-    }
+def model_factory(columns=None, table_info=None):
+    # make name, build columns and table info
+
+    # name, table_info = fn
+
+    # columns = fn
+
     return get_model('Sample', columns, table_info)
 
 

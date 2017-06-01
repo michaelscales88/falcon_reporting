@@ -6,6 +6,7 @@ from datetime import datetime
 from app.lib.mixins import *
 
 
+@generic_repr                                           # nice prebuilt __repr__ for all models
 class BaseMixin(object):
     id = Column(Integer, primary_key=True)
 

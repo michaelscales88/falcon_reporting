@@ -2,6 +2,8 @@ from sqlalchemy.orm import defer
 from datetime import datetime
 from json import dumps
 from pandas import DataFrame
+from sqlalchemy import Column, String, Integer
+
 
 from app.fixtures.base_test import BaseTest
 from app.src.factory import model_factory
@@ -13,10 +15,17 @@ class TestCustomModel(BaseTest):
         super().setUp()
 
     def test_columns(self):
-        table_info = {'__tablename__': 'sla_report',
-                      '__table_args__': {'autoload': False}, }
-        # model = custom_model('sla_report', table_info)  # This appears to be working. Need many more mixins
-        model = model_factory()
+        table_info = {
+            '__tablename__': 'sla_report',
+            '__table_args__': {
+                'autoload': False
+            }
+        }
+        columns = {
+            'string': Column('string', String(20)),
+            'integer': Column('integer', Integer())
+        }
+        model = model_factory(columns, table_info)
         print(model)
         print(model.__base__)
         print(model.__tablename__)
@@ -43,7 +52,7 @@ class TestCustomModel(BaseTest):
             all_call_data
         )
         # data.set_index('call_id', inplace=True)
-        # print(data.dtypes)
+        print(data.dtypes)
         # print(data)
         # for call_id, call_data in all_call_data:
         #     print(call_id)
