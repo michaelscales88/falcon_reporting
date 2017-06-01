@@ -3,7 +3,7 @@ from json import dumps
 from datetime import datetime
 
 
-from .mixins import FnLib
+# from .mixins import FnLib
 from .report_utilities import ReportUtilities
 
 
@@ -11,7 +11,7 @@ class DataWorker(object):
 
     def __init__(self):
         self._commands = {}
-        self.fn_lib = FnLib()
+        # self.fn_lib = FnLib()
 
     @staticmethod
     def my_business(obj):

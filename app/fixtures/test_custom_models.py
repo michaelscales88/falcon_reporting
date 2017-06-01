@@ -3,11 +3,12 @@ from datetime import datetime
 from json import dumps
 from pandas import DataFrame
 from sqlalchemy import Column, String, Integer
+import numpy as np
 
 
 from app.fixtures.base_test import BaseTest
 from app.src.factory import model_factory
-from app.lib.json_encoders import MyEncoder
+from app.lib.mixins import COLUMNS
 
 
 class TestCustomModel(BaseTest):
@@ -23,7 +24,8 @@ class TestCustomModel(BaseTest):
         }
         columns = {
             'string': Column('string', String(20)),
-            'integer': Column('integer', Integer())
+            'integer': Column('integer', Integer()),
+
         }
         model = model_factory(columns, table_info)
         print(model)
@@ -45,14 +47,14 @@ class TestCustomModel(BaseTest):
         self.assertTrue(True)
 
     def test_identify_columns(self):
-        clients = ['Susy', 'Josh', 'Sally', 'Emily']
-        all_call_data = self.example_data_src.example(datetime.today().date(), clients)
+        # clients = ['Susy', 'Josh', 'Sally', 'Emily']
+        # all_call_data = self.example_data_src.example(datetime.today().date(), clients)
         # print(all_call_data[0])
-        data = DataFrame(
-            all_call_data
-        )
+        # data = DataFrame(
+        #     all_call_data
+        # )
         # data.set_index('call_id', inplace=True)
-        print(data.dtypes)
+        # print(data.dtypes)
         # print(data)
         # for call_id, call_data in all_call_data:
         #     print(call_id)
@@ -64,19 +66,22 @@ class TestCustomModel(BaseTest):
         #     print(inner_data.dtypes)
         #     print(call_data.keys())
         #     break
-        # with TestCustomModel.app.app_context():
-        #     src, result = self.query_statement(
-        #         TestCustomModel.app.config['TEST_STATEMENT'],
-        #         TestCustomModel.app.config['EXTERNAL_CONNECTION']
-        #     )
-        #     data_src_records = [dict(zip(row.keys(), row)) for row in result]
-        #     # print(data_src_records[0], flush=True)
-        #     # record = data_src_records[0]
-        #     # print(dumps(record, indent=4, cls=MyEncoder))
-        #     data = DataFrame(
-        #         data_src_records
-        #     )
-        #     data.set_index('call_id', inplace=True)
-        #     # print(data.dtypes)
-        #     # print(data)
+        with TestCustomModel.app.app_context():
+            src, result = self.query_statement(
+                TestCustomModel.app.config['TEST_STATEMENT'],
+                TestCustomModel.app.config['EXTERNAL_CONNECTION']
+            )
+            data_src_records = [dict(zip(row.keys(), row)) for row in result]
+            # print(data_src_records[0], flush=True)
+            # record = data_src_records[0]
+            # print(dumps(record, indent=4, cls=MyEncoder))
+            data = DataFrame(
+                data_src_records
+            )
+            data.set_index('call_id', inplace=True)
+            # print(data.dtypes, type(data.dtypes))
+            # print(COLUMNS.keys())
+            print([(d.type, COLUMNS.get(d.type, None)) for d in data.dtypes])
+            # print([COLUMNS.get(c_dtype(a_dtype), None) for a_dtype in data.dtypes])
+            # print(data)
         self.assertTrue(True)

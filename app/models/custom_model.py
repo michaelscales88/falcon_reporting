@@ -1,13 +1,11 @@
-from sqlalchemy import Column, Integer, DateTime, String
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
-from datetime import datetime
+from sqlalchemy_utils import generic_repr               # sqlalchemy provided mixins
 
 
 from app.lib.mixins import *
 
 
 @generic_repr                                           # nice prebuilt __repr__ for all models
-class BaseMixin(object):
+class BaseMixin(TimeStamp):                             # include created_on and updated_on columns for all models
     id = Column(Integer, primary_key=True)
 
 
