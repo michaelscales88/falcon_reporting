@@ -94,6 +94,7 @@ class CallCenter:
                     '7': timedelta(0)                       # Hold time
                 }
             }
-        return {
-            '{call_id}'.format(call_id=call_id_seed + index): calls[key] for index, key in enumerate(sorted(calls.keys()))
-        }
+        return [
+            {'{call_id}'.format(call_id=call_id_seed + index): calls[key]}
+            for index, key in enumerate(sorted(calls.keys()))
+        ]

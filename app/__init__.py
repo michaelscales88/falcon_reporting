@@ -76,6 +76,7 @@ def teardown(error):
 def not_found(error):
     return render_template('404.html'), 404
 
+
 from app.views import index
 from app.views import records
 from app.views import insert
