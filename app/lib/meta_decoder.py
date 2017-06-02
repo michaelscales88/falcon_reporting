@@ -1,4 +1,0 @@
-
-
-class MetaDecoder(object):
-    pass

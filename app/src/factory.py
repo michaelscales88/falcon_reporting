@@ -107,7 +107,7 @@ def run_logger(app_name):
         log.addHandler(handler)
 
 
-def model_factory(columns=None, table_info=None, name='Sample'):
+def model_factory(name='Sample', columns=None, table_info=None):
     # make name, build columns and table info
 
     # name, table_info = fn

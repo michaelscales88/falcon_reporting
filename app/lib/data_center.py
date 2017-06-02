@@ -3,7 +3,7 @@ from json import dumps
 
 from app.lib.report_utilities import ReportUtilities
 from app.lib.data_worker import DataWorker
-from app.lib.session_register import SessionRegistry
+from app.lib.app_registry import SessionRegistry
 
 
 class DataCenter(object):
