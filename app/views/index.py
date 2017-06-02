@@ -1,7 +1,6 @@
 from flask import render_template, g, Blueprint
 from pandas import DataFrame
 
-
 from app.src.factory import get_page_args, get_pagination
 from app.models.flexible_storage import FlexibleStorage
 
@@ -11,21 +10,29 @@ mod = Blueprint('index', __name__, template_folder='templates')
 @mod.route('/')
 def index():
     page, per_page, offset = get_page_args()
+    # query = (
+    #     g.db.query(FlexibleStorage)
+    #     .order_by(FlexibleStorage.id.desc())
+    #     .limit(per_page)
+    #     .offset(offset)
+    # ).all()
+    # df = DataFrame.from_records([q.to_dict() for q in query])
+    # if not df.empty:
+    #     df.set_index(['call_id', 'event_id'], inplace=True)
     record_set = (
         g.db.query(FlexibleStorage)
-        .order_by(FlexibleStorage.id.desc())
-        .limit(per_page)
-        .offset(offset)
+            .order_by(FlexibleStorage.id.desc())
+            .limit(per_page)
+            .offset(offset)
     ).all()
     df = DataFrame(
         [rec.to_dict() for rec in record_set]
     )
-    if not df.empty:                      # Protect from KeyError if the dB is empty
+    if not df.empty:  # Protect from KeyError if the dB is empty
         df.set_index('id', inplace=True)  # inplace = True saves us from having to bind a new dataframe
         # data.rename_axis(None)          # remove id label <- not working
         df.name = 'test'
-        del df.index.name                 # remove id label
-        # print(df)
+        del df.index.name  # remove id label
     pagination = get_pagination(
         page=page,
         per_page=per_page,

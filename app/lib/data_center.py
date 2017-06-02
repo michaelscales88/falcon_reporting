@@ -4,6 +4,7 @@ from json import dumps
 from app.lib.report_utilities import ReportUtilities
 from app.lib.data_worker import DataWorker
 from app.lib.app_registry import SessionRegistry
+from app.lib.app_registry import ModelRegistry
 
 
 class DataCenter(object):
@@ -17,7 +18,8 @@ class DataCenter(object):
         self._job = None
         self._util = ReportUtilities()
         self._worker = DataWorker()
-        self._registry = SessionRegistry()
+        self._session_registry = SessionRegistry()
+        self._model_registry = ModelRegistry()
 
     # Currently using settings file to control the extension for saving
     # TODO beef this up to identify the extension type from the file type
@@ -55,5 +57,7 @@ class DataCenter(object):
         yield dumps(record, **kwargs)
 
     def get_session(self, target, **kwargs):
-        return self._registry.get(target, **kwargs)
+        return self._session_registry.get(target, **kwargs)
 
+    def get_model(self, target, **kwargs):
+        return self._model_registry.get(target, **kwargs)

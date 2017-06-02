@@ -87,6 +87,7 @@ class TestCustomModel(BaseTest):
         conn.commit()
         query = conn.query(model).all()
         df = DataFrame.from_records([q.to_dict() for q in query])
+        df.set_index(['call_id', 'event_id'], inplace=True)     # This groups by call_id and then event_id
         # df = DataFrame(query.all(), columns=[column['name'] for column in query.column_descriptions])
         print(df)
         self.assertTrue(True)

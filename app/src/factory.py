@@ -4,7 +4,7 @@ from flask_paginate import Pagination
 from flask import current_app, request
 
 
-from app.models.custom_model import get_model
+# decoder_ring = QueryDecoder()
 
 
 def manifest_reader(manifest=None):
@@ -107,14 +107,16 @@ def run_logger(app_name):
         log.addHandler(handler)
 
 
-def model_factory(name='Sample', columns=None, table_info=None):
+def model_factory(result, **kwargs):
+    # get model by name
+    model = current_app.data_src.get_model(result, **kwargs)
     # make name, build columns and table info
-
+    # model, data = decoder_ring.decode_result(result)
     # name, table_info = fn
 
     # columns = fn
 
-    return get_model(name, columns, table_info)
+    return model  # , data
 
 
 def query_statement(statement, connection, **kwargs):

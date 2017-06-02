@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+from app.models.custom_model import get_model
+from app.lib.query_decoder import QueryDecoder
+
 
 class SessionRegistry(object):
     _registry = {}
@@ -23,6 +26,7 @@ class ModelRegistry(object):
     def get(self, url, **kwargs):
         if url not in self._registry:
             pass
-            # Model stuff
+            # columns, table_info
+            # model = get_model('Test', columns, table_info)
             # self._registry[url] = model
         return self._registry[url]

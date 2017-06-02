@@ -2,7 +2,7 @@ from pandas import DataFrame
 from sqlalchemy import Column
 
 from app.lib.mixins import COLUMNS
-from app.src.factory import model_factory
+from app.models.custom_model import get_model
 
 
 class QueryDecoder(object):
@@ -11,7 +11,7 @@ class QueryDecoder(object):
     def decode_result(self, result):
         data = self.coerce_result_(result)
         name, columns, table_info = self.make_meta_data_(data)
-        model = model_factory(name, columns, table_info)
+        model = get_model(name, columns, table_info)
         self.model_info(model)
         return model, data
 
@@ -44,6 +44,7 @@ class QueryDecoder(object):
     @staticmethod
     def model_info(model):
         print(model)
+        print(model.__name__)
         print(model.__base__)
         print(model.__tablename__)
         print(model.__table_args__)

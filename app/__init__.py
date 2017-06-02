@@ -61,7 +61,6 @@ def before_request():
         echo=app.config['SQLALCHEMY_ECHO'],
         cls=FlexibleStorage
     )
-    print(g.db)
 
 
 @app.teardown_request
