@@ -16,8 +16,8 @@ class TestCallCenter(BaseTest):
     def test_2(self):
         clients = ['Susy', 'Josh', 'Sally', 'Emily']
         day_of_calls = self.func.example(datetime.today().date(), clients)
-        for call_id in sorted(day_of_calls.keys()):
-            # print(call_id)
+        for call in day_of_calls:
+            print(call)
             # print(dumps(day_of_calls[call_id], cls=MyEncoder, indent=4))
             pass
 
