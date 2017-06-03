@@ -17,8 +17,8 @@ class TestCallCenter(BaseTest):
         clients = ['Susy', 'Josh', 'Sally', 'Emily']
         day_of_calls = self.func.example(datetime.today().date(), clients)
         for call in day_of_calls:
-            print(call['start_time'], type(call['start_time']))
-            # print(dumps(call, indent=4, default=str))
+            # print(call['start_time'], type(call['start_time']))
+            print(dumps(call, indent=4, default=str))
             pass
 
         self.assertTrue(True)

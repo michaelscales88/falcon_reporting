@@ -38,6 +38,6 @@ class MixedModel(object):
 Base = declarative_base(cls=BaseMixin)
 
 
-def get_model(name, columns, table_info):
+def model_factory(name, columns, table_info):
     my_mixin = apply_mixins(MixedModel, columns)        # get a mixed model with correct column types
     return type(name, (Base, my_mixin), table_info)     # return Model object

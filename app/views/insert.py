@@ -14,9 +14,16 @@ from app.lib.call_center import CallCenter
 mod = Blueprint('insert', __name__, template_folder='templates')
 
 
-# @mod.before_request
-# def before_request():
-#     # Set up a unique dB connection for this blueprint
+@mod.before_request
+def before_request():
+    # Set up our dB connection
+    model = current_app.data_src.model('sla_report')
+    if model:
+        g.db = internal_connection(
+            current_app.config['SQLALCHEMY_DATABASE_URI'],
+            echo=current_app.config['SQLALCHEMY_ECHO'],
+            cls=model
+        )
 
 
 @mod.route('/init_db/')
@@ -44,55 +51,61 @@ def init_db2():
 @mod.route('/test_db')
 def test_db():
     # Sample data from app/lib/call_center.py
-    data_src_records = CallCenter().example(
+    records = CallCenter().example(
         current_app.test_date,
-        [client for client in current_app.config['CLIENTS'].keys()]
+        list(current_app.config['CLIENTS'])
     )
-    cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
-    return insert_records(cached_records)
+    name = 'sla_report'
+    current_app.data_src.insert_records(name, records)
+    print('inserted records and found model', current_app.data_src.model(name))
+    return show_inserted([i for i in range(30000)], model=current_app.data_src.model(name))
 
 
-def insert_records(records, model=None):
+def insert_records(records):
+    for pk, call_data_dict in records.items():
+        call_data = FlexibleStorage(
+            id=pk,
+            start=call_data_dict.pop('Start Time'),
+            end=call_data_dict.pop('End Time'),
+            unique_id1=call_data_dict.pop('Unique Id1'),
+            unique_id2=call_data_dict.pop('Unique Id2'),
+            data=call_data_dict
+        )
+        g.db.add(call_data)
+    g.db.commit()
+    return show_inserted(records.keys(), model=FlexibleStorage)
 
-    if model:
-        with current_app.app_context():
-            g.db = internal_connection(
-                current_app.config['SQLALCHEMY_DATABASE_URI'],
-                echo=current_app.config['SQLALCHEMY_ECHO'],
-                cls=model
-            )
-        for index, row in records.iterrows():
-            call_data = model(
-                **row
-            )
-            g.db.add(call_data)
-        g.db.commit()
-        return redirect(url_for('index.index'))
-    else:
-        for pk, call_data_dict in records.items():
-            call_data = FlexibleStorage(
-                id=pk,
-                start=call_data_dict.pop('Start Time'),
-                end=call_data_dict.pop('End Time'),
-                unique_id1=call_data_dict.pop('Unique Id1'),
-                unique_id2=call_data_dict.pop('Unique Id2'),
-                data=call_data_dict
-            )
-            g.db.add(call_data)
-        g.db.commit()
+
+def insert_records2(name, records):
+    for pk, call_data_dict in records.items():
+        call_data = FlexibleStorage(
+            id=pk,
+            start=call_data_dict.pop('Start Time'),
+            end=call_data_dict.pop('End Time'),
+            unique_id1=call_data_dict.pop('Unique Id1'),
+            unique_id2=call_data_dict.pop('Unique Id2'),
+            data=call_data_dict
+        )
+        g.db.add(call_data)
+    g.db.commit()
     return show_inserted(records.keys())
 
 
-def show_inserted(ids):
+def show_inserted(ids, model=None):
     page, per_page, offset = get_page_args()
-    record_set = (
-        g.db.query(FlexibleStorage)
-        .order_by(FlexibleStorage.id)
-        .filter(FlexibleStorage.id.in_(ids))
-        .limit(per_page)
-        .offset(offset)
-        .all()
-    )
+    print(page, per_page, offset)
+    record_set = current_app.data_src.get_records('sla_report', offset=offset, ids=ids)
+    # if current_app.data_src.model('sla_report'):
+    #     record_set = (
+    #         g.db.query(model)
+    #         .order_by(model.id)
+    #         .filter(model.id.in_(ids))
+    #         .limit(per_page)
+    #         .offset(offset)
+    #         .all()
+    #     )
+    # else:
+    #     record_set = []
     pagination = get_pagination(
         page=page,
         per_page=per_page,

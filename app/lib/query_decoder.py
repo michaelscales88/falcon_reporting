@@ -2,18 +2,18 @@ from pandas import DataFrame
 from sqlalchemy import Column
 
 from app.lib.mixins import COLUMNS
-from app.models.custom_model import get_model
+from app.models.custom_model import model_factory
 
 
 class QueryDecoder(object):
     # TODO this is the place to check for a model in a model registry
 
-    def decode_result(self, result):
-        data = self.coerce_result_(result)
-        name, columns, table_info = self.make_meta_data_(data)
-        model = get_model(name, columns, table_info)
+    def decode_result(self, name, records):
+        data = self.coerce_result_(records)
+        name, columns, table_info = self.make_meta_data_(name, data)
+        model = model_factory(name, columns, table_info)
         self.model_info(model)
-        return model, data
+        return model
 
     @staticmethod
     def coerce_result_(result):
@@ -28,15 +28,19 @@ class QueryDecoder(object):
         )
 
     @staticmethod
-    def make_meta_data_(data):
+    def make_meta_data_(name, data):
         columns = {
             # col_name: Column(col_name, col_type, table=None)
             name: Column(name, COLUMNS.get(d.type, None)) for name, d in zip(list(data), data.dtypes)
         }
         table_info = {
-            '__tablename__': 'sla_report',
+            '__tablename__': name,
             '__table_args__': {
+                # 'autoload': True,
+                # 'schema': 'data',
+                # 'autoload_with': db.engine
                 'autoload': False
+
             }
         }
         return table_info['__tablename__'], columns, table_info

@@ -56,11 +56,13 @@ app.data_src = DataCenter()     # Holds session registry, metadata, etc -> needs
 @app.before_request
 def before_request():
     # Set up our dB connection
-    g.db = internal_connection(
-        app.config['SQLALCHEMY_DATABASE_URI'],
-        echo=app.config['SQLALCHEMY_ECHO'],
-        cls=FlexibleStorage
-    )
+    model = app.data_src.model('sla_report')
+    if model:
+        g.db = internal_connection(
+            app.config['SQLALCHEMY_DATABASE_URI'],
+            echo=app.config['SQLALCHEMY_ECHO'],
+            cls=model
+        )
 
 
 @app.teardown_request

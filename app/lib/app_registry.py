@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from app.models.custom_model import get_model
+from app.models.custom_model import model_factory
 from app.lib.query_decoder import QueryDecoder
 
 
@@ -22,11 +22,13 @@ class SessionRegistry(object):
 
 class ModelRegistry(object):
     _registry = {}
+    _decoder = QueryDecoder()
 
-    def get(self, url, **kwargs):
-        if url not in self._registry:
-            pass
-            # columns, table_info
-            # model = get_model('Test', columns, table_info)
-            # self._registry[url] = model
-        return self._registry[url]
+    def get(self, table_name, records, **kwargs):
+        if table_name not in self._registry:
+            model = self._decoder.decode_result(table_name, records)
+            self._registry[table_name] = model
+        return self._registry[table_name]
+
+    def __getitem__(self, table_name):
+        return self._registry[table_name] if table_name in self._registry.keys() else None

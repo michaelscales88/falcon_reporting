@@ -5,6 +5,9 @@ from math import pow, ceil
 
 class EventManager:
 
+    event_id = None
+    call_id = None
+
     @staticmethod
     def increment_time(event_cursor, start, end, time_value):
         if event_cursor[end]:   # catch the first increment since end is none
@@ -13,8 +16,27 @@ class EventManager:
 
     @staticmethod
     def increment(event_cursor, value, inc):
-        event_cursor[value] += inc
+        try:
+            event_cursor[value] += inc
+        except TypeError:
+            print('cant add those types')
 
+    # @staticmethod
+    # def thread_events(event_cursor, call, events):
+    #     for event_type, event_time in call.call_flow():
+    #         event_manager.increment_time(event_cursor, 'start_time', 'end_time', event_time)
+    #         event = {
+    #             'event_id': EventManager.event_id,
+    #             'start_time': event_cursor['start_time'],
+    #             'end_time': event_cursor['end_time'],
+    #             'call_id': EventManager.call_id,
+    #             'calling_party_number': call.calling_party,  # Calling party
+    #             'dialed_party_number': call.receiving_party,  # Receiving Party
+    #             'event_type': event_type
+    #         }
+    #         event_manager.increment(EventManager.event_id, 1)  # prepare for next event
+    #         events.append(event)
+    #     event_manager.increment(EventManager.call_id, 1)
 
 event_manager = EventManager()
 
@@ -30,6 +52,7 @@ def event_generator(call, event_cursor):
     # 21 call drop
     """
     events = []
+    # currently this overflows on the day -> need some thread like mechanism for adding events concurrently
     for event_type, event_time in call.call_flow():
         event_manager.increment_time(event_cursor, 'start_time', 'end_time', event_time)
         event = {
