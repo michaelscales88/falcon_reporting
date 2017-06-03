@@ -1,9 +1,26 @@
 from radar import random_datetime, randint
 from datetime import timedelta, datetime, time
 from math import pow, ceil
+from json import dumps
 
 
-def event_generator(call, call_time, call_id, event_id):
+class EventManager:
+
+    @staticmethod
+    def increment_time(event_cursor, start, end, time_value):
+        if event_cursor[end]:   # catch the first increment since end is none
+            event_cursor[start] = event_cursor[end]
+        event_cursor[end] = event_cursor[start] + time_value
+
+    @staticmethod
+    def increment(event_cursor, value, inc):
+        event_cursor[value] += inc
+
+
+event_manager = EventManager()
+
+
+def event_generator(call, event_cursor):
     """
     # 1 ringing
     # 4 Talking
@@ -15,46 +32,65 @@ def event_generator(call, call_time, call_id, event_id):
     """
     events = []
     call_duration = call.total_time
+
     if call.answered:
         while call_duration > timedelta(0):
+            event_manager.increment_time(event_cursor, 'start_time', 'end_time', timedelta(seconds=15))
             event = {
-
+                'event_id': event_cursor['event_id'],
+                'start_time': event_cursor['start_time'],
+                'end_time': event_cursor['end_time'],
+                'call_id': event_cursor['call_id']
             }
-            call_duration -= timedelta(60)
+            event_manager.increment(event_cursor, 'event_id', 1)
+            call_duration -= timedelta(seconds=15)
             events.append(event)
     else:
-        events.append(
-            {
-                'event_id': event_id,
-                'call_id': call_id,
-                'Start Time': call_time,
-                'End Time': call_time + call.total_time,
-                'event_type': 1
+        for event_type in (1, 10, 21):
+            event_manager.increment_time(event_cursor, 'start_time', 'end_time', timedelta(seconds=15))
+            event = {
+                'event_id': event_cursor['event_id'],
+                'start_time': event_cursor['start_time'],
+                'end_time': event_cursor['end_time'],
+                'call_id': event_cursor['call_id'],
+                'event_type': event_type
             }
-        )
-        event_id += 1
-        if call.voice_mail:
-            events.append(
-                {
-                    'event_id': event_id,
-                    'call_id': call_id,
-                    'Start Time': call_time + call.total_time,
-                    'End Time': call_time + call.total_time,
-                    'event_type': 10
-                }
-            )
-            event_id += 1
-        events.append(
-            {
-                'event_id': event_id,
-                'call_id': call_id,
-                'Start Time': call_time + call.total_time,
-                'End Time': call_time + call.total_time,
-                'event_type': 21
-            }
-        )
-        event_id += 1
-        call_id += 1
+            event_manager.increment(event_cursor, 'event_id', 1)
+            events.append(event)
+        # events.append(
+        #     {
+        #         'event_id': event_id,
+        #         'call_id': call_id,
+        #         'Start Time': call_time,
+        #         'End Time': call_time + call.total_time,
+        #         'event_type': 1
+        #     }
+        # )
+        # event_id += 1
+        # if call.voice_mail:
+        #     events.append(
+        #         {
+        #             'event_id': event_id,
+        #             'call_id': call_id,
+        #             'Start Time': call_time + call.total_time,
+        #             'End Time': call_time + call.total_time,
+        #             'event_type': 10
+        #         }
+        #     )
+        #     event_id += 1
+        # events.append(
+        #     {
+        #         'event_id': event_id,
+        #         'call_id': call_id,
+        #         'Start Time': call_time + call.total_time,
+        #         'End Time': call_time + call.total_time,
+        #         'event_type': 21
+        #     }
+        # )
+        # event_id += 1
+        # call_id += 1
+    event_manager.increment(event_cursor, 'call_id', 1)         # last thing is to increment the call_id
+    event_manager.increment(event_cursor, 'event_id', 1)        # a new call == new event
     return events
 
 
@@ -121,18 +157,24 @@ class CallCenter:
     def example(date, clients):
         # Use the date to seed our call_id -> we can run multiple examples w/o duplicate pk
         # This is roughshod right now
-        call_id = int(''.join(str(i) for i in (date.month, date.day, date.year)))   # seed the first call_id
-        event_id = call_id * 10                                                     # # events > # of calls
+        call_id = int(''.join(str(i) for i in (date.month, date.day, date.year)))   # seed the first call_id                                                    #
         call_time = random_datetime(                                                # seed the first call of the day
             start=datetime.combine(date, time(0)),
             stop=datetime.combine(date, time(hour=23, minute=59, second=59))
         )
         calls = []
         num_clients = len(clients)
+        event_cursor = {
+            'call_id': call_id,
+            'event_id': call_id * 10,       # events > # of calls
+            'start_time': call_time,
+            'end_time': None
+
+        }
         for index in range(num_clients*date.month*randint(1, 5)):       # create randomish number of calls
             call = Call(clients[(index - randint(0, 7)) % num_clients])
-            events = event_generator(call, call_time, call_id, event_id)
-
+            events = event_generator(call, event_cursor)
+            print(dumps(event_cursor, indent=4, default=str))
 
             # calls[start_time] = {
             #     'Start Time': start_time,
