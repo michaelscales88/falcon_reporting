@@ -44,7 +44,11 @@ def cache(data_src_records, pk, subkey):
             record['event_type'],
             timedelta(0)
         )
-        event_accum += record['end_time'] - record['start_time']
+        try:
+            event_accum += record['end_time'] - record['start_time']
+        except TypeError:
+            print(record['end_time'], type(record['end_time']))
+            print(record['start_time'], type(record['start_time']))
         cached_event['Event Summary'][record['event_type']] = event_accum
 
         cached_events[key] = cached_event

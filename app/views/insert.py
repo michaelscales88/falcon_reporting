@@ -44,10 +44,11 @@ def init_db2():
 @mod.route('/test_db')
 def test_db():
     # Sample data from app/lib/call_center.py
-    cached_records = CallCenter().example(
+    data_src_records = CallCenter().example(
         current_app.test_date,
         [client for client in current_app.config['CLIENTS'].keys()]
     )
+    cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
     return insert_records(cached_records)
 
 

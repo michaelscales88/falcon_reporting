@@ -4,7 +4,7 @@ from json import dumps
 
 from app.fixtures.base_test import BaseTest
 from app.lib.call_center import CallCenter
-from app.lib.json_encoders import MyEncoder
+from app.lib.sla_cache import cache
 
 
 class TestCallCenter(BaseTest):
@@ -17,9 +17,17 @@ class TestCallCenter(BaseTest):
         clients = ['Susy', 'Josh', 'Sally', 'Emily']
         day_of_calls = self.func.example(datetime.today().date(), clients)
         for call in day_of_calls:
-            print(call)
-            # print(dumps(day_of_calls[call_id], cls=MyEncoder, indent=4))
+            print(call['start_time'], type(call['start_time']))
+            # print(dumps(call, indent=4, default=str))
             pass
 
         self.assertTrue(True)
 
+    def test_3(self):
+        clients = ['Susy', 'Josh', 'Sally', 'Emily']
+        result = self.func.example(datetime.today().date(), clients)
+        data_src_records = [dict(zip(row.keys(), row)) for row in result]
+        for call in data_src_records:
+            print(call)
+        cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
+        self.assertTrue(True)
