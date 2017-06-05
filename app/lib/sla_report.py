@@ -84,6 +84,8 @@ def report(records):
 
     # Filter Step
     try:
+        print(records.keys())
+        print(type(records))
         for x in range(0, len(records)):
             match_record = records[x]
             matches = match(records[x+1:], match_val=match_record)

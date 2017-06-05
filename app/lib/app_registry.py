@@ -1,7 +1,7 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import scoped_session
+from redpanda import create_engine
+from redpanda.orm import sessionmaker
 
-from app.models.custom_model import model_factory
 from app.lib.query_decoder import QueryDecoder
 
 
@@ -10,7 +10,7 @@ class SessionRegistry(object):
 
     def get(self, url, **kwargs):
         if url not in self._registry:
-            mapped_cls = kwargs.pop('cls', None)    # get the custom mapped class
+            mapped_cls = kwargs.pop('cls', None)        # get the custom mapped class
             engine = create_engine(url, **kwargs)
             if mapped_cls:
                 mapped_cls.metadata.create_all(engine)  # This creates the declarative base tables
@@ -31,4 +31,4 @@ class ModelRegistry(object):
         return self._registry[table_name]
 
     def __getitem__(self, table_name):
-        return self._registry[table_name] if table_name in self._registry.keys() else None
+        return self._registry[table_name] if table_name in self._registry.keys() else None  # can't use .get atm

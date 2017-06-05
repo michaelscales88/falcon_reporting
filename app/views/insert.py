@@ -58,7 +58,7 @@ def test_db():
     name = 'sla_report'
     current_app.data_src.insert_records(name, records)
     print('inserted records and found model', current_app.data_src.model(name))
-    return show_inserted([i for i in range(30000)], model=current_app.data_src.model(name))
+    return show_inserted([i for i in range(len(records))])
 
 
 def insert_records(records):
@@ -91,21 +91,14 @@ def insert_records2(name, records):
     return show_inserted(records.keys())
 
 
-def show_inserted(ids, model=None):
+def show_inserted(ids):
     page, per_page, offset = get_page_args()
-    print(page, per_page, offset)
-    record_set = current_app.data_src.get_records('sla_report', offset=offset, ids=ids)
-    # if current_app.data_src.model('sla_report'):
-    #     record_set = (
-    #         g.db.query(model)
-    #         .order_by(model.id)
-    #         .filter(model.id.in_(ids))
-    #         .limit(per_page)
-    #         .offset(offset)
-    #         .all()
-    #     )
-    # else:
-    #     record_set = []
+    record_set = current_app.data_src.get_records(
+        'sla_report',
+        offset=offset,
+        ids=ids,
+        per_page=per_page
+    )
     pagination = get_pagination(
         page=page,
         per_page=per_page,
