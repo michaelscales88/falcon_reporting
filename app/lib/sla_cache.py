@@ -1,4 +1,5 @@
 from datetime import timedelta
+from dateutil.parser import parse
 
 
 def cache(data_src_records, pk, subkey):
@@ -29,7 +30,7 @@ def cache(data_src_records, pk, subkey):
         if not cached_event['Start Time']:  # Set if none
             cached_event['Start Time'] = getattr(record, 'start_time')
         elif cached_event['Start Time'] > getattr(record, 'start_time'):  # or with a new lowest start_time
-            cached_event['Start Time'] = getattr (record, 'start_time')
+            cached_event['Start Time'] = getattr(record, 'start_time')
 
         # MAX end time
         if not cached_event['End Time']:  # Set if none
@@ -51,7 +52,7 @@ def cache(data_src_records, pk, subkey):
             # print(record['end_time'], type(record['end_time']))
             # print(record['start_time'], type(record['start_time']))
         cached_event['Event Summary'][getattr(record, 'event_type')] = event_accum
-
+        # print(cached_event['Start Time'], type(cached_event['Start Time']))
         cached_events[key] = cached_event
 
     return cached_events

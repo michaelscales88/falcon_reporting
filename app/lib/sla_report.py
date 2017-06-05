@@ -2,6 +2,7 @@ from operator import itemgetter
 from datetime import timedelta, time
 from pyexcel import Sheet
 from collections import OrderedDict
+from json import dumps
 
 
 from app.lib.app_settings import AppSettings
@@ -15,17 +16,21 @@ def chop_microseconds(delta):
 
 def match(record_list, match_val=None):
     matched_records = []
-
     for record in record_list:
         # Check match conditions
         match0 = (
-            getattr(match_val, 'data')['Event Summary'].get('4', timedelta(0))
-            == getattr(record, 'data')['Event Summary'].get('4', timedelta(0))
+            # getattr(match_val, 'data')['Event Summary'].get('4', timedelta(0))
+            match_val.get('Event Summary').get('4', timedelta(0))
+            # == getattr(record, 'data')['Event Summary'].get('4', timedelta(0))
+            == record.get('Event Summary').get('4', timedelta(0))
             == timedelta(0)
         )
-        match1 = getattr(match_val, 'unique_id2') == getattr(record, 'unique_id2')
-        match2 = getattr(match_val, 'unique_id1') == getattr(record, 'unique_id1')
-        match3 = (getattr(record, 'start') - getattr(match_val, 'end')) < timedelta(seconds=61)
+        # match1 = getattr(match_val, 'unique_id2') == getattr(record, 'unique_id2')
+        match1 = match_val.get('Unique Id2') == record.get('Unique Id2')
+        # match2 = getattr(match_val, 'unique_id1') == getattr(record, 'unique_id1')
+        match2 = match_val.get('Unique Id1') == record.get('Unique Id1')
+        # match3 = (getattr(record, 'start') - getattr(match_val, 'end')) < timedelta(seconds=61)
+        match3 = (record.get('Start Time') - match_val.get('End Time')) < timedelta(seconds=61)
 
         all_matched = all(
             [
@@ -37,7 +42,7 @@ def match(record_list, match_val=None):
         )
 
         if all_matched:
-            matched_records.append(getattr(record, 'id'))
+            matched_records.append(record.get('id'))
 
     return matched_records
 
@@ -91,12 +96,12 @@ def report(records):
             matches = match(records[x+1:], match_val=match_record)
             if (
                     len(matches) > 1
-                    and (match_record.end - match_record.start > timedelta(seconds=20))
-                    and match_record.data['Event Summary'].get('10', timedelta(0)) == timedelta(0)
+                    and (match_record.get('End Time') - match_record.get('Start Time') > timedelta(seconds=20))
+                    and match_record.get('Event Summary').get('10', timedelta(0)) == timedelta(0)
             ):
                 for a_match in matches:
                     for i, o in enumerate(records):
-                        if getattr(o, 'id') == a_match:
+                        if o.get('id') == a_match:
                             del records[i]
                             break
 
@@ -106,13 +111,13 @@ def report(records):
 
     # Process Step
     for record in records:
-        row_name = str(record.unique_id1)    # This is how we bind our client settings
-        if row_name in test_output.rownames and time(hour=7) <= record.start.time() <= time(hour=19):
-            call_duration = record.end - record.start
-            talking_time = record.data['Event Summary'].get('4', timedelta(0))
-            voicemail_time = record.data['Event Summary'].get('10', timedelta(0))
+        row_name = str(record.get('Unique Id1'))    # This is how we bind our client settings
+        if row_name in test_output.rownames and time(hour=7) <= record.get('Start Time').time() <= time(hour=19):
+            call_duration = record.get('End Time') - record.get('Start Time')
+            talking_time = record.get('Event Summary').get('4', timedelta(0))
+            voicemail_time = record.get('Event Summary').get('10', timedelta(0))
             hold_time = sum(
-                [record.data['Event Summary'].get(event_type, timedelta(0)) for event_type in ('5', '6', '7')],
+                [record.get('Event Summary').get(event_type, timedelta(0)) for event_type in ('5', '6', '7')],
                 timedelta(0)
             )
             wait_duration = call_duration - talking_time - hold_time

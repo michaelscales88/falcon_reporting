@@ -10,6 +10,7 @@ class QueryDecoder(object):
 
     def decode_result(self, name, records):
         data = self.coerce_result_(records)
+        # print(data)
         name, columns, table_info = self.make_meta_data_(name, data)
         model = model_factory(name, columns, table_info)
         self.model_info(model)
@@ -17,8 +18,11 @@ class QueryDecoder(object):
 
     @staticmethod
     def coerce_result_(result):
+        # print(result.keys())
+        # print([row for row in result])
         return DataFrame(
-            [dict(zip(row.keys(), row)) for row in result if hasattr(row, 'keys')]  # Bind the column name to each value
+            # [zip(row.keys(), row) for row in result if hasattr(row, 'keys')]  # Bind the column name to each value
+            result
         )
 
     @staticmethod
@@ -29,6 +33,8 @@ class QueryDecoder(object):
 
     @staticmethod
     def make_meta_data_(name, data):
+        # print([(d, type(d)) for d in data])
+        # print([(name, d.type) for name, d in zip(list(data), data.dtypes)])
         columns = {
             # col_name: Column(col_name, col_type, table=None)
             name: Column(name, COLUMNS.get(d.type, None)) for name, d in zip(list(data), data.dtypes)

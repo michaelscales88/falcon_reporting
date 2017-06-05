@@ -29,6 +29,8 @@ class ReportBuilderTest(BaseTest):
             record_set = ReportBuilderTest.app.data_src.get_records(
                 'sla_report', filter=func.date(ReportBuilderTest.app.test_date)
             )
+            for record in record_set:
+                print(record.start_time, type(record.start_time))
             test_report = report(cache(record_set, pk='call_id', subkey='event_id'))
             test_report.name = str(ReportBuilderTest.app.test_date.date())
             test_report_rownames = test_report.rownames
@@ -38,6 +40,7 @@ class ReportBuilderTest(BaseTest):
                 [col for col in test_report_content.items()]
             )
             data.index = test_report_rownames
+            print(data)
         self.assertTrue(True)
 
     def test_cache(self):

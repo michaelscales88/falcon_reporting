@@ -1,11 +1,23 @@
 from sqlalchemy.orm import scoped_session
 from redpanda import create_engine
 from redpanda.orm import sessionmaker
+from json import dumps
 
 from app.lib.query_decoder import QueryDecoder
 
 
-class SessionRegistry(object):
+class Registry(object):
+
+    _registry = {}
+
+    def __repr__(self):
+        return dumps(self._registry, indent=4, default=str)
+
+    def __getitem__(self, item_in_reg):
+        return self._registry[item_in_reg] if item_in_reg in self._registry.keys() else None  # can't use .get atm
+
+
+class SessionRegistry(Registry):
     _registry = {}
 
     def get(self, url, **kwargs):
@@ -20,7 +32,7 @@ class SessionRegistry(object):
         return self._registry[url]
 
 
-class ModelRegistry(object):
+class ModelRegistry(Registry):
     _registry = {}
     _decoder = QueryDecoder()
 
@@ -30,5 +42,5 @@ class ModelRegistry(object):
             self._registry[table_name] = model
         return self._registry[table_name]
 
-    def __getitem__(self, table_name):
-        return self._registry[table_name] if table_name in self._registry.keys() else None  # can't use .get atm
+    # def __getitem__(self, item_in_reg):
+    #     return self._registry[item_in_reg] if item_in_reg in self._registry.keys() else None  # can't use .get atm

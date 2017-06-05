@@ -30,10 +30,13 @@ def before_request():
 @mod.route('/init_db')
 def init_db():
     # Make a connection to the PG dB and execute the query
-    src, result = query_statement(current_app.config['TEST_STATEMENT'], current_app.config['EXTERNAL_CONNECTION'])
-    data_src_records = [dict(zip(row.keys(), row)) for row in result]
-    cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
-    return insert_records(cached_records)
+    src, records = query_statement(current_app.config['TEST_STATEMENT'], current_app.config['EXTERNAL_CONNECTION'])
+    data_src_records = [dict(zip(row.keys(), row)) for row in records]
+    print(records)
+    current_app.data_src.insert_records('sla_report', data_src_records)
+
+    # cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
+    return show_inserted([rec.id for rec in records])
 
 
 @mod.route('/init_db2/')
