@@ -6,3 +6,4 @@ class TestConfig(object):
     TESTING = True
     DEBUG = True
     WTF_CSRF_ENABLED = False
+    SQLALCHEMY_ECHO = False

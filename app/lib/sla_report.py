@@ -1,3 +1,4 @@
+from operator import itemgetter
 from datetime import timedelta, time
 from pyexcel import Sheet
 from collections import OrderedDict
@@ -84,8 +85,7 @@ def report(records):
 
     # Filter Step
     try:
-        print(records.keys())
-        print(type(records))
+        records = [records[key] for key in sorted(records.keys())]  # create order of calls
         for x in range(0, len(records)):
             match_record = records[x]
             matches = match(records[x+1:], match_val=match_record)

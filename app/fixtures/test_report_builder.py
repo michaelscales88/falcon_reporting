@@ -1,23 +1,12 @@
-from platform import system
+from pandas import DataFrame
+from sqlalchemy import func
+
 
 from app.fixtures.base_test import BaseTest
-from app.src.factory import internal_connection
-from app.models.flexible_storage import FlexibleStorage
 from app.lib.call_center import CallCenter
 from app.lib.report_builder import ReportBuilder
-
-# if system() in ('Darwin', 'Linux'):
-#     from app.fixtures.base_test import BaseTest
-#     from app.src.factory import internal_connection
-#     from app.models.flexible_storage import FlexibleStorage
-#     from app.lib.call_center import CallCenter
-#     from app.lib.report_builder import ReportBuilder
-# else:
-#     from falcon_reporting.app.fixtures.base_test import BaseTest
-#     from falcon_reporting.app.src.factory import query_statement, internal_connection
-#     from falcon_reporting.app.models.flexible_storage import FlexibleStorage
-#     from falcon_reporting.app.lib.call_center import CallCenter
-#     from falcon_reporting.app.lib.report_builder import ReportBuilder
+from app.lib.sla_cache import cache
+from app.lib.sla_report import report
 
 
 class ReportBuilderTest(BaseTest):
@@ -28,18 +17,27 @@ class ReportBuilderTest(BaseTest):
         self.test_conn_1 = CallCenter  # Simulated db connection one
         self.test_conn_2 = CallCenter  # Simulated db connection two
 
-    def test_connections(self):
+    def test_manual_report(self):
         # Report builder should be able to connect to multiple data pts
-        # with ReportBuilderTest.app.app_context():
-        #     self.test_conn_1(
-        #         ReportBuilderTest.app.config['TEST_STATEMENT'],
-        #         ReportBuilderTest.app.config['EXTERNAL_CONNECTION']
-        #     )
-        #     self.test_conn_2(
-        #         ReportBuilderTest.app.config['SQLALCHEMY_DATABASE_URI'],
-        #         echo=ReportBuilderTest.app.config['SQLALCHEMY_ECHO'],
-        #         cls=FlexibleStorage
-        #     )
+        with ReportBuilderTest.app.app_context():
+            records = CallCenter().example(
+                ReportBuilderTest.app.test_date,
+                list(ReportBuilderTest.app.config['CLIENTS'])
+            )
+            name = 'sla_report'
+            ReportBuilderTest.app.data_src.insert_records(name, records)
+            record_set = ReportBuilderTest.app.data_src.get_records(
+                'sla_report', filter=func.date(ReportBuilderTest.app.test_date)
+            )
+            test_report = report(cache(record_set, pk='call_id', subkey='event_id'))
+            test_report.name = str(ReportBuilderTest.app.test_date.date())
+            test_report_rownames = test_report.rownames
+            test_report_content = test_report.to_dict()
+            # TODO 3: This should likely be its own 'pyexcel' model or something of the like
+            data = DataFrame.from_items(
+                [col for col in test_report_content.items()]
+            )
+            data.index = test_report_rownames
         self.assertTrue(True)
 
     def test_cache(self):
