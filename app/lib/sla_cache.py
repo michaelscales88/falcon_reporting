@@ -54,5 +54,6 @@ def cache(data_src_records, pk, subkey):
         cached_event['Event Summary'][getattr(record, 'event_type')] = event_accum
         # print(cached_event['Start Time'], type(cached_event['Start Time']))
         cached_events[key] = cached_event
-
+    # print([values['Event Summary'].keys() for cache, values in cached_events.items()])
+    # print([values['Event Summary'].get(4, None) for cache, values in cached_events.items()])
     return cached_events
