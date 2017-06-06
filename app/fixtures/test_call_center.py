@@ -26,8 +26,9 @@ class TestCallCenter(BaseTest):
     def test_3(self):
         clients = ['Susy', 'Josh', 'Sally', 'Emily']
         result = self.func.example(datetime.today().date(), clients)
+        print(result)
         data_src_records = [dict(zip(row.keys(), row)) for row in result]
-        for call in data_src_records:
-            print(call)
+        # for call in data_src_records:
+        #     print(call)
         cached_records = cache(data_src_records, pk='call_id', subkey='event_id')
         self.assertTrue(True)

@@ -58,9 +58,6 @@ class DataCenter(object):
                 query = conn.query(model).order_by(model.id).filter(model.id.in_(ids)).limit(per_page).offset(offset).all()
             elif filters is not None:
                 query = conn.query(model).order_by(model.id).filter(filters).all()
-                # for q in query:
-                #     print(q.to_dict())
-                #     print(q.start_time.property.columms[0].type)
             elif offset and per_page:
                 query = conn.query(model).order_by(model.id).limit(per_page).offset(offset).all()
             else:
