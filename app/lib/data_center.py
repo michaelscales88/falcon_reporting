@@ -1,5 +1,6 @@
 from flask import current_app
 from sqlalchemy.orm import class_mapper, ColumnProperty
+from pandas import DataFrame
 
 
 from app.lib.app_registry import SessionRegistry
@@ -98,4 +99,4 @@ class DataCenter(object):
                 query = conn.query(model).order_by(model.id).limit(per_page).offset(offset)
             return query.frame()
         else:
-            return []
+            return DataFrame()

@@ -4,7 +4,7 @@
 # db Reporting Tool documentation build configuration file, created by
 # sphinx-quickstart on Tue Apr 18 15:34:07 2017.
 #
-# This file is execfile()d with the current directory set to its
+# This file is execfile()d with the current static set to its
 # containing dir.
 #
 # Note that not all possible configuration values are present in this
@@ -13,8 +13,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
+# If extensions (or modules to document with autodoc) are in another static,
+# add these directories to sys.path here. If the static is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 # import os
@@ -33,7 +33,7 @@
 # ones.
 extensions = ['sphinx.ext.todo']
 
-# Add any paths that contain templates here, relative to this directory.
+# Add any paths that contain templates here, relative to this static.
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
@@ -66,7 +66,7 @@ release = 'April 18, 2017'
 # Usually you set "language" from the command line for these cases.
 language = None
 
-# List of patterns, relative to source directory, that match files and
+# List of patterns, relative to source static, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -92,7 +92,7 @@ html_theme = 'alabaster'
 # html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
+# relative to this static. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 

@@ -3,6 +3,7 @@ from flask import render_template, current_app, Blueprint, g, redirect, url_for
 
 from app.src.factory import get_page_args, get_pagination, query_statement, internal_connection
 from app.lib.call_center import CallCenter
+from app.views.data_frame_view import DataFrameView
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 
@@ -70,3 +71,6 @@ def show_inserted(ids):
         per_page=per_page,
         active_url='insert-test_db-url',
     )
+
+# Dis is how i dougie with Blueprints
+mod.add_url_rule('/insert/hello/', view_func=DataFrameView.as_view('hello'))
