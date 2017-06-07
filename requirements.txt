@@ -6,6 +6,8 @@ sqlalchemy-utils
 flask
 flask_excel
 flask_fixtures
+flask-restful
+flask-jsonpify
 radar
 redpanda
 pyexcel
