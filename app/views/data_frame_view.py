@@ -1,6 +1,6 @@
 from flask import render_template, current_app
 from flask_restful import Resource
-from flask_jsonpify import jsonpify
+from flask_jsonpify import jsonpify, jsonify
 
 from app.src.factory import get_page_args, get_pagination
 
@@ -34,7 +34,7 @@ class DataFrameView(Resource):
         # #     tables=[frame.to_html(classes='report') for frame in (df,) if not frame.empty],
         # #     titles=['na', *[frame.name for frame in (df,) if not frame.empty]]
         # # )
-        return jsonpify(df.to_json())
+        return jsonpify(df.to_json(orient='records'))
 
     def post(self):
         # post modifications to the selections for the dataframe
