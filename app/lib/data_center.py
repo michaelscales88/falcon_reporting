@@ -88,15 +88,17 @@ class DataCenter(object):
                 cls=model
             )
             ids = kwargs.get('ids', [])
-            offset = kwargs.get('offset', 0)
+            offset = kwargs.get('offset', None)
             filters = kwargs.get('filter', None)
-            per_page = kwargs.get('per_page', 10)
+            per_page = kwargs.get('per_page', None)
             if ids:
                 query = conn.query(model).order_by(model.id).filter(model.id.in_(ids)).limit(per_page).offset(offset)
             elif filters is not None:
                 query = conn.query(model).order_by(model.id).filter(filters)
-            else:
+            elif offset and per_page:
                 query = conn.query(model).order_by(model.id).limit(per_page).offset(offset)
+            else:
+                query = conn.query(model).order_by(model.id)
             return query.frame()
         else:
             return DataFrame()
