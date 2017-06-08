@@ -7,12 +7,8 @@ from app.src.factory import get_page_args, get_pagination
 
 class DataFrameView(Resource):
 
-    # Ajax should look like:
-    # type GET
-    # dataType: "jsonp",
-    # url: "http://localhost:5000/df/1"
     def get(self, id):
-        print('called get')
+        print('called get', id)
         total_records = current_app.data_src.record_count('sla_report')
         page, per_page, offset = get_page_args()
         df = current_app.data_src.get_frame('sla_report')
