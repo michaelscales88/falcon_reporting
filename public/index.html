@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+	<meta charset="utf-8">
+	<title>FALCON BITCHES</title>
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<style type="text/css">
+	#mainContent {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: xx-large;
+		font-weight: bold;
+		background-color: #E3F0FB;
+		border-radius: 4px;
+		padding: 10px;
+		text-align: center;
+	}
+	.buttonStyle {
+		border-radius: 4px;
+		border: thin solid #F0E020;
+		padding: 5px;
+		background-color: #F8F094;
+		font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+		font-weight: bold;
+		color: #663300;
+		width: 75px;
+	}
+
+	.buttonStyle:hover {
+		border: thin solid #FFCC00;
+		background-color: #FCF9D6;
+		color: #996633;
+		cursor: pointer;
+	}
+	.buttonStyle:active {
+		border: thin solid #99CC00;
+		background-color: #F5FFD2;
+		color: #669900;
+		cursor: pointer;
+	}
+
+	</style>
+</head>
+
+<body>
+	<table id="myTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+							<th>created</th>
+							<th>updated</th>
+							<th>id</th>
+							<th>call_id</th>
+							<th>calling_party_number</th>
+							<th>dialed_party_number</th>
+							<th>end_time</th>
+							<th>event_id</th>
+							<th>calling_party_number</th>
+							<th>start_time</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+							<th>created</th>
+							<th>updated</th>
+							<th>id</th>
+							<th>call_id</th>
+							<th>calling_party_number</th>
+							<th>dialed_party_number</th>
+							<th>end_time</th>
+							<th>event_id</th>
+							<th>calling_party_number</th>
+							<th>start_time</th>
+            </tr>
+        </tfoot>
+    </table>
+	<script
+	src="https://code.jquery.com/jquery-3.2.1.min.js"
+	integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+	crossorigin="anonymous"></script>
+	<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+	<script>
+	/* global $ */
+	/**
+	* $ is the shortcut for jQuery. It binds itself to the global $.
+	* This is an artifact from the old days of JavaScript with 1 global namespace and no modules.
+	* Never bind to global
+	**/
+
+	// http://legacy.datatables.net/usage/server-side
+	$(document).ready(function(){
+		var oTable = $('#myTable').DataTable({
+			"bProcessing": true,
+			"bInfo": true,
+			// "bJQueryUI": true,
+			"bServerSide": true,
+			"sAjaxSource": "/api",
+			"bPaginate": true,
+			"sPaginationType": "full_numbers",
+			"aoColumns": [
+				{ "mDataProp": 'created' },
+				{ "mDataProp": "updated" },
+				{ "mDataProp": "id" },
+				{ "mDataProp": "call_id" },
+				{ "mDataProp": "calling_party_number" },
+				{ "mDataProp": "dialed_party_number" },
+				{ "mDataProp": "end_time" },
+				{ "mDataProp": "event_id" },
+				{ "mDataProp": "event_type" },
+				{ "mDataProp": "start_time" }
+			]
+		});
+
+		$('#myTable').on('click', 'tr', function () {
+        var data = table.row( this ).data();
+        alert( 'You clicked on ' + data[0] + '\'s row' );
+    } );
+	});
+	</script>
+</body>
+</html>

@@ -83,6 +83,9 @@ celerybeat-schedule
 venv/
 ENV/
 
+# JS stuff
+node_modules/
+
 # Spyder project settings
 .spyderproject
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+	<title>FALCON BITCHES</title>
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+</head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+crossorigin="anonymous"></script>
+<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script>
+$(document).ready(function() {
+  // Code using $ as usual goes here.
+  $('#demo').html( '<table id="example" class="display" cellspacing="0" width="100%"></table>' );
+  $.ajax( {
+    url: '/api2',
+    dataSrc: function ( json ) {
+      $('#example').dataTable( json );
+    },
+    "dataType": "json"
+  } );
+});
+</script>
+<body>
+  <div id="demo"></div>
+</body>
+</html>
