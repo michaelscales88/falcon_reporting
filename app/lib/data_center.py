@@ -113,12 +113,7 @@ class DataCenter(object):
             )
             offset = kwargs.get('offset', 0)
             per_page = kwargs.get('per_page', 10)
-            if offset > 0:
-                print('inside offset > 0')
-                query = conn.query(model).order_by(model.id.asc()).offset(offset).limit(per_page)
-            else:
-                print('inside offset 0')
-                query = conn.query(model).order_by(model.id.asc()).limit(per_page)
+            query = conn.query(model).order_by(model.id.asc()).offset(offset).limit(per_page)
             return query.frame()
         else:
             return DataFrame()

@@ -1,6 +1,6 @@
 from flask import current_app, request, abort
 from flask_restful import Resource
-from flask_jsonpify import jsonify
+from flask_jsonpify import jsonify, jsonpify
 
 
 def get_paginated_list(klass, url, start, limit):
@@ -32,21 +32,25 @@ def get_paginated_list(klass, url, start, limit):
 
 class DataFrameView(Resource):
 
-    def get(self, page, per_page):
+    def get(self, offset, per_page):
         total_records = current_app.data_src.record_count('sla_report')
-        offset = (page - 1) * per_page
-        print('called get', page, per_page, offset)
-        df = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
-        return jsonify(
+        # offset = (page - 1) * per_page
+        print('called get', offset, per_page)
+        frame = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
+        return jsonpify(
             iTotalRecords=total_records,
-            iTotalDisplayRecords=per_page,
-            aaData=df.to_json(orient='records')
+            iTotalDisplayRecords=total_records,
+            aaData=frame.to_json(orient='records')
         )
 
-    def get2(self):
-        return jsonify(get_paginated_list(
-            ,
-            '/api/v2/events/page',
-            start=request.args.get('start', 1),
-            limit=request.args.get('limit', 20)
-        ))
+
+class OtherFrameView(Resource):
+
+    def get(self):
+        print('inside other frame')
+        total_records = current_app.data_src.record_count('sla_report')
+        df = current_app.data_src.page_view('sla_report')
+        df.to_json(orient='split')
+        return jsonify(
+
+        )

@@ -14,7 +14,7 @@ from app.lib.data_center import DataCenter
 from app.src.factory import internal_connection, run_logger
 from app.models.flexible_storage import FlexibleStorage
 from app.views.data_frame_view import DataFrameView
-
+from app.views.data_frame_view import OtherFrameView
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -78,7 +78,8 @@ app.register_blueprint(records.mod)
 app.register_blueprint(insert.mod)
 app.register_blueprint(reports.mod)
 
-api.add_resource(DataFrameView, '/df/<int:page>/<int:per_page>')
+api.add_resource(DataFrameView, '/df/<int:offset>/<int:per_page>')
+api.add_resource(OtherFrameView, '/df2/')
 app.register_blueprint(api_bp)
 
 # read the SO below -> modify views and how they're being rendered
