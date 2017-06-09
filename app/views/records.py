@@ -56,5 +56,5 @@ def records(page):
         pagination=pagination,
         active_url='records-page-url',
         tables=[frame.to_html(classes='report') for frame in (df,) if not frame.empty],
-        titles=['na', *[frame.name for frame in (df,) if not frame.empty]]
+        titles=['na', tuple(frame.name for frame in (df,) if not frame.empty)]
     )

@@ -12,11 +12,12 @@ integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 crossorigin="anonymous"></script>
 <script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script>
+/* global $ */
 $(document).ready(function() {
   // Code using $ as usual goes here.
   $('#demo').html( '<table id="example" class="display" cellspacing="0" width="100%"></table>' );
   $.ajax( {
-    url: '/api2',
+    url: '/extended',
     dataSrc: function ( json ) {
       $('#example').dataTable( json );
     },

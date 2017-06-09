@@ -13,8 +13,8 @@ from app.lib.flask_extended import Flask
 from app.lib.data_center import DataCenter
 from app.src.factory import internal_connection, run_logger
 from app.models.flexible_storage import FlexibleStorage
-from app.views.data_frame_view import DataFrameView
-from app.views.data_frame_view import OtherFrameView
+from app.resources.data_frame_view import DataFrameView
+from app.resources.data_frame_view import OtherFrameView
 
 app = Flask(__name__)
 api = Api(app=app)

@@ -44,7 +44,7 @@
 </head>
 
 <body>
-	<table id="myTable" class="display" cellspacing="0" width="100%">
+	<table id="myTable" class="display nowrap" cellspacing="0" width="100%">
         <thead>
             <tr>
 							<th>created</th>
@@ -94,7 +94,7 @@
 			"bInfo": true,
 			// "bJQueryUI": true,
 			"bServerSide": true,
-			"sAjaxSource": "/api",
+			"sAjaxSource": "/index",
 			"bPaginate": true,
 			"sPaginationType": "full_numbers",
 			"aoColumns": [
@@ -108,7 +108,11 @@
 				{ "mDataProp": "event_id" },
 				{ "mDataProp": "event_type" },
 				{ "mDataProp": "start_time" }
-			]
+			],
+			"scrollY": 600,
+        	"scroller": {
+            	"loadingIndicator": true
+        	}
 		});
 
 		$('#myTable').on('click', 'tr', function () {

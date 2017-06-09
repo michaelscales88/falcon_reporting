@@ -1,7 +1,5 @@
 var express = require('express')
 var request = require('request')
-// var bodyParser = require('body-parser')
-// var alert = require('alerts')
 var app = express()
 
 app.use(function(req, res, next) {
@@ -14,10 +12,10 @@ app.use(express.static('public'));
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/api', function (req, res) {
+app.get('/index', function (req, res) {
   console.log(req.query);
   console.log(req.query.recordsFiltered);
-  var url = "http://localhost:5000/df" + "/" + req.query['iDisplayStart'] + "/" + req.query['iDisplayLength'];
+  var url = "http://localhost:8080/df" + "/" + req.query['iDisplayStart'] + "/" + req.query['iDisplayLength'];
   console.log(url);
 
   request(url, function(err, resp, body) {
@@ -27,7 +25,7 @@ app.get('/api', function (req, res) {
   });
 })
 
-app.get('/api2', function (req, res) {
+app.get('/extended', function (req, res) {
   var url = "http://localhost:5000/df2/";
   console.log(url);
 
@@ -42,6 +40,6 @@ app.get('/api2', function (req, res) {
   });
 })
 
-app.listen(8080, function () {
-  console.log('App listening on port 8080!')
+app.listen(8081, function () {
+  console.log('App listening on port 8081!')
 })

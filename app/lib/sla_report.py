@@ -72,7 +72,7 @@ def report(records):
     )
 
     try:
-        for client_num in (*settings['Clients'], 'Summary'):
+        for client_num in tuple(settings['Clients'], 'Summary'):
             additional_row = OrderedDict(
                 [
                     (client_num,

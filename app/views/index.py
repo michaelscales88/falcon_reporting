@@ -65,5 +65,5 @@ def index():
         per_page=per_page,
         pagination=pagination,
         tables=[frame.to_html(classes='report') for frame in (df,) if not frame.empty],
-        titles=['na', *[frame.name for frame in (df,) if not frame.empty]]
+        titles=['na', tuple(frame.name for frame in (df,) if not frame.empty)]
     )
