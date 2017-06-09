@@ -96,9 +96,29 @@ class DataCenter(object):
             elif filters is not None:
                 query = conn.query(model).order_by(model.id).filter(filters)
             elif offset and per_page:
-                query = conn.query(model).order_by(model.id).limit(per_page).offset(offset)
+                query = conn.query(model).order_by(model.id.asc()).limit(per_page).offset(offset)
             else:
                 query = conn.query(model).order_by(model.id)
+            return query.frame()
+        else:
+            return DataFrame()
+
+    def page_view(self, table_name, **kwargs):
+        model = self.model(table_name)
+        if model:
+            conn = self.get_session(
+                current_app.config['SQLALCHEMY_DATABASE_URI'],
+                echo=current_app.config['SQLALCHEMY_ECHO'],
+                cls=model
+            )
+            offset = kwargs.get('offset', 0)
+            per_page = kwargs.get('per_page', 10)
+            if offset > 0:
+                print('inside offset > 0')
+                query = conn.query(model).order_by(model.id.asc()).offset(offset).limit(per_page)
+            else:
+                print('inside offset 0')
+                query = conn.query(model).order_by(model.id.asc()).limit(per_page)
             return query.frame()
         else:
             return DataFrame()

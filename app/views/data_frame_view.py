@@ -1,43 +1,52 @@
-from flask import current_app
+from flask import current_app, request, abort
 from flask_restful import Resource
 from flask_jsonpify import jsonify
 
-from app.src.factory import get_page_args, get_pagination
+
+def get_paginated_list(klass, url, start, limit):
+    # check if page exists
+    results = klass.query.all()
+    count = len(results)
+    if count < start:
+        abort(404)
+    # make response
+    obj = {'start': start, 'limit': limit, 'count': count}
+    # make URLs
+    # make previous url
+    if start == 1:
+        obj['previous'] = ''
+    else:
+        start_copy = max(1, start - limit)
+        limit_copy = start - 1
+        obj['previous'] = url + '?start=%d&limit=%d' % (start_copy, limit_copy)
+    # make next url
+    if start + limit > count:
+        obj['next'] = ''
+    else:
+        start_copy = start + limit
+        obj['next'] = url + '?start=%d&limit=%d' % (start_copy, limit)
+    # finally extract result according to bounds
+    obj['results'] = results[(start - 1):(start - 1 + limit)]
+    return obj
 
 
 class DataFrameView(Resource):
 
-    def get(self, id):
-        print('called get', id)
+    def get(self, page, per_page):
         total_records = current_app.data_src.record_count('sla_report')
-        page, per_page, offset = get_page_args()
-        df = current_app.data_src.get_frame('sla_report')
-        print(df)
-        # if not df.empty:  # Protect from KeyError if the dB is empty
-        #     df.set_index(['call_id', 'event_id'], inplace=True)  # inplace = True saves us from having to bind a new dataframe
-        # # pagination = get_pagination(
-        # #     page=page,
-        # #     per_page=per_page,
-        # #     total=total_records,
-        # #     record_name='id',
-        # #     format_total=True,
-        # #     format_number=True,
-        # # )
-        # # return render_template(
-        # #     'index.html',
-        # #     page=page,
-        # #     per_page=per_page,
-        # #     pagination=pagination,
-        # #     tables=[frame.to_html(classes='report') for frame in (df,) if not frame.empty],
-        # #     titles=['na', *[frame.name for frame in (df,) if not frame.empty]]
-        # # )
+        offset = (page - 1) * per_page
+        print('called get', page, per_page, offset)
+        df = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
         return jsonify(
             iTotalRecords=total_records,
             iTotalDisplayRecords=per_page,
             aaData=df.to_json(orient='records')
         )
 
-    def post(self):
-        # post modifications to the selections for the dataframe
-        # return render_template()
-        return 'hello'
+    def get2(self):
+        return jsonify(get_paginated_list(
+            ,
+            '/api/v2/events/page',
+            start=request.args.get('start', 1),
+            limit=request.args.get('limit', 20)
+        ))

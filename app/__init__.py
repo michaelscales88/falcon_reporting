@@ -78,7 +78,7 @@ app.register_blueprint(records.mod)
 app.register_blueprint(insert.mod)
 app.register_blueprint(reports.mod)
 
-api.add_resource(DataFrameView, '/df/<int:id>')
+api.add_resource(DataFrameView, '/df/<int:page>/<int:per_page>')
 app.register_blueprint(api_bp)
 
 # read the SO below -> modify views and how they're being rendered
