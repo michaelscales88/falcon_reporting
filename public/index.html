@@ -15,6 +15,7 @@
 		border-radius: 4px;
 		padding: 10px;
 		text-align: center;
+		width: auto;
 	}
 	.buttonStyle {
 		border-radius: 4px;
@@ -39,12 +40,11 @@
 		color: #669900;
 		cursor: pointer;
 	}
-
 	</style>
 </head>
 
 <body>
-	<table id="myTable" class="display nowrap" cellspacing="0" width="100%">
+	<table id="myTable" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
 							<th>created</th>
@@ -55,7 +55,7 @@
 							<th>dialed_party_number</th>
 							<th>end_time</th>
 							<th>event_id</th>
-							<th>calling_party_number</th>
+							<th>event_type</th>
 							<th>start_time</th>
             </tr>
         </thead>
@@ -69,7 +69,7 @@
 							<th>dialed_party_number</th>
 							<th>end_time</th>
 							<th>event_id</th>
-							<th>calling_party_number</th>
+							<th>event_type</th>
 							<th>start_time</th>
             </tr>
         </tfoot>
@@ -91,8 +91,6 @@
 	$(document).ready(function(){
 		var oTable = $('#myTable').DataTable({
 			"bProcessing": true,
-			"bInfo": true,
-			// "bJQueryUI": true,
 			"bServerSide": true,
 			"sAjaxSource": "/index",
 			"bPaginate": true,
@@ -109,10 +107,12 @@
 				{ "mDataProp": "event_type" },
 				{ "mDataProp": "start_time" }
 			],
-			"scrollY": 600,
+			"scrollY": 350,
         	"scroller": {
             	"loadingIndicator": true
-        	}
+        	},
+        	"scrollX": false,
+        	"autoWidth": true
 		});
 
 		$('#myTable').on('click', 'tr', function () {
