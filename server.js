@@ -13,10 +13,7 @@ app.use(express.static('public'));
 // app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/index', function (req, res) {
-  console.log(req.query);
-  console.log(req.query.recordsFiltered);
-  var url = "http://localhost:5000/df" + "/" + req.query['iDisplayStart'] + "/" + req.query['iDisplayLength'];
-  console.log(url);
+  var url = "http://localhost:8080/df" + "/" + req.query['iDisplayStart'] + "/" + req.query['iDisplayLength'];
 
   request(url, function(err, resp, body) {
     var parsedBody = JSON.parse(body);
@@ -26,11 +23,11 @@ app.get('/index', function (req, res) {
 })
 
 app.get('/extended', function (req, res) {
-  var url = "http://localhost:5000/df2/";
+  console.log(req.query);
+  var url = "http://localhost:8080/df";
   console.log(url);
 
   request(url, function(err, resp, body) {
-    // console.log(body);
     var parsedBody = JSON.parse(JSON.parse(body));
     // parsedBody['aaData'] = JSON.parse(parsedBody['aaData']);
     // console.log('error:', err);         // Print the error if one occurred
