@@ -1,5 +1,7 @@
 from flask import render_template, g, Blueprint, current_app, request
 
+from app import app
+
 from app.src.factory import get_page_args, get_pagination, internal_connection
 
 mod = Blueprint('index', __name__, template_folder='templates')
@@ -17,15 +19,27 @@ def before_request():
         )
 
 
-@mod.route('/')
+# https://realpython.com/blog/python/primer-on-jinja-templating/
+@app.route('/index')
+@mod.route('/index', methods=["GET", "POST"])
 def index():
-    print(request)
+    print('index')
+    if 'download' in request.form:
+        print('passed')
+        pass
+    elif 'btn-grp' in request.form:
+        option = request.form['btn-group']
+        print(option)
+        pass
+    else:
+        print('else', request.form)
+
     page, per_page, offset = get_page_args()
     total_records = current_app.data_src.record_count('sla_report')
     frame = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
     frame.name = 'default'
     try:
-        frame.set_index(['event_id'], inplace=True)  # inplace = True saves us from having to bind a new dataframe
+        frame.set_index(['call_id', 'event_id'], inplace=True)  # inplace = True saves us from having to bind a new dataframe
     except KeyError:
         pass
     pagination = get_pagination(

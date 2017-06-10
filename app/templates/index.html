@@ -1,65 +1,71 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/report_viewer.css') }}">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/web.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/report_viewer.css') }}">
 {% endblock %}
 
 {% block content %}
-<div id="radios1" class="btn-group view-opt-btn-group" data-toggle="buttons-radio">
-{% for button in buttons %}
-    <button type="submit" class="btn{{" active" if button in active_btns}}" name="choice1" value="{{ button }}">{{ button }}</button>
-{% endfor %}
-</div>
-{% if tables %}
-{{ pagination.info }}
-{{ pagination.links }}
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-        <tr><th>#</th><th>Flexible Storage</th></tr>
-        </thead>
-        <tbody>
-        {% if tables %}
-        {% for table in tables %}
-        <h2>{{titles[loop.index]}}</h2>
-        {{ table|safe }}
+    <div id="radios1" class="btn-group view-opt-btn-group" data-toggle="buttons-radio">
+        {% for button in buttons %}
+            <button type="button" class="btn{{"active" if button in active_btns}}" name="choices1" value="{{ button }}">{{ button }}</button>
         {% endfor %}
-        {% endif %}
-        </tbody>
-    </table>
-</div>
-{{ pagination.links }}
-{% else %}
-<div class="container">
+        <input type="hidden" name="btn-group" value={{request.form['choice1']}} />
+        <script type="text/jscript">
+            $("#radios button").click(function() {
+                $.post("/index", { choices1: $(this).val() } );
+            });
+        </script>
+    </div>
+    {% if tables %}
+        {{ pagination.info }}
+        {{ pagination.links }}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr><th>#</th><th>Flexible Storage</th></tr>
+                </thead>
+                <tbody>
+                {% if tables %}
+                    {% for table in tables %}
+                        <h2>{{titles[loop.index]}}</h2>
+                        {{ table|safe }}
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+        {{ pagination.links }}
+    {% else %}
+        <div class="container">
 
-    <header>
-        <h1>No records currently.</h1>
-    </header>
+            <header>
+                <h1>No records currently.</h1>
+            </header>
 
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Recent Records</a></li>
-            <li><a href="#">All Records</a></li>
-        </ul>
-    </nav>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Recent Records</a></li>
+                    <li><a href="#">All Records</a></li>
+                </ul>
+            </nav>
 
-    <article>
-        Add some examples: <a href="{{ url_for('insert.test_db') }}">Add RNG call records.</a>
-    </article>
+            <article>
+                Add some examples: <a href="{{ url_for('insert.test_db') }}">Add RNG call records.</a>
+            </article>
 
-    <footer><a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
+            <footer><a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
 
-</div>
-{% endif %}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block js %}
-{% if active_url %}
-$('#{{ active_url }}').addClass('active');
-{% else %}
-$('#records-url').addClass('active');
-{% endif %}
+    {% if active_url %}
+        $('#{{ active_url }}').addClass('active');
+    {% else %}
+        $('#records-url').addClass('active');
+    {% endif %}
 {% endblock %}
