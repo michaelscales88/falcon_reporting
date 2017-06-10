@@ -54,7 +54,7 @@ def run_report():
     # need to have custom models before this will work though
     # record_set = g.db.query(FlexibleStorage).order_by(FlexibleStorage.id).filter((func.date(current_app.test_date)).all()
     record_set = current_app.data_src.get_records('sla_report', filter=func.date(current_app.test_date))
-    test_report = report(cache(record_set, pk='call_id', subkey='event_id'))
+    test_report = report(cache(record_set, pk='call_id', subkey='event_id'), list(current_app.config['CLIENTS']))
     test_report.name = str(current_app.test_date.date())
     test_report_rownames = test_report.rownames
     test_report_content = test_report.to_dict()

@@ -13,8 +13,7 @@ from app.lib.flask_extended import Flask
 from app.lib.data_center import DataCenter
 from app.src.factory import internal_connection, run_logger
 from app.models.flexible_storage import FlexibleStorage
-from app.resources.data_frame_view import DataFrameView
-from app.resources.data_frame_view import OtherFrameView
+from app.resources.index_resource import IndexView
 
 app = Flask(__name__)
 api = Api(app=app)
@@ -67,19 +66,16 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-from app.views import index
-from app.views import records
-from app.views import insert
-from app.views import reports
+from app.views import index_view
+from app.views import insert_view
+from app.views import report_view
 
 
-app.register_blueprint(index.mod)
-app.register_blueprint(records.mod)
-app.register_blueprint(insert.mod)
-app.register_blueprint(reports.mod)
+app.register_blueprint(index_view.mod)
+app.register_blueprint(insert_view.mod)
+app.register_blueprint(report_view.mod)
 
-api.add_resource(DataFrameView, '/df/<int:offset>/<int:per_page>')
-api.add_resource(OtherFrameView, '/df2/')
+api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')
 app.register_blueprint(api_bp)
 
 # read the SO below -> modify views and how they're being rendered

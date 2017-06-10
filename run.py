@@ -7,7 +7,7 @@ from app import app
 
 @command()
 @option('--host', '-h', default='0.0.0.0', help='host ip')
-@option('--port', '-p', default=5000, help='listening port')
+@option('--port', '-p', default=8080, help='listening port')
 def run(host, port):
     app.run(host=os.getenv('IP', '0.0.0.0'), port=int(os.getenv('PORT', 8080)))
 

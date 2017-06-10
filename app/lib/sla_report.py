@@ -3,9 +3,9 @@ from pyexcel import Sheet
 from collections import OrderedDict
 
 
-from app.lib.app_settings import AppSettings
-
-_settings = 'db_report_test'
+# from app.lib.app_settings import AppSettings
+#
+# _settings = 'db_report_test'
 
 
 def chop_microseconds(delta):
@@ -45,7 +45,7 @@ def match(record_list, match_val=None):
     return matched_records
 
 
-def report(records):
+def report(records, client_list):
     output_headers = [
         'I/C Presented',
         'I/C Answered',
@@ -66,24 +66,22 @@ def report(records):
         'PCA'
     ]
 
-    settings = AppSettings(file_name=_settings)
     test_output = Sheet(
         colnames=output_headers
     )
-
+    client_list.append('Summary')
+    row_names = client_list
     try:
-        for client_num in tuple(settings['Clients'], 'Summary'):
-            additional_row = OrderedDict(
-                [
-                    (client_num,
-                     [0, 0, 0, 0, 0, 0, timedelta(0), timedelta(0), timedelta(0), 0, 0, 0, 0, 0, 0, timedelta(0), 0]
-                     )
-                ]
-            )
+        for row_name in row_names:
+            additional_row = OrderedDict()
+            additional_row[str(row_name)] = [
+                0, 0, 0, 0, 0, 0, timedelta(0), timedelta(0), timedelta(0), 0, 0, 0, 0, 0, 0, timedelta(0), 0
+            ]
+            print(additional_row)
             test_output.extend_rows(additional_row)
     except KeyError:
         from json import dumps
-        print(dumps(settings, indent=4))
+        print(dumps(client_list, indent=4))
         raise
 
     # Filter Step
@@ -91,7 +89,7 @@ def report(records):
         records = [records[key] for key in sorted(records.keys())]  # create order of calls
         for x in range(0, len(records)):
             match_record = records[x]
-            matches = match(records[x+1:], match_val=match_record)
+            matches = match(records[x + 1:], match_val=match_record)
             if (
                     len(matches) > 1
                     and (match_record.get('End Time') - match_record.get('Start Time') > timedelta(seconds=20))
@@ -109,7 +107,7 @@ def report(records):
 
     # Process Step
     for record in records:
-        row_name = str(record.get('Unique Id1'))    # This is how we bind our client settings
+        row_name = str(record.get('Unique Id1'))  # This is how we bind our client settings
         if row_name in test_output.rownames and time(hour=7) <= record.get('Start Time').time() <= time(hour=19):
             call_duration = record.get('End Time') - record.get('Start Time')
             talking_time = record.get('Event Summary').get(4, timedelta(0))
@@ -121,6 +119,7 @@ def report(records):
             wait_duration = call_duration - talking_time - hold_time
             # DO the rest of the output work
             if talking_time > timedelta(0):
+                print('output')
                 test_output[row_name, 'I/C Presented'] += 1
                 test_output[row_name, 'I/C Answered'] += 1
                 test_output[row_name, 'Average Incoming Duration'] += talking_time
@@ -186,57 +185,58 @@ def report(records):
                 test_output['Summary', 'Average Wait Lost'] += call_duration
 
             else:
+                print('passed')
                 pass
 
     # Finalize step
-    for row in test_output.rownames:
+    for row_name in test_output.rownames:
+        row_name = str(row_name)
         try:
-            test_output[row, 'Incoming Answered (%)'] = '{0:.1%}'.format(
-                test_output[row, 'I/C Answered'] / test_output[row, 'I/C Presented']
+            test_output[row_name, 'Incoming Answered (%)'] = '{0:.1%}'.format(
+                test_output[row_name, 'I/C Answered'] / test_output[row_name, 'I/C Presented']
             )
         except ZeroDivisionError:
-            test_output[row, 'Incoming Answered (%)'] = 1.0
+            test_output[row_name, 'Incoming Answered (%)'] = 1.0
 
         try:
-            test_output[row, 'Incoming Lost (%)'] = '{0:.1%}'.format(
-                (test_output[row, 'I/C Lost'] + test_output[row, 'I/C Lost'])
-                / test_output[row, 'I/C Presented']
+            test_output[row_name, 'Incoming Lost (%)'] = '{0:.1%}'.format(
+                (test_output[row_name, 'I/C Lost'] + test_output[row_name, 'I/C Lost'])
+                / test_output[row_name, 'I/C Presented']
             )
         except ZeroDivisionError:
-            test_output[row, 'Incoming Lost (%)'] = 0.0
+            test_output[row_name, 'Incoming Lost (%)'] = 0.0
 
         try:
-            test_output[row, 'Average Incoming Duration'] = str(
-                chop_microseconds(test_output[row, 'Average Incoming Duration'] / test_output[row, 'I/C Answered'])
+            test_output[row_name, 'Average Incoming Duration'] = str(
+                chop_microseconds(test_output[row_name, 'Average Incoming Duration'] / test_output[row_name, 'I/C Answered'])
             )
         except ZeroDivisionError:
-            test_output[row, 'Average Incoming Duration'] = '0:00:00'
+            test_output[row_name, 'Average Incoming Duration'] = '0:00:00'
 
         try:
-            test_output[row, 'Average Wait Answered'] = str(
-                chop_microseconds(test_output[row, 'Average Wait Answered'] / test_output[row, 'I/C Answered'])
+            test_output[row_name, 'Average Wait Answered'] = str(
+                chop_microseconds(test_output[row_name, 'Average Wait Answered'] / test_output[row_name, 'I/C Answered'])
             )
         except ZeroDivisionError:
-            test_output[row, 'Average Wait Answered'] = '0:00:00'
+            test_output[row_name, 'Average Wait Answered'] = '0:00:00'
 
         try:
-            test_output[row, 'Average Wait Lost'] = str(
-                chop_microseconds(test_output[row, 'Average Wait Lost'] / test_output[row, 'I/C Lost'])
+            test_output[row_name, 'Average Wait Lost'] = str(
+                chop_microseconds(test_output[row_name, 'Average Wait Lost'] / test_output[row_name, 'I/C Lost'])
             )
         except ZeroDivisionError:
-            test_output[row, 'Average Wait Lost'] = '0:00:00'
+            test_output[row_name, 'Average Wait Lost'] = '0:00:00'
 
-        test_output[row, 'Longest Waiting Answered'] = str(
-            chop_microseconds(test_output[row, 'Longest Waiting Answered'])
+        test_output[row_name, 'Longest Waiting Answered'] = str(
+            chop_microseconds(test_output[row_name, 'Longest Waiting Answered'])
         )
 
         try:
-            test_output[row, 'PCA'] = '{0:.1%}'.format(
-                (test_output[row, 'Calls Ans Within 15'] + test_output[row, 'Calls Ans Within 30'])
-                / test_output[row, 'I/C Presented']
+            test_output[row_name, 'PCA'] = '{0:.1%}'.format(
+                (test_output[row_name, 'Calls Ans Within 15'] + test_output[row_name, 'Calls Ans Within 30'])
+                / test_output[row_name, 'I/C Presented']
             )
         except ZeroDivisionError:
-            test_output[row, 'PCA'] = 0.0
+            test_output[row_name, 'PCA'] = 0.0
 
     return test_output
-
