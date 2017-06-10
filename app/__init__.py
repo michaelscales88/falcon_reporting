@@ -70,7 +70,6 @@ from app.views import index_view
 from app.views import insert_view
 from app.views import report_view
 
-
 app.register_blueprint(index_view.mod)
 app.register_blueprint(insert_view.mod)
 app.register_blueprint(report_view.mod)
