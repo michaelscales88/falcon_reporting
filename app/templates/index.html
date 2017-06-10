@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block content %}
-{% if records or tables %}
+<div id="radios1" class="btn-group view-opt-btn-group" data-toggle="buttons-radio">
+{% for button in buttons %}
+    <button type="submit" class="btn{{" active" if button in active_btns}}" name="choice1" value="{{ button }}">{{ button }}</button>
+{% endfor %}
+</div>
+{% if tables %}
 {{ pagination.info }}
 {{ pagination.links }}
 <div class="table-responsive">
@@ -16,14 +21,6 @@
         <tr><th>#</th><th>Flexible Storage</th></tr>
         </thead>
         <tbody>
-        {% if records and not tables %}
-        {% for record in records %}
-        <tr>
-            <td>{{ loop.index + (page - 1) * per_page }}</td>
-            <td>{{ record }}</td>
-        </tr>
-        {% endfor %}
-        {% endif %}
         {% if tables %}
         {% for table in tables %}
         <h2>{{titles[loop.index]}}</h2>

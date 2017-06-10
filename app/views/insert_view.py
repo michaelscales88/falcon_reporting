@@ -47,6 +47,7 @@ def test_db():
 
 def show_inserted(ids):
     page, per_page, offset = get_page_args()
+
     record_set = current_app.data_src.get_records(
         'sla_report',
         offset=offset,
@@ -71,5 +72,3 @@ def show_inserted(ids):
         active_url='insert-test_db-url',
     )
 
-# Dis is how i dougie with Blueprints
-# mod.add_url_rule('/insert/hello/', view_func=DataFrameView.as_view('hello'))
