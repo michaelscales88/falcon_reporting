@@ -1,8 +1,10 @@
-from flask import render_template, g, Blueprint, current_app, request
-
 from app import app
-from app.forms.forms import SimpleForm
 from app.src.factory import get_page_args, get_pagination, internal_connection
+from flask_wtf import Form
+
+from app.templates.partials.forms import SimpleForm
+from app.templates.partials.forms import FrameColumns
+from flask import render_template, g, Blueprint, current_app, request
 
 mod = Blueprint('index', __name__, template_folder='templates')
 
@@ -22,13 +24,7 @@ def before_request():
 # https://realpython.com/blog/python/primer-on-jinja-templating/
 @app.route('/index')
 @mod.route('/index', methods=["GET", "POST"])
-def index():
-    form = SimpleForm()
-    if form.validate_on_submit():
-        print(form.example.data)
-    else:
-        print(form.errors)
-
+def records():
     page, per_page, offset = get_page_args()
     total_records = current_app.data_src.record_count('sla_report')
     frame = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
@@ -52,7 +48,7 @@ def index():
         pagination=pagination,
         tables=[fr.to_html(classes='report') for fr in (frame,) if not fr.empty],
         titles=['na', tuple(fr.name for fr in (frame,) if not fr.empty)],
-        buttons=[col for col in list(frame)],
-        active_btns=[],
-        form=form
+        # buttons=[col for col in list(frame)],
+        # active_btns=[],
+        # form=form
     )

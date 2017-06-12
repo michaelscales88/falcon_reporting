@@ -9,6 +9,7 @@ flask_excel
 flask_fixtures
 flask-restful
 flask-jsonpify
+flask-WTF
 radar
 redpanda
 pyexcel
