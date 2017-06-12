@@ -21,7 +21,7 @@ api_bp = Blueprint('api', __name__)
 app.config.from_pyfile('settings/app.cfg')
 app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 # app.debug = config.DEBUG
-# app.secret_key = config.SECRET_KEY
+app.secret_key = 'development'
 
 
 # Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants

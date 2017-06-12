@@ -1,3 +1,4 @@
+wtforms
 pyyaml
 configobj
 pandas

@@ -1,7 +1,7 @@
 from flask import render_template, g, Blueprint, current_app, request
 
 from app import app
-
+from app.forms.forms import SimpleForm
 from app.src.factory import get_page_args, get_pagination, internal_connection
 
 mod = Blueprint('index', __name__, template_folder='templates')
@@ -23,16 +23,11 @@ def before_request():
 @app.route('/index')
 @mod.route('/index', methods=["GET", "POST"])
 def index():
-    print('index')
-    if 'download' in request.form:
-        print('passed')
-        pass
-    elif 'btn-grp' in request.form:
-        option = request.form['btn-group']
-        print(option)
-        pass
+    form = SimpleForm()
+    if form.validate_on_submit():
+        print(form.example.data)
     else:
-        print('else', request.form)
+        print(form.errors)
 
     page, per_page, offset = get_page_args()
     total_records = current_app.data_src.record_count('sla_report')
@@ -58,5 +53,6 @@ def index():
         tables=[fr.to_html(classes='report') for fr in (frame,) if not fr.empty],
         titles=['na', tuple(fr.name for fr in (frame,) if not fr.empty)],
         buttons=[col for col in list(frame)],
-        active_btns=[]
+        active_btns=[],
+        form=form
     )

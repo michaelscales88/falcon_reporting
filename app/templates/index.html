@@ -7,25 +7,27 @@
 {% endblock %}
 
 {% block content %}
-    <div id="radios1" class="btn-group view-opt-btn-group" data-toggle="buttons-radio">
-        {% for button in buttons %}
-            <button type="button" class="btn{{"active" if button in active_btns}}" name="choices1" value="{{ button }}">{{ button }}</button>
-        {% endfor %}
-        <input type="hidden" name="btn-group" value={{request.form['choice1']}} />
-        <script type="text/jscript">
-            $("#radios button").click(function() {
-                $.post("/index", { choices1: $(this).val() } );
-            });
-        </script>
-    </div>
+{#    <div id="radios1" class="btn-group view-opt-btn-group" data-toggle="buttons-radio">#}
+{#        {% for button in buttons %}#}
+{#            <button type="button" class="btn{{"active" if button in active_btns}}" name="choices1" value="{{ button }}">{{ button }}</button>#}
+{#        {% endfor %}#}
+{#        <input type="hidden" name="btn-group" value={{request.form['choice1']}} />#}
+{#        <script type="text/jscript">#}
+{#            $("#radios button").click(function() {#}
+{#                $.post("/index", { choices1: $(this).val() } );#}
+{#            });#}
+{#        </script>#}
+{#    </div>#}
+    <form method="post">
+        {{ form.hidden_tag() }}
+        {{ form.example }}
+        <input type="submit">
+    </form>
     {% if tables %}
         {{ pagination.info }}
         {{ pagination.links }}
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead>
-                <tr><th>#</th><th>Flexible Storage</th></tr>
-                </thead>
                 <tbody>
                 {% if tables %}
                     {% for table in tables %}
