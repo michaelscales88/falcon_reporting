@@ -47,8 +47,5 @@ def records():
         per_page=per_page,
         pagination=pagination,
         tables=[fr.to_html(classes='report') for fr in (frame,) if not fr.empty],
-        titles=['na', tuple(fr.name for fr in (frame,) if not fr.empty)],
-        # buttons=[col for col in list(frame)],
-        # active_btns=[],
-        # form=form
+        titles=['na', tuple(fr.name for fr in (frame,) if not fr.empty)]
     )

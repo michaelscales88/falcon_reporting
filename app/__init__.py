@@ -66,16 +66,16 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-from app.views import index_view
-from app.views import insert_view
-from app.views import report_view
-from app.views import builder_view
+from app.views import index
+from app.views import insert
+from app.views import report
+from app.views import builder
 
 
-app.register_blueprint(index_view.mod)
-app.register_blueprint(insert_view.mod)
-app.register_blueprint(report_view.mod)
-app.register_blueprint(builder_view.mod)
+app.register_blueprint(index.mod)
+app.register_blueprint(insert.mod)
+app.register_blueprint(report.mod)
+app.register_blueprint(builder.mod)
 
 
 api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')

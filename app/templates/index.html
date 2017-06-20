@@ -18,12 +18,12 @@
 {#            });#}
 {#        </script>#}
 {#    </div>#}
-    <form method="post">
-        {{ form.hidden_tag() }}
-        <!--{{ form.example }}-->
-        {{ form.example2 }}
-        <input type="submit">
-    </form>
+{#    <form method="post">#}
+{#        {{ form.hidden_tag() }}#}
+{#        <!--{{ form.example }}-->#}
+{#        {{ form.example2 }}#}
+{#        <input type="submit">#}
+{#    </form>#}
     {% if tables %}
         {{ pagination.info }}
         {{ pagination.links }}
@@ -59,7 +59,7 @@
                 Add some examples: <a href="{{ url_for('insert.test_db') }}">Add RNG call records.</a>
             </article>
 
-            <footer><a href="{{ url_for('index.index') }}">Go somewhere nicer.</a></footer>
+            <footer><a href="{{ url_for('index.records') }}">Go somewhere nicer.</a></footer>
 
         </div>
     {% endif %}
