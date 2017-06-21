@@ -18,7 +18,7 @@ from app.resources.index_resource import IndexView
 app = Flask(__name__)
 api = Api(app=app)
 api_bp = Blueprint('api', __name__)
-app.config.from_pyfile('settings/app.cfg')
+app.config.from_pyfile('settings/default_config.py')
 app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
 # app.debug = config.DEBUG
 # app.secret_key = config.SECRET_KEY

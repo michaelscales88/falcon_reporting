@@ -4,25 +4,38 @@
 
 import os
 import yaml
+import types
+import errno
 
 from flask import Flask as BaseFlask, Config as BaseConfig
 
 
 class Config(BaseConfig):
-    """Flask config enhanced with a `from_yaml` method."""
+    """Updates the values in the config from a Python file.  This function
+    behaves as if the file was imported as module with the
+    :meth:`from_object` function.
 
-    def from_yaml(self, config_file):
-        env = os.environ.get('FLASK_ENV', 'development')
-        self['ENVIRONMENT'] = env.lower()
+    :param filename: the filename of the config.  This can either be an
+                     absolute filename or a filename relative to the
+                     root path.
+    :param silent: set to ``True`` if you want silent failure for missing
+                   files.
 
-        with open(config_file) as f:
-            c = yaml.load(f)
-
-        c = c.get(env, c)
-
-        for key in c.keys():
-            if key.isupper():
-                self[key] = c[key]
+    """
+    def from_yaml(self, filename, silent=False):
+        filename = os.path.join(self.root_path, filename)
+        d = types.ModuleType('config')
+        d.__file__ = filename
+        try:
+            with open(filename, mode='rb') as filename:
+                d.__dict__.update(yaml.load(filename))
+        except IOError as e:
+            if silent and e.errno in (errno.ENOENT, errno.EISDIR):
+                return False
+            e.strerror = 'Unable to load configuration file (%s)' % e.strerror
+            raise
+        self.from_object(d)
+        return True
 
 
 class Flask(BaseFlask):
