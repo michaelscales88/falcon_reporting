@@ -1,14 +1,13 @@
 from app import db
 # from sqlalchemy.types import Integer, Text, DateTime
-from sqlalchemy_utils import Timestamp, generic_repr       # sqlalchemy provided mixins
+from sqlalchemy_utils import Timestamp, generic_repr
 from sqlalchemy.ext.declarative import declarative_base
 
 
-@generic_repr                                           # nice prebuilt __repr__ for all models
-class _Base(object):                             # include created_on and updated_on columns for all models
+@generic_repr
+class _Base(object):
     __tablename__ = 'base'
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.Text)
     query = db.session.query_property()
 
     @property
@@ -26,6 +25,6 @@ class _Base(object):                             # include created_on and update
     #         k: v for k, v in self.columns               # lets us easily convert back to DataFrame
     #     }
 
-
+# Timestamp includes created_on and updated_on columns for all models
 Base = declarative_base(cls=(_Base, Timestamp))
 

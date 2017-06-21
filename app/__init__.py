@@ -1,11 +1,9 @@
 from __future__ import unicode_literals
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 from app.src.flask_extended import Flask
-
-# app/__init__.py
-# https://gist.github.com/mattupstate/2046115: extended flask with yaml support
 
 
 # from app.lib.data_center import DataCenter
@@ -24,6 +22,15 @@ app.config.from_yaml('clients.yml', silent=True)
 
 # Connection to db
 db = SQLAlchemy(app)
+
+# Configure login page
+lm = LoginManager()
+lm.init_app(app)
+lm.login_view = 'login'
+
+from app.views import index
+
+app.register_blueprint(index.mod)
 
 # api = Api(app=app)
 # api_bp = Blueprint('api', __name__)

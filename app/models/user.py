@@ -7,7 +7,6 @@ class User(Base):
     __tablename__ = 'user'
     __searchable__ = ['nickname']
 
-    id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.Text, index=True, unique=True)
     email = db.Column(db.Text, index=True, unique=True)
     about_me = db.Column(db.Text)
