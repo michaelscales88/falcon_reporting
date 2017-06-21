@@ -1,11 +1,10 @@
-from flask import render_template, g, Blueprint, current_app, request, jsonify
+import flask_excel as excel
+from app.lib.sla_cache import cache
+from flask import render_template, Blueprint, current_app, request, jsonify
 from pandas import DataFrame
 from sqlalchemy import func
-import flask_excel as excel
 
-
-from app.lib.sla_cache import cache
-from app.lib.sla_report import report
+from app.src.sla_report import report
 
 mod = Blueprint('reports', __name__, template_folder='templates')
 

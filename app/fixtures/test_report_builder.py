@@ -1,12 +1,11 @@
-from pandas import DataFrame
-from sqlalchemy import func
-
-
-from app.fixtures.base_test import BaseTest
-from app.lib.call_center import CallCenter
 from app.lib.report_builder import ReportBuilder
 from app.lib.sla_cache import cache
 from app.lib.sla_report import report
+from pandas import DataFrame
+from sqlalchemy import func
+
+from app.fixtures.base_test import BaseTest
+from app.src.call_center import CallCenter
 
 
 class ReportBuilderTest(BaseTest):

@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 
-from app.lib.json_encoders import MyEncoder
-from app.models.flexible_storage import FlexibleStorage
 from app.lib.report_utilities import ReportUtilities
-from app.src.factory import query_statement, internal_connection
 from sqlalchemy import func
+
+from app.models.flexible_storage import FlexibleStorage
+from app.src.factory import query_statement, internal_connection
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 

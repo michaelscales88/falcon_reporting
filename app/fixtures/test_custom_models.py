@@ -1,12 +1,11 @@
 from datetime import datetime
-from json import dumps
+
 from pandas import DataFrame
 from sqlalchemy import Column, String, Integer
 
-
 from app.fixtures.base_test import BaseTest
 from app.src.factory import model_factory
-from app.lib.query_decoder import QueryDecoder
+from app.src.query_decoder import QueryDecoder
 
 
 class TestCustomModel(BaseTest):

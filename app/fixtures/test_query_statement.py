@@ -1,11 +1,10 @@
 #!/Users/michaelscales/Desktop/local/environments/flask_venv/bin/python3.5
 from pandas import DataFrame
 
-
 from app.fixtures.base_test import BaseTest
-from app.src.factory import query_statement, internal_connection
-from app.lib.sla_cache import cache
 from app.models.flexible_storage import FlexibleStorage
+from app.src.factory import query_statement, internal_connection
+from app.src.sla_cache import cache
 
 
 class TestQueryStatement(BaseTest):

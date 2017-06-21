@@ -1,9 +1,10 @@
-from sqlalchemy.orm import scoped_session
-from redpanda import create_engine
-from redpanda.orm import sessionmaker
 from json import dumps
 
-from app.lib.query_decoder import QueryDecoder
+from redpanda import create_engine
+from redpanda.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
+
+from app.src.query_decoder import QueryDecoder
 
 
 class Registry(object):

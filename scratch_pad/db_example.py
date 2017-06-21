@@ -1,10 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
+
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from collections import defaultdict
-
-from app.lib.data_center import DataCenter
 
 
 def test(query_date):

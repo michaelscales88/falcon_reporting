@@ -1,10 +1,10 @@
 from datetime import datetime
 from json import dumps
 
+from app.lib.sla_cache import cache
 
 from app.fixtures.base_test import BaseTest
-from app.lib.call_center import CallCenter
-from app.lib.sla_cache import cache
+from app.src.call_center import CallCenter
 
 
 class TestCallCenter(BaseTest):

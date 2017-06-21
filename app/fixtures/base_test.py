@@ -1,10 +1,8 @@
-from unittest import TestCase, TestLoader, TestSuite
-from click import command, option, pass_context
-
+from unittest import TestCase
 
 from app import app
+from app.src.call_center import CallCenter
 from app.src.factory import query_statement, internal_connection
-from app.lib.call_center import CallCenter
 
 
 class BaseTest(TestCase):

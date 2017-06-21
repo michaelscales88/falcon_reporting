@@ -1,5 +1,6 @@
-from app.lib.mixins import BaseMixin
 from sqlalchemy.ext.declarative import declarative_base
+
+from app.src.mixins import BaseMixin
 
 
 def apply_mixins(cls, column_data):

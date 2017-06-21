@@ -1,9 +1,9 @@
 from datetime import timedelta, time
-from pyexcel import Sheet
+
 from collections import OrderedDict
+from pyexcel import Sheet
 
-
-from app.lib.app_settings import AppSettings
+from app.src.app_settings import AppSettings
 
 _settings = r'C:\Users\mscales\Desktop\Development\automated_sla_tool\automated_sla_tool\settings\db_report_test'
 

@@ -1,8 +1,7 @@
-from flask import render_template, current_app, Blueprint, g, redirect, url_for
+from flask import render_template, current_app, Blueprint, g
 
-
+from app.src.call_center import CallCenter
 from app.src.factory import get_page_args, get_pagination, query_statement, internal_connection
-from app.lib.call_center import CallCenter
 
 mod = Blueprint('insert', __name__, template_folder='templates')
 

@@ -1,19 +1,19 @@
 from __future__ import unicode_literals
-# app/__init__.py
-# https://gist.github.com/mattupstate/2046115: extended flask with yaml support
 
+from datetime import datetime
+
+from app.lib.data_center import DataCenter
 from flask import render_template, g, Blueprint
 from flask_restful import Api
-from datetime import datetime
-from sqlalchemy.exc import OperationalError
 from os.path import join
+from sqlalchemy.exc import OperationalError
 
-
-from app.lib.flask_extended import Flask
-from app.lib.data_center import DataCenter
-from app.src.factory import internal_connection, run_logger
-from app.models.flexible_storage import FlexibleStorage
 from app.resources.index_resource import IndexView
+from app.src.factory import internal_connection, run_logger
+from app.src.flask_extended import Flask
+
+# app/__init__.py
+# https://gist.github.com/mattupstate/2046115: extended flask with yaml support
 
 app = Flask(__name__)
 api = Api(app=app)

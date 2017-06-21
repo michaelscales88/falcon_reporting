@@ -1,10 +1,9 @@
 from flask import current_app
-from sqlalchemy.orm import class_mapper, ColumnProperty
 from pandas import DataFrame
+from sqlalchemy.orm import class_mapper, ColumnProperty
 
-
-from app.lib.app_registry import SessionRegistry
-from app.lib.app_registry import ModelRegistry
+from app.src.app_registry import ModelRegistry
+from app.src.app_registry import SessionRegistry
 
 
 def attribute_names(cls):

@@ -1,8 +1,8 @@
 from pandas import DataFrame
 from sqlalchemy import Column
 
-from app.lib.mixins import COLUMNS
 from app.models.custom_model import model_factory
+from app.src.mixins import COLUMNS
 
 
 class QueryDecoder(object):
