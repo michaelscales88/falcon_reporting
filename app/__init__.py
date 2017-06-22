@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 
+from os import environ
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 from app.src.flask_extended import Flask
-
+from app.src.app_registry import ModelRegistry
 
 # from app.lib.data_center import DataCenter
 # from app.src.factory import internal_connection, run_logger
@@ -21,13 +22,24 @@ app.config.from_pyfile('app.cfg', silent=True)
 app.config.from_yaml('clients.yml', silent=True)
 
 # Connection to db
+
 db = SQLAlchemy(app)
+
+# Get a model/session registry
+if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    #     app.session_register = getattr(app, 'session_register', None)
+    app.model_registry = getattr(app, 'model_registry', None)
+    #     if not app.session_register:
+    #         app.session_register = SessionRegistry()
+    if not app.model_registry:
+        app.model_registry = ModelRegistry()
 
 # Configure login page
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+from app.views import app_routing
 from app.views import index
 
 app.register_blueprint(index.mod)
@@ -38,11 +50,11 @@ app.register_blueprint(index.mod)
 
 # Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
 # with app.app_context():
-    # call set up functions which need to bind to app
-    # try:
-    #     run_logger(__name__)
-    # except FileNotFoundError:
-    #     print('failed to open logger')
+# call set up functions which need to bind to app
+# try:
+#     run_logger(__name__)
+# except FileNotFoundError:
+#     print('failed to open logger')
 
 
 """

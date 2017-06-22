@@ -1,14 +1,19 @@
 from app import db
+# from sqlalchemy import Column
 # from sqlalchemy.types import Integer, Text, DateTime
 from sqlalchemy_utils import Timestamp, generic_repr
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 
 @generic_repr
 class _Base(object):
-    __tablename__ = 'base'
+
     id = db.Column(db.Integer, primary_key=True)
     query = db.session.query_property()
+
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
 
     @property
     def columns(self):

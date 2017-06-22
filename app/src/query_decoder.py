@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from sqlalchemy import Column
 
-from app.models.custom_model import model_factory
+# from app.models.custom_model import model_factory
 from app.src.mixins import COLUMNS
 
 
@@ -12,9 +12,9 @@ class QueryDecoder(object):
         data = self.coerce_result_(records)
         # print(data)
         name, columns, table_info = self.make_meta_data_(name, data)
-        model = model_factory(name, columns, table_info)
-        self.model_info(model)
-        return model
+        # model = model_factory(name, columns, table_info)
+        # self.model_info(model)
+        return name, columns, table_info
 
     @staticmethod
     def coerce_result_(result):

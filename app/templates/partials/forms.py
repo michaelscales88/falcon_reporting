@@ -1,9 +1,13 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
+from wtforms import StringField, BooleanField
+from wtforms.validators import DataRequired, Length
+
+from app.models.user import User
 
 from wtforms import SelectField, TextAreaField, StringField, validators, SelectMultipleField, FieldList, FormField
 
 
-class BaseForm(Form):
+class BaseForm(FlaskForm):
     def __iter__(self):
         field_order = getattr(self, 'field_order', None)
         if field_order:
@@ -17,7 +21,7 @@ class BaseForm(Form):
         return super(BaseForm, self).__iter__()
 
 
-class SimpleForm(Form):
+class SimpleForm(FlaskForm):
     # example = RadioField('Label', choices=[('value', 'description'), ('value_two', 'whatever')])
     example2 = SelectMultipleField(
         'Label2',
@@ -27,12 +31,12 @@ class SimpleForm(Form):
     )
 
 
-class MyForm(Form):
+class MyForm(FlaskForm):
     name = StringField(u'Full Name', [validators.required(), validators.length(max=10)])
     address = TextAreaField(u'Mailing Address', [validators.optional(), validators.length(max=200)])
 
 
-class ColumnEntryForm(Form):
+class ColumnEntryForm(FlaskForm):
     column = StringField()
 
 
@@ -45,3 +49,7 @@ def form_generator(columns):
     for column in columns:
         print(column)
 
+
+class LoginForm(FlaskForm):
+    login = StringField('login', validators=[DataRequired()])
+    remember_me = BooleanField('remember_me', default=False)

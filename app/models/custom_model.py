@@ -1,6 +1,7 @@
-from sqlalchemy.ext.declarative import declarative_base
-
-from app.src.mixins import BaseMixin
+# from sqlalchemy.ext.declarative import declarative_base
+# from app import db
+# from app.src.mixins import BaseMixin
+from app.models.base import Base
 
 
 def apply_mixins(cls, column_data):
@@ -13,7 +14,7 @@ class MixedModel(object):
     pass
 
 
-Base = declarative_base(cls=BaseMixin)
+# Base = declarative_base(cls=BaseMixin)
 
 
 def model_factory(name, columns, table_info):

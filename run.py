@@ -1,7 +1,6 @@
 import os
 from click import command, option
 
-
 from app import app
 
 

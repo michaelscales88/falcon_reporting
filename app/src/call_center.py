@@ -157,6 +157,7 @@ class CallCenter:
         )
         calls = []
         num_clients = len(clients)
+        clients = list(clients)
         event_cursor = {
             'call_id': call_id,
             'event_id': call_id * 10,       # events > # of calls
