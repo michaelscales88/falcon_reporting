@@ -1,6 +1,7 @@
 from app import db
 # from sqlalchemy import Column
 # from sqlalchemy.types import Integer, Text, DateTime
+from math import ceil
 from sqlalchemy_utils import Timestamp, generic_repr
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 

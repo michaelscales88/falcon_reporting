@@ -1,14 +1,16 @@
 from app import app
+from flask import flash, url_for, redirect
 from app.src.factory import get_page_args, get_pagination, internal_connection
 from flask_wtf import Form
 
 from app.templates.partials.forms import SimpleForm
 from app.templates.partials.forms import FrameColumns
-from pandas import DataFrame
+from pandas import DataFrame, read_sql
+from json import dumps
 from flask import render_template, g, Blueprint, current_app, request
 from flask_login import login_required
 from datetime import datetime, timedelta
-from app.core import get_records, insert_records, get_connection
+from app.core import query_model, insert_records, get_connection
 
 mod = Blueprint('index', __name__, template_folder='templates')
 
@@ -19,14 +21,24 @@ mod = Blueprint('index', __name__, template_folder='templates')
 @login_required
 def index(page=1):
     report_date = datetime.today().date()
-    # date_range = [date.date() for date in range(datetime.today() - timedelta(days=3), datetime.today().date())]
-    print(app.model_registry)
     # need to check for records in db and get records if not present
-    records = get_records('sla_report')
-    if not records:
+    query, offset, total = query_model('sla_report', report_date, page, app.config['POSTS_PER_PAGE'])
+
+    if not query or total == 0:
         records = get_connection(report_date)
         insert_records(g.session, 'sla_report', records)
-    records = get_records('sla_report')
+        flash(
+            'Added {number} records to {model_name}'.format(
+                number=len(records),
+                model_name='sla_report'
+            )
+        )
+        return redirect(url_for('index.index'))
+    # query, offset, total = query_model('sla_report', report_date, page, app.config['POSTS_PER_PAGE'])
+    print(query.statement)
+    df = read_sql(query.statement, query.session.bind)
+    df.set_index(['call_id', 'event_id'], inplace=True)
+    df.name = 'sla_report'
     # frame = DataFrame(records)
     # print(frame)
     # form = PostForm()
@@ -40,7 +52,10 @@ def index(page=1):
     return render_template('index.html',
                            title='Home',
                            report_date=report_date,
-                           # posts=posts
+                           tables=[df.to_html()],
+                           titles=[df.name],
+                           offset=offset,
+                           total=total
                            )
 # @mod.before_request
 # def before_request():

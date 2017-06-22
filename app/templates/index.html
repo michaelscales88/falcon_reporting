@@ -2,10 +2,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Hi, {{ g.user.nickname }}!</h1>
+    <h1>Hi, {{ g.user.nickname }}!</h1>
     <p>Last Seen: {{ g.user.last_seen }}</p>
-<!-- Show the paginated dataframe -->
-<table>
-<p>{{ report_date }}</p>
-</table>
+    <!-- Show the paginated dataframe -->
+    <table>
+        <p>{{ report_date }}</p>
+        {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>
+            {{ table|safe }}
+        {% endfor %}
+    </table>
+    <p>{{ offset }} {{ total }}</p>
 {% endblock %}

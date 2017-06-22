@@ -16,7 +16,21 @@
   <body>
     <div>Falcon Reporting:
         <a href="{{ url_for('index.index') }}">Home</a>
+        {% if g.user.is_authenticated %}
+{#        | <form style="display: inline;" action="{{ url_for('search') }}" method="post" name="search">{{ g.search_form.hidden_tag() }}{{ g.search_form.search(size=20) }}<input type="submit" value="Search"></form>#}
+        | <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+
     </div>
+    {% with messages = get_flashed_messages() %}    <!--This is perfect for redirecting after an insert -->
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }} </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
   </body>
 </html>

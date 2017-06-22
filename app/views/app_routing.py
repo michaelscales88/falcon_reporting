@@ -7,6 +7,7 @@ from datetime import datetime
 
 from app.models.user import User
 from app.templates.partials.forms import LoginForm
+from app.core import get_count
 
 
 @app.before_request
@@ -17,6 +18,7 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
         g.session = db.session
+        g.model_registry = getattr(app, 'model_registry', None)
         # print(app.data_center)
         # g.search_form = SearchForm()
 
@@ -24,6 +26,17 @@ def before_request():
 @app.teardown_request
 def teardown(error):
     session = getattr(g, 'session', None)
+    if app.debug and app.config['WIPE_SESSION']:
+        model_registry = getattr(g, 'model_registry', None)
+        if model_registry:
+            model = model_registry['sla_report']
+            if model and get_count(model.query) > app.config['MAX_RECORDS']:
+                print('blasting session')
+                mm = model.query.all()
+                for m in mm:
+                    session.delete(m)
+                session.commit()
+
     if session:
         session.remove()     # Close scoped session
 
