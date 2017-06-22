@@ -1,7 +1,4 @@
 from app import db
-# from sqlalchemy import Column
-# from sqlalchemy.types import Integer, Text, DateTime
-from math import ceil
 from sqlalchemy_utils import Timestamp, generic_repr
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
@@ -26,10 +23,10 @@ class _Base(object):
                 ]
         ]
 
-    # def to_dict(self):
-    #     return {
-    #         k: v for k, v in self.columns               # lets us easily convert back to DataFrame
-    #     }
+    def to_dict(self):
+        return {
+            k: v for k, v in self.columns   # lets us easily convert back to DataFrame
+        }
 
 # Timestamp includes created_on and updated_on columns for all models
 Base = declarative_base(cls=(_Base, Timestamp))

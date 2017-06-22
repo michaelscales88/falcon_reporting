@@ -34,8 +34,7 @@ def index(page=1):
             )
         )
         return redirect(url_for('index.index'))
-    # query, offset, total = query_model('sla_report', report_date, page, app.config['POSTS_PER_PAGE'])
-    print(query.statement)
+
     df = read_sql(query.statement, query.session.bind)
     df.set_index(['call_id', 'event_id'], inplace=True)
     df.name = 'sla_report'

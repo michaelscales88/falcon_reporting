@@ -26,13 +26,13 @@ app.config.from_yaml('clients.yml', silent=True)
 db = SQLAlchemy(app)
 # Get a model/session registry
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
-    #     app.session_register = getattr(app, 'session_register', None)
-    app.model_registry = getattr(app, 'model_registry', None)
-    #     if not app.session_register:
-    #         app.session_register = SessionRegistry()
-    if not app.model_registry:
-        print('getting a model_registry')
-        app.model_registry = ModelRegistry()
+    model_registry = ModelRegistry()
+    print('made a model_registry')
+    # #     if not app.session_register:
+    # #         app.session_register = SessionRegistry()
+    # if not app.model_registry:
+    #     print('getting a model_registry')
+    #     app.model_registry = ModelRegistry()
 
 # Configure login page
 lm = LoginManager()

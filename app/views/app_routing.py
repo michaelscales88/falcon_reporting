@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, g, abort
 from flask_login import login_user, logout_user, login_required, current_user
-from app import app, db, lm
+from app import app, db, lm, model_registry
 from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
@@ -18,8 +18,7 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
         g.session = db.session
-        g.model_registry = getattr(app, 'model_registry', None)
-        # print(app.data_center)
+        g.model_registry = model_registry
         # g.search_form = SearchForm()
 
 
@@ -31,7 +30,6 @@ def teardown(error):
         if model_registry:
             model = model_registry['sla_report']
             if model and get_count(model.query) > app.config['MAX_RECORDS']:
-                print('blasting session')
                 mm = model.query.all()
                 for m in mm:
                     session.delete(m)
