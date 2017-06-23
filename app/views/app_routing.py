@@ -1,12 +1,12 @@
 from flask import render_template, flash, redirect, url_for, request, g, abort
 from flask_login import login_user, logout_user, login_required, current_user
-from app import app, db, lm
+from app import app, db, lm, si
 from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
 
 from app.models.user import User
-from app.templates.partials.forms import LoginForm
+from app.templates.partials.forms import LoginForm, SearchForm
 from app.core import get_count
 
 
@@ -21,7 +21,12 @@ def before_request():
         g.session = db.session
         g.model_registry = app.model_registry
         g.report_date = datetime.today().date()
-        # g.search_form = SearchForm()
+        if app.config['ENABLE_SEARCH']:
+            si.register_class(User)  # update whoosh with User information
+            # for model in g.model_registry:
+            #     if model:
+            #         si.register_class(model)    # update whoosh with custom models
+            g.search_form = SearchForm()
 
 
 @app.teardown_request
@@ -109,3 +114,27 @@ def logout():
 @lm.user_loader
 def load_user(id):
     return User.get(id=int(id))
+
+
+@app.route('/search', methods=['POST'])
+@login_required
+def search():
+    if not g.search_form.validate_on_submit():
+        return redirect(url_for('index.index'))
+    return redirect(url_for('search_results', query=g.search_form.search.data))
+
+
+@app.route('/search_results/<query>')
+@login_required
+def search_results(query):
+    model_name = 'sla_report'
+    model = g.model_registry[model_name]
+
+    if not model:
+        redirect(url_for('index.index'))
+
+    results = User.search_query(query)
+    print(results, dir(results))
+    return render_template('search_results.html',
+                           query=query,
+                           results=results)

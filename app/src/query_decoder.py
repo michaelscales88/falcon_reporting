@@ -36,7 +36,6 @@ class QueryDecoder(object):
         # print([(d, type(d)) for d in data])
         # print([(name, d.type) for name, d in zip(list(data), data.dtypes)])
         columns = {
-            # col_name: Column(col_name, col_type, table=None)
             name: Column(name, COLUMNS.get(d.type, None)) for name, d in zip(list(data), data.dtypes)
         }
         table_info = {
@@ -47,7 +46,8 @@ class QueryDecoder(object):
                 # 'autoload_with': db.engine
                 'autoload': False
 
-            }
+            },
+            # '__searchable__': list(data)
         }
         return table_info['__tablename__'], columns, table_info
 
@@ -57,5 +57,6 @@ class QueryDecoder(object):
         print(model.__name__)
         print(model.__base__)
         print(model.__tablename__)
+        # print(model.__searchable__)
         print(model.__table_args__)
         print(model.__table__.columns.keys())

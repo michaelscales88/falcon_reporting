@@ -1,5 +1,5 @@
 from sqlalchemy import func
-from flask import g
+from flask import g, flash
 
 from app import app
 from app.src.call_center import CallCenter
@@ -64,3 +64,9 @@ def insert_records(session, model_name, records):
         model = model_registry[model_name]
         session.add(model(**record))
         session.commit()
+    flash(
+        'Added {number} records to {model_name}'.format(
+            number=len(records),
+            model_name=model_name
+        )
+    )

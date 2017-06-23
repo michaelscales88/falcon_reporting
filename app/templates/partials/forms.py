@@ -21,35 +21,10 @@ class BaseForm(FlaskForm):
         return super(BaseForm, self).__iter__()
 
 
-class SimpleForm(FlaskForm):
-    # example = RadioField('Label', choices=[('value', 'description'), ('value_two', 'whatever')])
-    example2 = SelectMultipleField(
-        'Label2',
-        choices=[('value', 'description'), ('value_two', 'whatever')],
-        # coerce='utf-8',
-        option_widget=None
-    )
-
-
-class MyForm(FlaskForm):
-    name = StringField(u'Full Name', [validators.required(), validators.length(max=10)])
-    address = TextAreaField(u'Mailing Address', [validators.optional(), validators.length(max=200)])
-
-
-class ColumnEntryForm(FlaskForm):
-    column = StringField()
-
-
-class FrameColumns(BaseForm):
-    columns = FieldList(FormField(ColumnEntryForm), min_entries=1)
-    # field_order = ('username', '*')
-
-
-def form_generator(columns):
-    for column in columns:
-        print(column)
-
-
 class LoginForm(FlaskForm):
     login = StringField('login', validators=[DataRequired()])
     remember_me = BooleanField('remember_me', default=False)
+
+
+class SearchForm(FlaskForm):
+    search = StringField('search', validators=[DataRequired()])

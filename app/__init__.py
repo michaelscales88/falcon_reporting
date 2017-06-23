@@ -28,6 +28,10 @@ db = SQLAlchemy(app)
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':     # prevents recreating model registry on multi init
     app.model_registry = ModelRegistry()
 
+# Start the index service
+if app.config['ENABLE_SEARCH']:
+    from whooshalchemy import IndexService
+    si = IndexService(config=app.config)
 
 # Configure login page
 lm = LoginManager()

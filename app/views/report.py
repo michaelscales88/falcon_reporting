@@ -34,7 +34,7 @@ def report(page=1):
         [col for col in test_report_content.items()]
     )
     df.name = 'sla_report'
-    # df.index = list([''].extend(app.config['CLIENTS']))
+    df.index = [''] + list(app.config['CLIENTS'])
     pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
     return render_template(
         'report.html',

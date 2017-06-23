@@ -3,11 +3,6 @@ from pyexcel import Sheet
 from collections import OrderedDict
 
 
-# from app.lib.app_settings import AppSettings
-#
-# _settings = 'db_report_test'
-
-
 def chop_microseconds(delta):
     return delta - timedelta(microseconds=delta.microseconds)
 
@@ -17,17 +12,12 @@ def match(record_list, match_val=None):
     for record in record_list:
         # Check match conditions
         match0 = (
-            # getattr(match_val, 'data')['Event Summary'].get('4', timedelta(0))
             match_val.get('Event Summary').get(4, timedelta(0))
-            # == getattr(record, 'data')['Event Summary'].get('4', timedelta(0))
             == record.get('Event Summary').get(4, timedelta(0))
             == timedelta(0)
         )
-        # match1 = getattr(match_val, 'unique_id2') == getattr(record, 'unique_id2')
         match1 = match_val.get('Unique Id2') == record.get('Unique Id2')
-        # match2 = getattr(match_val, 'unique_id1') == getattr(record, 'unique_id1')
         match2 = match_val.get('Unique Id1') == record.get('Unique Id1')
-        # match3 = (getattr(record, 'start') - getattr(match_val, 'end')) < timedelta(seconds=61)
         match3 = (record.get('Start Time') - match_val.get('End Time')) < timedelta(seconds=61)
 
         all_matched = all(
@@ -46,6 +36,7 @@ def match(record_list, match_val=None):
 
 
 def sla_report(records, client_list=None):
+    print('sla_report')
     output_headers = [
         'I/C Presented',
         'I/C Answered',
@@ -77,7 +68,6 @@ def sla_report(records, client_list=None):
             additional_row[str(row_name)] = [
                 0, 0, 0, 0, 0, 0, timedelta(0), timedelta(0), timedelta(0), 0, 0, 0, 0, 0, 0, timedelta(0), 0
             ]
-            print(additional_row)
             test_output.extend_rows(additional_row)
     except KeyError:
         from json import dumps
@@ -119,7 +109,6 @@ def sla_report(records, client_list=None):
             wait_duration = call_duration - talking_time - hold_time
             # DO the rest of the output work
             if talking_time > timedelta(0):
-                print('output')
                 test_output[row_name, 'I/C Presented'] += 1
                 test_output[row_name, 'I/C Answered'] += 1
                 test_output[row_name, 'Average Incoming Duration'] += talking_time
