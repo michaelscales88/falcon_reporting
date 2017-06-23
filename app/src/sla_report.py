@@ -45,7 +45,7 @@ def match(record_list, match_val=None):
     return matched_records
 
 
-def report(records, client_list):
+def sla_report(records, client_list=None):
     output_headers = [
         'I/C Presented',
         'I/C Answered',

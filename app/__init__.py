@@ -22,27 +22,23 @@ app.config.from_pyfile('app.cfg', silent=True)
 app.config.from_yaml('clients.yml', silent=True)
 
 # Connection to db
-
 db = SQLAlchemy(app)
+
 # Get a model/session registry
-if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
-    model_registry = ModelRegistry()
-    print('made a model_registry')
-    # #     if not app.session_register:
-    # #         app.session_register = SessionRegistry()
-    # if not app.model_registry:
-    #     print('getting a model_registry')
-    #     app.model_registry = ModelRegistry()
+if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':     # prevents recreating model registry on multi init
+    app.model_registry = ModelRegistry()
+
 
 # Configure login page
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-from app.views import app_routing
-from app.views import index
+from app.views import app_routing, index, report
+
 
 app.register_blueprint(index.mod)
+app.register_blueprint(report.mod)
 
 # api = Api(app=app)
 # api_bp = Blueprint('api', __name__)

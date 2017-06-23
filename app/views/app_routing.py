@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, g, abort
 from flask_login import login_user, logout_user, login_required, current_user
-from app import app, db, lm, model_registry
+from app import app, db, lm
 from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
@@ -12,23 +12,26 @@ from app.core import get_count
 
 @app.before_request
 def before_request():
+    print('setup')
     g.user = current_user
     if g.user.is_authenticated:
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
         g.session = db.session
-        g.model_registry = model_registry
+        g.model_registry = app.model_registry
+        g.report_date = datetime.today().date()
         # g.search_form = SearchForm()
 
 
 @app.teardown_request
 def teardown(error):
+    print('teardown')
     session = getattr(g, 'session', None)
     if app.debug and app.config['WIPE_SESSION']:
-        model_registry = getattr(g, 'model_registry', None)
-        if model_registry:
-            model = model_registry['sla_report']
+        registry = getattr(g, 'model_registry', None)
+        if registry:
+            model = registry['sla_report']
             if model and get_count(model.query) > app.config['MAX_RECORDS']:
                 mm = model.query.all()
                 for m in mm:

@@ -1,31 +1,25 @@
 from app import app
-from flask import flash, url_for, redirect
-from app.src.factory import get_page_args, get_pagination, internal_connection
-from flask_wtf import Form
-
-from app.templates.partials.forms import SimpleForm
-from app.templates.partials.forms import FrameColumns
-from pandas import DataFrame, read_sql
-from json import dumps
-from flask import render_template, g, Blueprint, current_app, request
+from pandas import read_sql
+from flask import render_template, g, Blueprint, flash, url_for, redirect
 from flask_login import login_required
-from datetime import datetime, timedelta
+
 from app.core import query_model, insert_records, get_connection
+from app.src.pandas_page import PandasPage
 
 mod = Blueprint('index', __name__, template_folder='templates')
 
 
 @mod.route('/')
-@mod.route('/index', methods=['GET', 'POST'])
+@mod.route('/index?=<int:page>', methods=['GET', 'POST'])
 @app.route('/index/<int:page>', methods=['GET', 'POST'])
 @login_required
 def index(page=1):
-    report_date = datetime.today().date()
+
     # need to check for records in db and get records if not present
-    query, offset, total = query_model('sla_report', report_date, page, app.config['POSTS_PER_PAGE'])
+    query, offset, total = query_model('sla_report', g.report_date, page, app.config['POSTS_PER_PAGE'])
 
     if not query or total == 0:
-        records = get_connection(report_date)
+        records = get_connection(g.report_date)
         insert_records(g.session, 'sla_report', records)
         flash(
             'Added {number} records to {model_name}'.format(
@@ -33,11 +27,12 @@ def index(page=1):
                 model_name='sla_report'
             )
         )
-        return redirect(url_for('index.index'))
+        return redirect(url_for('index.index', page=1))
 
     df = read_sql(query.statement, query.session.bind)
     df.set_index(['call_id', 'event_id'], inplace=True)
     df.name = 'sla_report'
+    pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
     # frame = DataFrame(records)
     # print(frame)
     # form = PostForm()
@@ -50,49 +45,7 @@ def index(page=1):
     # posts = g.user.followed_posts().paginate(page, app.config['POSTS_PER_PAGE'], False)
     return render_template('index.html',
                            title='Home',
-                           report_date=report_date,
-                           tables=[df.to_html()],
-                           titles=[df.name],
-                           offset=offset,
-                           total=total
+                           report_date=g.report_date,
+                           tables=[pf],
+                           titles=[pf.frame.name]
                            )
-# @mod.before_request
-# def before_request():
-#     # Set up our dB connection
-#     model = current_app.data_src.model('sla_report')
-#     if model:
-#         g.db = internal_connection(
-#             current_app.config['SQLALCHEMY_DATABASE_URI'],
-#             echo=current_app.config['SQLALCHEMY_ECHO'],
-#             cls=model
-#         )
-#
-#
-# # https://realpython.com/blog/python/primer-on-jinja-templating/
-# @app.route('/index')
-# @mod.route('/index', methods=["GET", "POST"])
-# def records():
-#     page, per_page, offset = get_page_args()
-#     total_records = current_app.data_src.record_count('sla_report')
-#     frame = current_app.data_src.page_view('sla_report', offset=offset, per_page=per_page)
-#     frame.name = 'default'
-#     try:
-#         frame.set_index(['call_id', 'event_id'], inplace=True)  # inplace = True saves us from having to bind a new dataframe
-#     except KeyError:
-#         pass
-#     pagination = get_pagination(
-#         page=page,
-#         per_page=per_page,
-#         total=total_records,
-#         record_name='id',
-#         format_total=True,
-#         format_number=True,
-#     )
-#     return render_template(
-#         'index.html',
-#         page=page,
-#         per_page=per_page,
-#         pagination=pagination,
-#         tables=[fr.to_html(classes='report') for fr in (frame,) if not fr.empty],
-#         titles=['na', tuple(fr.name for fr in (frame,) if not fr.empty)]
-#     )

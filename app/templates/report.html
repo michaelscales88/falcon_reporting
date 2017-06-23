@@ -3,8 +3,6 @@
 
 {% block content %}
 
-    <h1>Hi, {{ g.user.nickname }}!</h1>
-    <p>Last Seen: {{ g.user.last_seen }}</p>
     <!-- Show the paginated dataframe -->
     <table>
     {% for table in tables %}
