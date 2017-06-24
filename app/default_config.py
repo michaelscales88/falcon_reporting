@@ -9,7 +9,7 @@ class Config(object):
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASEDIR, 'app.db')
     SQLALCHEMY_MIGRATE_REPO = os.path.join(BASEDIR, 'db_repository')
-    SQLALCHEMY_TRACK_MODIFICATIONS = True  # Turn this off to reduce overhead
+    SQLALCHEMY_TRACK_MODIFICATIONS = False  # Turn this off to reduce overhead
 
     # pagination
     POSTS_PER_PAGE = 50
@@ -34,14 +34,15 @@ class Config(object):
 
 
 class ProductionConfig(Config):
-    DATABASE_URI = 'somethingelse'
+    pass
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_ECHO = False
     WIPE_SESSION = True
-    MAX_RECORDS = 2000
+    MAX_RECORDS = 3000
+    SQLALCHEMY_TRACK_MODIFICATIONS = True  # Turn this off to reduce overhead
 
 
 class TestingConfig(Config):

@@ -1,8 +1,6 @@
 from datetime import datetime
 from json import dumps
 
-from app.lib.sla_cache import cache
-
 from app.fixtures.base_test import BaseTest
 from app.src.call_center import CallCenter
 

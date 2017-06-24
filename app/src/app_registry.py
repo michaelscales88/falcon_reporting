@@ -15,7 +15,12 @@ class Registry(object):
     def __repr__(self):
         return dumps(self._registry, indent=4, default=str)
 
+    def __iter__(self):
+        for value in self._registry.values():
+            yield value
 
+    def __bool__(self):
+        return True if self._registry else False
 # class SessionRegistry(Registry):
 #     _registry = {}
 #

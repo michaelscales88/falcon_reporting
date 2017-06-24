@@ -1,8 +1,6 @@
 from unittest import TestCase
 
 from app import app
-from app.src.call_center import CallCenter
-from app.src.factory import query_statement, internal_connection
 
 
 class BaseTest(TestCase):
@@ -14,28 +12,13 @@ class BaseTest(TestCase):
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
         # Make connections available to Fixtures
-        self.internal_connection = internal_connection
-        self.query_statement = query_statement
-        self.example_data_src = CallCenter
-
-    #
-    # @staticmethod
-    # def parametrize(testcase_klass, param=None):
-    #     """ Create a suite containing all tests taken from the given
-    #         subclass, passing them the parameter 'param'.
-    #     """
-    #     testloader = TestLoader()
-    #     testnames = testloader.getTestCaseNames(testcase_klass)
-    #     suite = TestSuite()
-    #     for name in testnames:
-    #         suite.addTest(testcase_klass(name, param=param))
-    #     return suite
+        # self.internal_connection = internal_connection
+        # self.query_statement = query_statement
+        # self.example_data_src = CallCenter
 
     def setUp(self):
         # Set up test configuration
-        app.config.from_object('app.test_config.TestConfig')
-        # app.config['DEBUG'] = self.param['DEBUG']
-        # app.config['SQLALCHEMY_ECHO'] = self.param['ECHO']
+        app.config.from_object('app.default_config.DevelopmentConfig')
 
     def tearDown(self):
         # Break down db connections

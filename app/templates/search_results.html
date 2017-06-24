@@ -3,7 +3,10 @@
 
 {% block content %}
   <h1>Search results for "{{ query }}":</h1>
-    {% for result in results %}
+    {% for result in user_results %}
+    {{ result }}
+    {% endfor %}
+    {% for result in model_results %}
     {{ result }}
     {% endfor %}
 {% endblock %}

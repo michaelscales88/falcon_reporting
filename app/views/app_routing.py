@@ -5,7 +5,7 @@ from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
 
-from app.models.user import User
+from app.models import User
 from app.templates.partials.forms import LoginForm, SearchForm
 from app.core import get_count
 
@@ -15,6 +15,7 @@ def before_request():
     print('setup')
     g.user = current_user
     if g.user.is_authenticated:
+        print('authenticated')
         g.user.last_seen = datetime.utcnow()
         db.session.add(g.user)
         db.session.commit()
@@ -23,9 +24,11 @@ def before_request():
         g.report_date = datetime.today().date()
         if app.config['ENABLE_SEARCH']:
             si.register_class(User)  # update whoosh with User information
-            # for model in g.model_registry:
-            #     if model:
-            #         si.register_class(model)    # update whoosh with custom models
+            if app.model_registry:
+                for model in app.model_registry:
+                    if model:
+                        model.metadata.create_all(g.session.bind)  # Make schema and bind to engine
+                        si.register_class(model)    # update whoosh to any changes to the schema model
             g.search_form = SearchForm()
 
 
@@ -78,9 +81,6 @@ def login():
             user = User(nickname=nickname, email=user_email)
             db.session.add(user)
             db.session.commit()
-            # make the user follow him/herself
-            # db.session.add(user.follow(user))
-            # db.session.commit()
 
         login_user(user)
         flash('Logged in successfully.')
@@ -133,8 +133,17 @@ def search_results(query):
     if not model:
         redirect(url_for('index.index'))
 
-    results = User.search_query(query)
-    print(results, dir(results))
+    user_results = User.search_query(query)
+    model_results = model.search_query(query)
     return render_template('search_results.html',
                            query=query,
-                           results=results)
+                           user_results=user_results,
+                           model_results=model_results)
+
+
+def redirect_back(endpoint, **values):
+    target = request.form['next']
+    if not target or not is_safe_url(target):
+        target = url_for(endpoint, **values)
+    return redirect(target)
+

@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from sqlalchemy import Column
-
+from app import db
 # from app.models.custom_model import model_factory
 from app.src.mixins import COLUMNS
 
@@ -10,16 +10,11 @@ class QueryDecoder(object):
 
     def decode_result(self, name, records):
         data = self.coerce_result_(records)
-        # print(data)
         name, columns, table_info = self.make_meta_data_(name, data)
-        # model = model_factory(name, columns, table_info)
-        # self.model_info(model)
         return name, columns, table_info
 
     @staticmethod
     def coerce_result_(result):
-        # print(result.keys())
-        # print([row for row in result])
         return DataFrame(
             # [zip(row.keys(), row) for row in result if hasattr(row, 'keys')]  # Bind the column name to each value
             result
@@ -32,22 +27,21 @@ class QueryDecoder(object):
         )
 
     @staticmethod
-    def make_meta_data_(name, data):
-        # print([(d, type(d)) for d in data])
-        # print([(name, d.type) for name, d in zip(list(data), data.dtypes)])
+    def make_meta_data_(table_name, data):
+        col_types = zip(list(data), data.dtypes)
         columns = {
-            name: Column(name, COLUMNS.get(d.type, None)) for name, d in zip(list(data), data.dtypes)
+            name: Column(name, COLUMNS.get(d.type, None))   # Column name: Column(name, Type)
+            for name, d in col_types
         }
         table_info = {
-            '__tablename__': name,
+            '__tablename__': table_name,
             '__table_args__': {
-                # 'autoload': True,
+                'autoload': False,
                 # 'schema': 'data',
-                # 'autoload_with': db.engine
-                'autoload': False
+                # 'autoload_with': db.engine,
 
             },
-            # '__searchable__': list(data)
+            '__searchable__': [name for name, column in columns.items() if isinstance(column.type, db.Text)]
         }
         return table_info['__tablename__'], columns, table_info
 
@@ -57,6 +51,6 @@ class QueryDecoder(object):
         print(model.__name__)
         print(model.__base__)
         print(model.__tablename__)
-        # print(model.__searchable__)
+        print(model.__searchable__)
         print(model.__table_args__)
         print(model.__table__.columns.keys())

@@ -21,6 +21,7 @@ def index(page=1):
     if not query or total == 0:
         records = get_connection(g.report_date)
         insert_records(g.session, 'sla_report', records)
+        print('redirecting')
         return redirect(url_for('index.index', page=1))
 
     df = read_sql(query.statement, query.session.bind)

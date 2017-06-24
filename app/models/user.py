@@ -5,8 +5,9 @@ from .base import Base
 
 class User(Base):
     __tablename__ = 'user'
-    __searchable__ = ['nickname']
+    __searchable__ = ['id2', 'nickname']
 
+    id2 = db.Column(db.Text, index=True, unique=True)
     nickname = db.Column(db.Text, index=True, unique=True)
     email = db.Column(db.Text, index=True, unique=True)
     about_me = db.Column(db.Text)

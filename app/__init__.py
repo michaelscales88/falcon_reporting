@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-
 from os import environ
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -43,6 +42,7 @@ from app.views import app_routing, index, report
 
 app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)
+
 
 # api = Api(app=app)
 # api_bp = Blueprint('api', __name__)

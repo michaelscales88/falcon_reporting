@@ -1,10 +1,12 @@
 from sqlalchemy import func
-from flask import g, flash
+from flask import g, flash, redirect, url_for
+from datetime import datetime
 
-from app import app
+from app import app, db
 from app.src.call_center import CallCenter
 from app.src.query_decoder import QueryDecoder
 
+from app.models import Base
 from app.models.custom_model import model_factory
 
 decoder = QueryDecoder()
@@ -60,13 +62,44 @@ def insert_records(session, model_name, records):
         model_registry[model_name] = model  # save it for later
         decoder.model_info(model)
 
+    model = model_registry[model_name]
+    rebase()    # this could be saved for changes only
+    records = [convert_to_unicode(record) for record in records]
+
+    if app.config['ENABLE_SEARCH']:
+        from app import si
+        si.register_class(model)
+
     for record in records:
-        model = model_registry[model_name]
         session.add(model(**record))
-        session.commit()
+    session.commit()
     flash(
         'Added {number} records to {model_name}'.format(
             number=len(records),
             model_name=model_name
         )
     )
+
+
+def rebase():
+    Base.metadata.create_all(db.engine)
+
+
+def convert_to_unicode(dictionary):
+    """Converts dictionary values to strings."""
+    if not isinstance(dictionary, dict):
+        return dictionary
+    encoded_dict = {}
+    for k, v in dictionary.items():
+        if is_encodable(v):
+            encoded_dict[k] = repr(v)
+        else:
+            encoded_dict[k] = v
+    return encoded_dict
+
+
+def is_encodable(v):
+    if isinstance(v, datetime):
+        return False
+    else:
+        return True
