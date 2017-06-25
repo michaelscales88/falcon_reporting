@@ -9,6 +9,7 @@ from app.src.app_registry import ModelRegistry
 
 app = Flask(__name__, instance_relative_config=True)
 
+
 # Load default settings
 app.config.from_object('app.default_config.DevelopmentConfig')
 
@@ -24,8 +25,10 @@ app.config.from_yaml('clients.yml', silent=True)
 db = SQLAlchemy(app)
 
 # Get a model/session registry
-if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':     # prevents recreating model registry on multi init
+if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
+
     app.model_registry = ModelRegistry()
+
 
 # Configure logger
 if not app.debug:

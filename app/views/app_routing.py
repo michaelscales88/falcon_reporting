@@ -1,9 +1,8 @@
-from flask import render_template, flash, redirect, url_for, request, g, abort
+from flask import render_template, flash, redirect, url_for, request, g, abort, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
 from app import app, db, lm, si
 from urllib.parse import urlparse, urljoin
 from datetime import datetime
-
 
 from app.models import User
 from app.templates.partials.forms import LoginForm, SearchForm

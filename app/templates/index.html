@@ -7,10 +7,23 @@
     <p>Last Seen: {{ g.user.last_seen }}</p>
     <!-- Show the paginated dataframe -->
     <table>
-    {% for table in tables %}
-        <h2>{{titles[loop.index]}}</h2>
+        {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>
             {% include 'partials/data_frame.html' %}
-    {% endfor %}
+        {% endfor %}
+        <form action="" method="post" name="login">
+            {{ form.hidden_tag() }}
+            <p>
+                Please enter your email address:
+                <br>
+                {{ form.login(size=80) }}
+                {% for error in form.login.errors %}
+                    <span style="color: red;">[{{error}}]</span>
+                {% endfor %}<br>
+            </p>
+            <p>{{ form.remember_me }} Remember Me</p>
+            <p><input type="submit" value="Sign In"></p>
+        </form>
     </table>
 
 {% endblock %}

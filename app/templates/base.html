@@ -5,33 +5,40 @@
     <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">#}
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     {% if title %}
-    <title>{{ title }} - Falcon Reporting</title>
+        <title>{{ title }} - Falcon Reporting</title>
     {% else %}
-    <title>Falcon Reporting</title>
+        <title>Falcon Reporting</title>
     {% endif %}
-  </head>
-  <body>
-    <div>Falcon Reporting:
-        <a href="{{ url_for('index.index', page=1) }}">Home</a>
-        {% if g.user.is_authenticated %}
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+
+<body>
+<div>Falcon Reporting:
+    <a href="{{ url_for('index.index', page=1) }}">Home</a>
+    {% if g.user.is_authenticated %}
         | <form style="display: inline;" action="{{ url_for('search') }}" method="post" name="search">{{ g.search_form.hidden_tag() }}{{ g.search_form.search(size=20) }}<input type="submit" value="Search"></form>
         | <a href="{{ url_for('report.report') }}">Report</a>
         | <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
+    {% endif %}
 
-    </div>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
+</div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
         <ul>
-        {% for message in messages %}
-            <li>{{ message }} </li>
-        {% endfor %}
+            {% for message in messages %}
+                <li>{{ message }} </li>
+            {% endfor %}
         </ul>
-      {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-  </body>
+    {% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</body>
 </html>

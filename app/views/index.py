@@ -5,6 +5,7 @@ from flask_login import login_required
 
 from app.core import query_model, insert_records, get_connection
 from app.src.pandas_page import PandasPage
+from app.src.save_widget import SaveWidget
 
 mod = Blueprint('index', __name__, template_folder='templates')
 
@@ -27,6 +28,9 @@ def index(page=1):
     df.set_index(['call_id', 'event_id'], inplace=True)
     df.name = 'sla_report'
     pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
+    sw = SaveWidget(query.all(), list(df))
+    print(sw.data)
+    print(sw.columns)
     # frame = DataFrame(records)
     # print(frame)
     # form = PostForm()
