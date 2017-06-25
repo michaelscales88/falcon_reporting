@@ -6,10 +6,6 @@ from flask_login import LoginManager
 from app.src.flask_extended import Flask
 from app.src.app_registry import ModelRegistry
 
-# from app.lib.data_center import DataCenter
-# from app.src.factory import internal_connection, run_logger
-# from app.models.flexible_storage import FlexibleStorage
-# from app.resources.index_resource import IndexView
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -20,12 +16,45 @@ app.config.from_object('app.default_config.DevelopmentConfig')
 app.config.from_pyfile('app.cfg', silent=True)
 app.config.from_yaml('clients.yml', silent=True)
 
+# Register api
+# api = Api(app=app)
+# api_bp = Blueprint('api', __name__)
+
 # Connection to db
 db = SQLAlchemy(app)
 
 # Get a model/session registry
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':     # prevents recreating model registry on multi init
     app.model_registry = ModelRegistry()
+
+# Configure logger
+if not app.debug:
+    import logging
+    from logging.handlers import SMTPHandler
+    credentials = None
+
+    if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
+        credentials = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+
+    mail_handler = SMTPHandler(
+        (app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
+        'no-reply@' + app.config['MAIL_SERVER'],
+        app.config['ADMINS'],
+        'microblog failure',
+        credentials
+    )
+
+    mail_handler.setLevel(logging.ERROR)
+    app.logger.addHandler(mail_handler)
+
+    from logging.handlers import RotatingFileHandler
+
+    file_handler = RotatingFileHandler('app/tmp/falcon_web.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.info('falcon startup')
 
 # Start the index service
 if app.config['ENABLE_SEARCH']:
@@ -37,74 +66,17 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+
+# Add views
 from app.views import app_routing, index, report
 
 
 app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)
 
-
-# api = Api(app=app)
-# api_bp = Blueprint('api', __name__)
-
-
-# Looks like a name issue when entering unittest the __name__ is falcon.app instead of whatever it wants
-# with app.app_context():
-# call set up functions which need to bind to app
-# try:
-#     run_logger(__name__)
-# except FileNotFoundError:
-#     print('failed to open logger')
-
-
-"""
-Remove after testing.
-"""
-# app.test_date = datetime.today().replace(year=2017, month=5, day=1, hour=0, minute=0, second=0)
-# app.config['TEST_STATEMENT'] = app.config['TEST_STATEMENT'].format(date=str(app.test_date.date()))
-# app.data_src = DataCenter()     # Holds session registry, metadata, etc -> needs to have a model registry
-
-
-# @app.before_request
-# def before_request():
-#     # Set up our dB connection
-#     model = app.data_src.model('sla_report')
-#     if model:
-#         g.db = internal_connection(
-#             app.config['SQLALCHEMY_DATABASE_URI'],
-#             echo=app.config['SQLALCHEMY_ECHO'],
-#             cls=model
-#         )
-#
-#
-# @app.teardown_request
-# def teardown(error):
-#     db = getattr(g, 'db', None)
-#     if db:
-#         db.remove()     # Close scoped session
-#
-#
-# @app.errorhandler(OperationalError)     # Give this it's own page eventually
-# @app.errorhandler(404)
-# def not_found(error):
-#     return render_template('404.html'), 404
-#
-#
-# from app.views import index
-# from app.views import insert
-# from app.views import report
-# from app.views import builder
-#
-#
-# app.register_blueprint(index.mod)
-# app.register_blueprint(insert.mod)
-# app.register_blueprint(report.mod)
-# app.register_blueprint(builder.mod)
-#
-#
+# Add api resources
 # api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')
+
+# Register the api
 # app.register_blueprint(api_bp)
-#
-# # read the SO below -> modify views and how they're being rendered
-# # https://stackoverflow.com/questions/15501518/dynamic-navigation-in-flask/15525226#15525226
-# # TODO extending blueprints: http://flask.pocoo.org/docs/0.12/patterns/appfactories/
+

@@ -1,8 +1,16 @@
 from pandas import DataFrame
 from sqlalchemy import Column
+from numpy import object_, int64
+from datetime import datetime
+
 from app import db
-# from app.models.custom_model import model_factory
-from app.src.mixins import COLUMNS
+
+
+COLUMNS = {
+    object_: db.Text,
+    int64: db.Text,
+    datetime: db.DateTime
+}
 
 
 class QueryDecoder(object):

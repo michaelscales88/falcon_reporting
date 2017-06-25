@@ -1,6 +1,6 @@
 from app import app
 from pandas import read_sql
-from flask import render_template, g, Blueprint, flash, url_for, redirect
+from flask import render_template, g, Blueprint, url_for, redirect
 from flask_login import login_required
 
 from app.core import query_model, insert_records, get_connection
@@ -21,7 +21,6 @@ def index(page=1):
     if not query or total == 0:
         records = get_connection(g.report_date)
         insert_records(g.session, 'sla_report', records)
-        print('redirecting')
         return redirect(url_for('index.index', page=1))
 
     df = read_sql(query.statement, query.session.bind)
