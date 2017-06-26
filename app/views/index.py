@@ -45,5 +45,6 @@ def index(page=1):
                            title='Home',
                            report_date=g.report_date,
                            tables=[pf],
-                           titles=[pf.frame.name]
+                           titles=[pf.frame.name],
+                           save_widget=sw
                            )

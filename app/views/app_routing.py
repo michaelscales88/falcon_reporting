@@ -1,5 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request, g, abort, send_from_directory
+from flask import render_template, flash, redirect, url_for, request, g, abort
 from flask_login import login_user, logout_user, login_required, current_user
+import flask_excel as excel
 from app import app, db, lm, si
 from urllib.parse import urlparse, urljoin
 from datetime import datetime
@@ -115,29 +116,45 @@ def load_user(id):
     return User.get(id=int(id))
 
 
-@app.route('/search', methods=['POST'])
+# @app.route('/search', methods=['POST'])
+# @login_required
+# def search():
+#     if not g.search_form.validate_on_submit():
+#         return redirect(url_for('index.index'))
+#     return redirect(url_for('search_results', query=g.search_form.search.data))
+
+
+# @app.route('/search_results/<query>')
+# @login_required
+# def search_results(query):
+#     model_name = 'sla_report'
+#     model = g.model_registry[model_name]
+#
+#     # need to check for records in db and get records if not present
+#     # query, offset, total = query_model('sla_report', g.report_date, page, app.config['POSTS_PER_PAGE'])
+#
+#     if not model:
+#         redirect(url_for('index.index'))
+#
+#     user_results = User.search_query(query)
+#     model_results = model.search_query(query)
+#     df = read_sql(model_results.statement, model_results.session.bind)
+#     df.set_index(['call_id', 'event_id'], inplace=True)
+#     df.name = 'sla_report'
+#     # pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
+#     print(type(model_results), model_results.statement)
+#     return render_template('search_results.html',
+#                            query=query,
+#                            user_results=user_results,
+#                            # model_results=model_results
+#                            # tables=[pf],
+#                            # titles=[pf.frame.name]
+#                            )
+@app.route('/save/<str:data_set>/<str:column_names>', methods=['GET', 'POST'])
+@app.route('/save/<str:data_set>/<str:column_names>/<str:fmt>', methods=['GET', 'POST'])
 @login_required
-def search():
-    if not g.search_form.validate_on_submit():
-        return redirect(url_for('index.index'))
-    return redirect(url_for('search_results', query=g.search_form.search.data))
-
-
-@app.route('/search_results/<query>')
-@login_required
-def search_results(query):
-    model_name = 'sla_report'
-    model = g.model_registry[model_name]
-
-    if not model:
-        redirect(url_for('index.index'))
-
-    user_results = User.search_query(query)
-    model_results = model.search_query(query)
-    return render_template('search_results.html',
-                           query=query,
-                           user_results=user_results,
-                           model_results=model_results)
+def save(data_set, column_names, fmt="xlsx"):
+    return excel.make_response_from_query_sets(data_set, column_names, fmt)
 
 
 def redirect_back(endpoint, **values):

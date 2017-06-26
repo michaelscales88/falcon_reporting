@@ -71,11 +71,12 @@ lm.login_view = 'login'
 
 
 # Add views
-from app.views import app_routing, index, report
+from app.views import app_routing, index, report, search
 
 
 app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)
+app.register_blueprint(search.mod)
 
 # Add api resources
 # api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')

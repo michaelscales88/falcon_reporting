@@ -1,4 +1,4 @@
-import flask_excel as excel
+from flask import redirect, url_for
 
 
 class SaveWidget(object):
@@ -8,4 +8,4 @@ class SaveWidget(object):
         self.columns = column_names
 
     def save(self):
-        return excel.make_response_from_query_sets(self.data, self.columns, "xlsx")
+        return redirect(url_for('save', data_set=self.data, column_names=self.columns))

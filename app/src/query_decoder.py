@@ -1,14 +1,15 @@
 from pandas import DataFrame
 from sqlalchemy import Column
-from numpy import object_, int64
+import numpy as np
 from datetime import datetime
 
 from app import db
 
 
 COLUMNS = {
-    object_: db.Text,
-    int64: db.Text,
+    np.object_: db.Text,
+    np.int64: db.Text,
+    np.datetime64: db.DateTime,
     datetime: db.DateTime
 }
 
