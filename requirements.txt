@@ -1,5 +1,5 @@
 whooshalchemy
-migrate
+sqlalchemy-migrate
 wtforms
 pyyaml
 configobj
@@ -12,6 +12,7 @@ flask_fixtures
 flask-restful
 flask-jsonpify
 flask-WTF
+flask-login
 radar
 redpanda
 pyexcel

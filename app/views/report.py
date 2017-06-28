@@ -26,7 +26,11 @@ def report(page=1):
         return redirect(url_for('index.index'))
 
     cached_list = cache(query.all(), pk='call_id', subkey='event_id')
-    test_report = sla_report(cached_list, client_list=list(app.config['CLIENTS']))
+    test_report = sla_report(
+        cached_list, 
+        client_list=list(app.config['CLIENTS']) if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
+    )
+    
     test_report.name = str(g.report_date)
     test_report_content = test_report.to_dict()
     # TODO 3: This should likely be its own 'pyexcel' model or something of the like
@@ -34,7 +38,7 @@ def report(page=1):
         [col for col in test_report_content.items()]
     )
     df.name = 'sla_report'
-    df.index = [''] + list(app.config['CLIENTS'])
+    df.index = [''] + (list(app.config['CLIENTS']) if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie'])
     pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
     return render_template(
         'report.html',

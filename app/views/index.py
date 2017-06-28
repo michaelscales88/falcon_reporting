@@ -34,24 +34,9 @@ def index(page=1):
     sw = SaveWidget(df.to_dict(orient='records'))
     sw.save()
     print('saved quote unquote')
-    return redirect(url_for('save', data_set=df.to_dict(orient='records')))
-    print('save 2')
+    # return redirect(url_for('save', data_set=df.to_dict(orient='records')))
+    # print('save 2')
     # print(sw.data)
-    # for record in df.to_dict(orient='records'):
-    #     print(record, type(record))
-    # print(excel.make_response_from_tables(g.session, [Category, Post], "xls"))
-
-    # print(excel.make_response_from_query_sets(df.to_records))
-    # frame = DataFrame(records)
-    # print(frame)
-    # form = PostForm()
-    # if form.validate_on_submit():
-    #     post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
-    #     db.session.add(post)
-    #     db.session.commit()
-    #     flash('Your post is now live!')
-    #     return redirect(url_for('index'))
-    # posts = g.user.followed_posts().paginate(page, app.config['POSTS_PER_PAGE'], False)
     return render_template('index.html',
                            title='Home',
                            report_date=g.report_date,

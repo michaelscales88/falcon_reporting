@@ -15,7 +15,7 @@ decoder = QueryDecoder()
 def get_connection(date):
     return CallCenter.example(
         date,
-        app.config['CLIENTS']
+        app.config['CLIENTS'] if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
     )
 
 

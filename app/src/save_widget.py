@@ -9,5 +9,5 @@ class SaveWidget(object):
 
     def save(self):
         print('save')
-        # return redirect(url_for('save', data_set=self.data))
-        return excel.make_response_from_records(self.data, 'xlsx')
+        return redirect(url_for('save', data_set=self.data))
+        # return excel.make_response_from_records(self.data, 'xlsx')
