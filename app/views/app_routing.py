@@ -116,45 +116,14 @@ def load_user(id):
     return User.get(id=int(id))
 
 
-# @app.route('/search', methods=['POST'])
-# @login_required
-# def search():
-#     if not g.search_form.validate_on_submit():
-#         return redirect(url_for('index.index'))
-#     return redirect(url_for('search_results', query=g.search_form.search.data))
-
-
-# @app.route('/search_results/<query>')
-# @login_required
-# def search_results(query):
-#     model_name = 'sla_report'
-#     model = g.model_registry[model_name]
-#
-#     # need to check for records in db and get records if not present
-#     # query, offset, total = query_model('sla_report', g.report_date, page, app.config['POSTS_PER_PAGE'])
-#
-#     if not model:
-#         redirect(url_for('index.index'))
-#
-#     user_results = User.search_query(query)
-#     model_results = model.search_query(query)
-#     df = read_sql(model_results.statement, model_results.session.bind)
-#     df.set_index(['call_id', 'event_id'], inplace=True)
-#     df.name = 'sla_report'
-#     # pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
-#     print(type(model_results), model_results.statement)
-#     return render_template('search_results.html',
-#                            query=query,
-#                            user_results=user_results,
-#                            # model_results=model_results
-#                            # tables=[pf],
-#                            # titles=[pf.frame.name]
-#                            )
-@app.route('/save/<str:data_set>/<str:column_names>', methods=['GET', 'POST'])
-@app.route('/save/<str:data_set>/<str:column_names>/<str:fmt>', methods=['GET', 'POST'])
+@app.route('/save/<data_set>', methods=['POST'])
+# @app.route('/save/<data_set>/<column_names>', methods=['GET', 'POST'])
+# @app.route('/save/data_set/column_names/<string:fmt>', methods=['GET', 'POST'])
 @login_required
-def save(data_set, column_names, fmt="xlsx"):
-    return excel.make_response_from_query_sets(data_set, column_names, fmt)
+def save(data_set=None, column_names=None, fmt="xlsx"):
+    print('save in app_routing', data_set, column_names)
+    print(data_set, type(data_set))
+    return excel.make_response_from_records(data_set, fmt)
 
 
 def redirect_back(endpoint, **values):

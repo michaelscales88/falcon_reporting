@@ -17,7 +17,7 @@ app.config.from_object('app.default_config.DevelopmentConfig')
 app.config.from_pyfile('app.cfg', silent=True)
 app.config.from_yaml('clients.yml', silent=True)
 
-# Register api
+# Create api
 # api = Api(app=app)
 # api_bp = Blueprint('api', __name__)
 
@@ -26,7 +26,11 @@ db = SQLAlchemy(app)
 
 # Get a model/session registry
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
-
+    import shutil
+    from os.path import join, isdir
+    whoosh_dir = join(app.config['BASEDIR'], 'tmp/whoosh/sla_report')
+    if isdir(whoosh_dir):
+        shutil.rmtree(whoosh_dir)       # fresh index from whoosh prevents errors
     app.model_registry = ModelRegistry()
 
 
@@ -81,6 +85,6 @@ app.register_blueprint(search.mod)
 # Add api resources
 # api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')
 
-# Register the api
+# Register the API to the app
 # app.register_blueprint(api_bp)
 

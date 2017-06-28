@@ -12,8 +12,8 @@ def match(record_list, match_val=None):
     for record in record_list:
         # Check match conditions
         match0 = (
-            match_val.get('Event Summary').get(4, timedelta(0))
-            == record.get('Event Summary').get(4, timedelta(0))
+            match_val.get('Event Summary').get('4', timedelta(0))
+            == record.get('Event Summary').get('4', timedelta(0))
             == timedelta(0)
         )
         match1 = match_val.get('Unique Id2') == record.get('Unique Id2')
@@ -83,7 +83,7 @@ def sla_report(records, client_list=None):
             if (
                     len(matches) > 1
                     and (match_record.get('End Time') - match_record.get('Start Time') > timedelta(seconds=20))
-                    and match_record.get('Event Summary').get(10, timedelta(0)) == timedelta(0)
+                    and match_record.get('Event Summary').get('10', timedelta(0)) == timedelta(0)
             ):
                 for a_match in matches:
                     for i, o in enumerate(records):
@@ -100,10 +100,10 @@ def sla_report(records, client_list=None):
         row_name = str(record.get('Unique Id1'))  # This is how we bind our client settings
         if row_name in test_output.rownames and time(hour=7) <= record.get('Start Time').time() <= time(hour=19):
             call_duration = record.get('End Time') - record.get('Start Time')
-            talking_time = record.get('Event Summary').get(4, timedelta(0))
-            voicemail_time = record.get('Event Summary').get(10, timedelta(0))
+            talking_time = record.get('Event Summary').get('4', timedelta(0))
+            voicemail_time = record.get('Event Summary').get('10', timedelta(0))
             hold_time = sum(
-                [record.get('Event Summary').get(event_type, timedelta(0)) for event_type in (5, 6, 7)],
+                [record.get('Event Summary').get(event_type, timedelta(0)) for event_type in ('5', '6', '7')],
                 timedelta(0)
             )
             wait_duration = call_duration - talking_time - hold_time

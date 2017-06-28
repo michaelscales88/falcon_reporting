@@ -3,7 +3,7 @@ import os
 
 class Config(object):
     WTF_CSRF_ENABLED = True
-    SECRET_KEY = 'you-will-never-guess'
+    SECRET_KEY = os.urandom(24)     # Generate a random session key
 
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
