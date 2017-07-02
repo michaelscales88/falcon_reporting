@@ -43,6 +43,7 @@ class DevelopmentConfig(Config):
     WIPE_SESSION = True
     MAX_RECORDS = 3000
     SQLALCHEMY_TRACK_MODIFICATIONS = True  # Turn this off to reduce overhead
+    CLIENTS = ['Torie', 'Sean', 'Susan', 'Debbie']
 
 
 class TestingConfig(Config):

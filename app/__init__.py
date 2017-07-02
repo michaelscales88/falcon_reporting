@@ -15,7 +15,8 @@ app.config.from_object('app.default_config.DevelopmentConfig')
 
 # Load the configuration from the instance folder
 app.config.from_pyfile('app.cfg', silent=True)
-app.config.from_yaml('clients.yml', silent=True)
+if not app.debug:
+    app.config.from_yaml('clients.yml', silent=True)
 
 # Create api
 # api = Api(app=app)

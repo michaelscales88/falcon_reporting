@@ -3,10 +3,10 @@
 
 {% block content %}
 <h1>Sign In</h1>
-<form action="" method="post" name="login">
+<form action="" method="POST" name="login">
     {{ form.hidden_tag() }}
     <p>
-        Please enter your email address:
+        Please enter your username:
         <br>
         {{ form.login(size=80) }}
         {% for error in form.login.errors %}
@@ -15,5 +15,6 @@
     </p>
     <p>{{ form.remember_me }} Remember Me</p>
     <p><input type="submit" value="Sign In"></p>
+    <input type=hidden value="{{ next or '' }}" name=next>
 </form>
 {% endblock %}

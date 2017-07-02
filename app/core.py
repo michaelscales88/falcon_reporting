@@ -1,6 +1,8 @@
 from sqlalchemy import func
 from flask import g, flash, redirect, url_for
 from datetime import datetime
+import flask_excel as excel
+from pandas import DataFrame
 
 from app import app, db
 from app.src.call_center import CallCenter
@@ -13,9 +15,10 @@ decoder = QueryDecoder()
 
 
 def get_connection(date):
+    print(app.config['CLIENTS'])
     return CallCenter.example(
         date,
-        app.config['CLIENTS'] if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
+        app.config['CLIENTS']  # if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
     )
 
 
@@ -103,3 +106,8 @@ def is_encodable(v):
         return False
     else:
         return True
+
+
+def save(frame, fmt="xlsx"):
+    if isinstance(frame, DataFrame):
+        return excel.make_response_from_records(frame.to_dict(orient='records'), fmt)
