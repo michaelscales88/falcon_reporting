@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">#}
+    {% block head %}
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        {#    <link rel="stylesheet" href="{{ url_for('static', filename='css/content.css') }}">#}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {% if title %}
-        <title>{{ title }} - Falcon Reporting</title>
-    {% else %}
-        <title>Falcon Reporting</title>
-    {% endif %}
+        {% if title %}
+            <title>{{ title }} - Falcon Reporting</title>
+        {% else %}
+            <title>Falcon Reporting</title>
+        {% endif %}
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% endblock %}
 </head>
 
 

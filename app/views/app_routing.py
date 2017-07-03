@@ -1,12 +1,11 @@
-from flask import render_template, flash, redirect, url_for, request, g, abort
+from flask import render_template, flash, redirect, url_for, request, g
 from flask_login import login_user, logout_user, login_required, current_user
-from app import app, db, lm, si
-from urllib.parse import urlparse, urljoin
 from datetime import datetime
 
+from app import app, db, lm, si
 from app.models import User
+from app.core import get_count, redirect_back, get_redirect_target
 from app.templates.partials.forms import LoginForm, SearchForm
-from app.core import get_count
 
 
 @app.before_request
@@ -106,28 +105,3 @@ def logout():
 def load_user(id):
     return User.get(id=int(id))
 
-
-def get_redirect_target():
-    for target in request.values.get('next'), request.referrer:
-        if not target:
-            continue
-        if is_safe_url(target):
-            return target
-        else:
-            return abort(400)
-
-
-def redirect_back(endpoint, **values):
-    target = request.form['next']
-    if not target or not is_safe_url(target):
-        target = url_for(endpoint, **values)
-    return redirect(target)
-
-
-def is_safe_url(target):
-    ref_url = urlparse(request.host_url)
-    test_url = urlparse(urljoin(request.host_url, target))
-    return (
-        test_url.scheme in ('http', 'https')
-        and ref_url.netloc == test_url.netloc
-    )

@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 from app.src.flask_extended import Flask
+from app.src.query_decoder import QueryDecoder
 from app.src.app_registry import ModelRegistry
 
 
@@ -24,6 +25,9 @@ if not app.debug:
 
 # Connection to db
 db = SQLAlchemy(app)
+
+# Query decoder determines metadata for an incoming table/subtable
+decoder = QueryDecoder()
 
 # Get a model/session registry
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
@@ -76,12 +80,13 @@ lm.login_view = 'login'
 
 
 # Add views
-from app.views import app_routing, index, report, search
+from app.views import app_routing, index, report, search, builder
 
 
 app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)
 app.register_blueprint(search.mod)
+app.register_blueprint(builder.mod)
 
 # Add api resources
 # api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')

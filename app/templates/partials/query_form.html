@@ -1,6 +1,8 @@
 <form style="display: inline;" action="" method="POST" name="form-name">
     {{ query_form.hidden_tag() }}
     Model Name: {{ query_form.model(size=80) }} |
+    Start: {{ query_form.start(class_='datepicker') }} |
+    End: {{ query_form.end(class_='datepicker') }}
     <input type="submit" name='form-name' value="display">
     {% for error in query_form.model.errors %}
         <span style="color: red;">[{{error}}]</span>

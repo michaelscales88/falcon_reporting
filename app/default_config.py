@@ -32,6 +32,9 @@ class Config(object):
     # Set external connections
     EXTERNAL_CONNECTION = None
 
+    # Default model to display on index pg
+    DEFAULT_MODEL = 'sla_report'
+
 
 class ProductionConfig(Config):
     pass

@@ -1,24 +1,21 @@
 from sqlalchemy import func
-from flask import g, flash, redirect, url_for
+from flask import g, flash, redirect, url_for, abort, request
 from datetime import datetime
 import flask_excel as excel
 from pandas import DataFrame
+from urllib.parse import urlparse, urljoin
 
-from app import app, db
-from app.src.call_center import CallCenter
-from app.src.query_decoder import QueryDecoder
-
+from app import app, db, decoder
 from app.models import Base
+from app.src.call_center import CallCenter
 from app.models.custom_model import model_factory
-
-decoder = QueryDecoder()
 
 
 def get_connection(date):
     print(app.config['CLIENTS'])
     return CallCenter.example(
         date,
-        app.config['CLIENTS']  # if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
+        app.config['CLIENTS']
     )
 
 
@@ -111,3 +108,29 @@ def is_encodable(v):
 def save(frame, fmt="xlsx"):
     if isinstance(frame, DataFrame):
         return excel.make_response_from_records(frame.to_dict(orient='records'), fmt)
+
+
+def get_redirect_target():
+    for target in request.values.get('next'), request.referrer:
+        if not target:
+            continue
+        if is_safe_url(target):
+            return target
+        else:
+            return abort(400)
+
+
+def redirect_back(endpoint, **values):
+    target = request.form['next']
+    if not target or not is_safe_url(target):
+        target = url_for(endpoint, **values)
+    return redirect(target)
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return (
+        test_url.scheme in ('http', 'https')
+        and ref_url.netloc == test_url.netloc
+    )

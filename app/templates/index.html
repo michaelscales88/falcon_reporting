@@ -1,5 +1,18 @@
 <!-- extend base layout -->
 {% extends "base.html" %}
+{#{% block head %}#}
+{#    {{ super() }}#}
+{#    <meta charset="utf-8">#}
+{#    <title>DatePicker Example</title>#}
+{#    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">#}
+{#    <script src="//code.jquery.com/jquery-1.10.2.js"></script>#}
+{#    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>#}
+{#    <script>#}
+{#        $(function() {#}
+{#            $( ".dtpick" ).datepicker();#}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}
 
 {% block content %}
 
@@ -7,11 +20,15 @@
     <p>Last Seen: {{ g.user.last_seen }}</p>
     <!-- Show the paginated dataframe -->
     <table>
+        {#        {% include 'partials/query_form.html' %}#}
+        {#        {% for table in tables %}#}
+        {#            <h2>{{titles[loop.index]}}</h2>#}
+        {#            {% include 'partials/data_frame.html' %}#}
+        {#        {% endfor %}#}
+        {#        {% include 'partials/save_form.html' %}#}
         {% include 'partials/query_form.html' %}
-        {% for table in tables %}
-            <h2>{{titles[loop.index]}}</h2>
-            {% include 'partials/data_frame.html' %}
-        {% endfor %}
+        <h2>{{ tablename }}</h2>
+        {% include 'partials/data_frame.html' %}
         {% include 'partials/save_form.html' %}
     </table>
 

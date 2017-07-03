@@ -12,7 +12,7 @@ class PandasPage(object):
     @property
     def pages(self):
         """The total number of pages"""
-        if self.per_page == 0:
+        if self.per_page == 0 or not self.total:    # Handles empty frame or 0 per page
             pages = 0
         else:
             pages = int(ceil(self.total / float(self.per_page)))

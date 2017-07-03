@@ -1,10 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField
-from wtforms.validators import DataRequired, Length
-
-from app.models.user import User
-
-from wtforms import SelectField, TextAreaField, StringField, validators, SelectMultipleField, FieldList, FormField
+from wtforms import BooleanField, StringField
+from wtforms.validators import DataRequired
+from wtforms.fields.html5 import DateField
 
 
 class LoginForm(FlaskForm):
@@ -18,6 +15,9 @@ class SearchForm(FlaskForm):
 
 class QueryForm(FlaskForm):
     model = StringField('model',  validators=[DataRequired()])
+    # this will need js in order to make it a datetime picker
+    start = DateField('Start', format="%m/%d/%Y",  validators=[DataRequired()])
+    end = DateField('End', format="%m/%d/%Y",  validators=[DataRequired()])
 
 
 class SaveForm(FlaskForm):
