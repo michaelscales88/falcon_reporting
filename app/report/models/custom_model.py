@@ -1,4 +1,4 @@
-from app.models.base import Base
+from app.database import Base
 
 
 def apply_mixins(cls, column_data):

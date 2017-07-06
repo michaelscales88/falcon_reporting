@@ -21,5 +21,5 @@ class QueryForm(FlaskForm):
 
 
 class SaveForm(FlaskForm):
-    save_directory = StringField('save_dir')
+    file_name = StringField('file_name')
 

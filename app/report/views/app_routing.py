@@ -1,11 +1,12 @@
-from flask import render_template, flash, redirect, url_for, request, g
-from flask_login import login_user, logout_user, login_required, current_user
 from datetime import datetime
 
+from flask import render_template, flash, redirect, url_for, request, g
+from flask_login import login_user, logout_user, login_required, current_user
+
 from app import app, db, lm, si
-from app.models import User
-from app.core import get_count, redirect_back, get_redirect_target
-from app.templates.partials.forms import LoginForm, SearchForm
+from app.core import get_count, redirect_back, get_redirect_target  # , populate_model, print_register
+from app.report.models import User
+from app.templates import LoginForm, SearchForm
 
 
 @app.before_request
@@ -17,15 +18,26 @@ def before_request():
         db.session.add(g.user)
         db.session.commit()
         g.session = db.session
+        # if app.model_registry.needs_init:
+        #     print('populating registry')
+        #     populate_model()
+        # else:
+        #     print_register()
         g.model_registry = app.model_registry
         g.report_date = datetime.today().date()
         if app.config['ENABLE_SEARCH']:
             si.register_class(User)  # update whoosh with User information
             if app.model_registry:
                 for model in app.model_registry:
-                    if model:
+                    try:
                         model.metadata.create_all(g.session.bind)  # Make schema and bind to engine
-                        si.register_class(model)    # update whoosh to any changes to the schema model
+                        si.register_class(model)  # update whoosh to any changes to the schema model
+                    except TypeError:
+                        print(model, type(model), dir(model))
+                        raise
+                    except AttributeError:
+                        print(model, type(model), dir(model))
+                        raise
             g.search_form = SearchForm()
 
 
@@ -61,6 +73,7 @@ def internal_error(error):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+
     next = get_redirect_target()
     form = LoginForm()
 

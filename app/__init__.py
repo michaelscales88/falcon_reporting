@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
-from os import environ
-from flask_sqlalchemy import SQLAlchemy
+
 from flask_login import LoginManager
+from os import environ
 
-from app.src.flask_extended import Flask
-from app.src.query_decoder import QueryDecoder
-from app.src.app_registry import ModelRegistry
-
+from app.database import init_db
+from app.report.models import ModelRegistry
+from app.report.src.flask_extended import Flask
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -24,10 +23,9 @@ if not app.debug:
 # api_bp = Blueprint('api', __name__)
 
 # Connection to db
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
+init_db()
 
-# Query decoder determines metadata for an incoming table/subtable
-decoder = QueryDecoder()
 
 # Get a model/session registry
 if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
@@ -36,6 +34,7 @@ if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
     whoosh_dir = join(app.config['BASEDIR'], 'tmp/whoosh/sla_report')
     if isdir(whoosh_dir):
         shutil.rmtree(whoosh_dir)       # fresh index from whoosh prevents errors
+    # Need to populate on first request
     app.model_registry = ModelRegistry()
 
 
@@ -80,8 +79,7 @@ lm.login_view = 'login'
 
 
 # Add views
-from app.views import app_routing, index, report, search, builder
-
+from app.report.views import search, report, index, builder
 
 app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)

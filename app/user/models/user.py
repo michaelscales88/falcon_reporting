@@ -1,17 +1,15 @@
-from app import db
-
-from .base import Base
+from sqlalchemy import Column, Text, DateTime
+from app.database import Base
 
 
 class User(Base):
-    __tablename__ = 'user'
     __searchable__ = ['id2', 'nickname']
 
-    id2 = db.Column(db.Text, index=True, unique=True)
-    nickname = db.Column(db.Text, index=True, unique=True)
-    email = db.Column(db.Text, index=True, unique=True)
-    about_me = db.Column(db.Text)
-    last_seen = db.Column(db.DateTime)
+    id2 = Column(Text, index=True, unique=True)
+    nickname = Column(Text, index=True, unique=True)
+    email = Column(Text, index=True, unique=True)
+    about_me = Column(Text)
+    last_seen = Column(DateTime)
 
     @property
     def is_authenticated(self):
@@ -27,9 +25,6 @@ class User(Base):
 
     def get_id(self):
         return str(self.id)
-
-    def __repr__(self):
-        return '<User %r>' % self.nickname
 
     @classmethod
     def get(cls, id):

@@ -1,14 +1,32 @@
-from sqlalchemy import func
-from flask import g, flash, redirect, url_for, abort, request
 from datetime import datetime
-import flask_excel as excel
-from pandas import DataFrame
 from urllib.parse import urlparse, urljoin
 
-from app import app, db, decoder
-from app.models import Base
+import flask_excel as excel
+# from app.models.base import Base
 from app.src.call_center import CallCenter
-from app.models.custom_model import model_factory
+from flask import g, flash, redirect, url_for, abort, request
+from pandas import DataFrame, read_sql
+from sqlalchemy import func
+
+from app import app
+from app.database import rebase
+from app.report.models import model_factory
+from app.report.src.query_decoder import QueryDecoder
+
+# Query decoder identifies metadata about an incoming table/subtable
+decoder = QueryDecoder()
+
+
+# def populate_model():
+#     model_registry = getattr(app, 'model_registry', None)
+#     if model_registry:
+#         model_registry.init_register(Base, db.engine)
+#
+#
+# def print_register():
+#     model_registry = getattr(app, 'model_registry', None)
+#     if model_registry:
+#         model_registry.print_register(Base, db.engine)
 
 
 def get_connection(date):
@@ -19,19 +37,21 @@ def get_connection(date):
     )
 
 
-def get_count(q):
-    count_q = q.statement.with_only_columns([func.count()]).order_by(None)
-    count = q.session.execute(count_q).scalar()
+def get_count(query):
+    if query:
+        count_q = query.statement.with_only_columns([func.count()]).order_by(None)
+        count = query.session.execute(count_q).scalar()
+    else:
+        count = 0
     return count
 
 
 def query_model(model_name, report_date, page, per_page):
     model_registry = getattr(g, 'model_registry', None)
-    query = offset = total = None
+    query = None
     if model_registry and model_registry[model_name]:
         model = model_registry[model_name]
         query = model.query
-        total = get_count(query)
 
         if page is None:
             page = 1
@@ -50,7 +70,7 @@ def query_model(model_name, report_date, page, per_page):
         if per_page > 0:
             query = query.limit(per_page)
 
-    return query, offset, total
+    return query
 
 
 def insert_records(session, model_name, records):
@@ -81,8 +101,8 @@ def insert_records(session, model_name, records):
     )
 
 
-def rebase():
-    Base.metadata.create_all(db.engine)
+# def rebase():
+#     Base.metadata.create_all(db.engine)
 
 
 def convert_to_unicode(dictionary):
@@ -105,9 +125,15 @@ def is_encodable(v):
         return True
 
 
-def save(frame, fmt="xlsx"):
+def save(frame, file_name, fmt="xlsx"):
     if isinstance(frame, DataFrame):
-        return excel.make_response_from_records(frame.to_dict(orient='records'), fmt)
+        if not file_name:
+            file_name = frame.name if frame.name else 'default_frame'
+        return excel.make_response_from_records(
+            frame.to_dict(orient='records'),
+            file_name=file_name,
+            file_type=fmt
+        )
 
 
 def get_redirect_target():
@@ -134,3 +160,12 @@ def is_safe_url(target):
         test_url.scheme in ('http', 'https')
         and ref_url.netloc == test_url.netloc
     )
+
+
+def get_frame(query, name='Default Frame'):
+    if query:
+        df = read_sql(query.statement, query.session.bind)
+    else:
+        df = DataFrame()
+    df.name = name
+    return df

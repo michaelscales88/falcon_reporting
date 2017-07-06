@@ -1,5 +1,5 @@
 from app import db
-from app.models import Base, User
+from app.report.models import Base, User
 
 
 def make_only_one(user_name, **kwargs):

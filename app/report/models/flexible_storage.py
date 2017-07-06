@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.ext import mutable
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
-from app.src.json_encoders import JsonEncodedDict
+from app.report.src.json_encoders import JsonEncodedDict
 
 Base = declarative_base()
 

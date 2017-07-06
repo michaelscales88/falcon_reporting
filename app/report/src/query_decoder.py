@@ -25,7 +25,6 @@ class QueryDecoder(object):
     @staticmethod
     def coerce_result_(result):
         return DataFrame(
-            # [zip(row.keys(), row) for row in result if hasattr(row, 'keys')]  # Bind the column name to each value
             result
         )
 
@@ -53,6 +52,11 @@ class QueryDecoder(object):
             '__searchable__': [name for name, column in columns.items() if isinstance(column.type, db.Text)]
         }
         return table_info['__tablename__'], columns, table_info
+
+    @staticmethod
+    def make_searchable(model):
+        search_attributes = [name for name, column in {}.items() if isinstance(column.type, db.Text)]
+        return setattr(model, '__searchable__', search_attributes)
 
     @staticmethod
     def model_info(model):

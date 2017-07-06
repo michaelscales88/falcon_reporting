@@ -5,7 +5,7 @@ from pandas import DataFrame
 from sqlalchemy import func
 
 from app.fixtures.base_test import BaseTest
-from app.src.call_center import CallCenter
+from app.report.src.call_center import CallCenter
 
 
 class ReportBuilderTest(BaseTest):

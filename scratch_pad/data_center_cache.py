@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 from app.lib.report_utilities import ReportUtilities
-
-from app.src.factory import query_statement
 from app.src.json_encoders import MyEncoder
+
+from app.report.src.factory import query_statement
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 

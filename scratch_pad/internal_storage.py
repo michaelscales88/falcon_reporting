@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from app.lib.report_utilities import ReportUtilities
 from sqlalchemy import func
 
-from app.models.flexible_storage import FlexibleStorage
-from app.src.factory import query_statement, internal_connection
+from app.report.models import FlexibleStorage
+from app.report.src.factory import query_statement, internal_connection
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'
 

@@ -1,8 +1,8 @@
 <form style="display: inline;" action="" method="POST" name="form-name">
     {{ save_form.hidden_tag() }}
-    Save directory: {{ save_form.save_directory(size=80) }} |
+    Save as (filename): {{ save_form.file_name(size=80) }} |
     <input type="submit" name='form-name' value="save">
-    {% for error in save_form.save_directory.errors %}
+    {% for error in save_form.file_name.errors %}
         <span style="color: red;">[{{error}}]</span>
     {% endfor %}<br>
 </form>

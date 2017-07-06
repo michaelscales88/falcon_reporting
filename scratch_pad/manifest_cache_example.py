@@ -1,9 +1,10 @@
 from datetime import datetime
 from json import dumps
 
-from app import app
-from app.src.factory import query_statement
 from app.src.json_encoders import MyEncoder
+
+from app import app
+from app.report.src.factory import query_statement
 from scratch_pad.manifest_example import manifest_reader
 
 _connection = 'postgres://Chronicall:ChR0n1c@ll1337@10.1.3.17:9086/chronicall'

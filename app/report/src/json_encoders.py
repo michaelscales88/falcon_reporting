@@ -5,7 +5,7 @@ from json import loads, dumps, JSONEncoder
 from dateutil import parser
 from sqlalchemy import String, TypeDecorator
 
-from app.src.report_utilities import ReportUtilities
+from app.report.src.report_utilities import ReportUtilities
 
 CONVERTERS = {
     'datetime': parser.parse,

@@ -2,7 +2,7 @@ from datetime import datetime
 from json import dumps
 
 from app.fixtures.base_test import BaseTest
-from app.src.call_center import CallCenter
+from app.report.src.call_center import CallCenter
 
 
 class TestCallCenter(BaseTest):

@@ -1,4 +1,4 @@
-from app.src.factory import manifest_reader
+from app.report.src.factory import manifest_reader
 
 
 class ReportBuilder:

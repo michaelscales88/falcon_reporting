@@ -1,4 +1,4 @@
-from app import db
+from sqlalchemy import Column, Integer
 from sqlalchemy_utils import Timestamp, generic_repr
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
@@ -6,8 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base, declared_attr
 @generic_repr
 class _Base(object):
 
-    id = db.Column(db.Integer, primary_key=True)
-    query = db.session.query_property()
+    id = Column(Integer, primary_key=True)
 
     @declared_attr
     def __tablename__(cls):
@@ -29,5 +28,5 @@ class _Base(object):
         }
 
 # Timestamp includes created_on and updated_on columns for all models
-Base = declarative_base(cls=(_Base, Timestamp))
+# Base = declarative_base(cls=(_Base, Timestamp))
 

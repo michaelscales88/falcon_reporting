@@ -1,16 +1,12 @@
-import flask_excel as excel
 from flask import render_template, Blueprint, g, redirect, url_for
-from pandas import DataFrame
+from app.src.sla_report import sla_report
+from flask import render_template, Blueprint, g, redirect, url_for
 from flask_login import login_required
+from pandas import DataFrame
 
 from app import app
-from app.src.sla_cache import cache
-from app.src.pandas_page import PandasPage
 from app.core import query_model
-
-
-from app.src.sla_report import sla_report
-
+from app.report.src.sla_cache import cache
 
 mod = Blueprint('report', __name__, template_folder='templates')
 
