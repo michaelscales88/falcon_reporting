@@ -97,7 +97,11 @@ def sla_report(records, client_list=None):
 
     # Process Step
     for record in records:
+        print('passing records')
         row_name = str(record.get('Unique Id1')).replace("'", '')  # This is how we bind our client settings
+        print(row_name)
+        print(time(hour=7) <= record.get('Start Time').time() <= time(hour=19))
+        print(row_name in test_output.rownames)
         if row_name in test_output.rownames and time(hour=7) <= record.get('Start Time').time() <= time(hour=19):
             call_duration = record.get('End Time') - record.get('Start Time')
             talking_time = record.get('Event Summary').get('4', timedelta(0))

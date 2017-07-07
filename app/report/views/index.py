@@ -37,13 +37,30 @@ def index(page=1):
         print(not query)
         print('added records. query:', query)
         records = get_connection(query_form.start.data)
-        insert_records(g.session, 'sla_report', records)
+        insert_records(g.session, app.config['DEFAULT_MODEL'], records)
         # return redirect(url_for('builder.records', back='index.index'))
         return redirect(url_for('index.index', page=1))
 
+    # Count the total number of records in the query
+    # If query is None total is 0
+    total = get_count(query)
+    print('updated total', total, query)
     # Get a DataFrame instance of the query
     # If query is None df is an empty frame
-    df = get_frame(query, name='sla_report')
+    query = query.limit(app.config['POSTS_PER_PAGE'])
+
+    offset = (page - 1) * app.config['POSTS_PER_PAGE']
+
+    if offset > 0:  # only need to offset if we need more than one page?
+        print('offsetting', offset)
+        query = query.offset(offset)
+
+    # df = get_frame(query, name='sla_report')
+    df = query.frame()
+    df.name = app.config['DEFAULT_MODEL']
+    # print(df)
+    # print(query.frame())
+    # print(query.statement)
     if frame_form.is_submitted():
         form_name = request.form.get('form-name')
         if form_name == 'frame' and frame_form.mode.data == 'Index':
@@ -52,13 +69,9 @@ def index(page=1):
             df.unstack()
             # df = df.pivot(index=str(frame_form.index.data), columns=frame_form.group.data)['event_id']
             df = pivot_table(df, index=frame_form.index.data, columns=frame_form.group.data)
-            df.name = 'sla_report'
+            df.name = app.config['DEFAULT_MODEL']
         else:
             pass
-
-    # Count the total number of records in the query
-    # If query is None total is 0
-    total = get_count(query)
 
     if request.method == 'POST':
         form_name = request.form.get('form-name')
@@ -76,6 +89,7 @@ def index(page=1):
                              else app.config['DEFAULT_MODEL'])
     frame_form.index.choices = [(l, l) for l in list(df)]
     frame_form.group.choices = frame_form.index.choices
+    print('i think my total is', total)
     pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
     return render_template('index.html',
                            title='Home',

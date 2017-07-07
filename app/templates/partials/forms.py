@@ -24,12 +24,12 @@ class QueryForm(FlaskForm):
     model = SelectField('Model List', choices=[])
     start = DateField(
         'Start', format='%Y-%m-%d',
-        default=datetime.today().date,
+        default=datetime.today,
         validators=[DataRequired()]
     )
     end = DateField(
         'End', format='%Y-%m-%d',
-        default=datetime.today().date,
+        default=datetime.today,
         validators=[DataRequired()]
     )
 

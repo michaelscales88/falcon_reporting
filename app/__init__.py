@@ -34,8 +34,6 @@ if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
     whoosh_dir = join(app.config['BASEDIR'], 'tmp/whoosh/sla_report')
     if isdir(whoosh_dir):
         shutil.rmtree(whoosh_dir)       # fresh index from whoosh prevents errors
-    # Need to populate on first request
-    # app.model_registry = ModelRegistry()
 
 
 # Configure logger
@@ -51,7 +49,7 @@ if not app.debug:
         (app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
         'no-reply@' + app.config['MAIL_SERVER'],
         app.config['ADMINS'],
-        'microblog failure',
+        'Package failure',
         credentials
     )
 
@@ -60,7 +58,7 @@ if not app.debug:
 
     from logging.handlers import RotatingFileHandler
 
-    file_handler = RotatingFileHandler('app/tmp/falcon_web.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler = RotatingFileHandler('app/tmp/{package}.log'.format(package=app.config['PACKAGE_NAME']), 'a', 1 * 1024 * 1024, 10)
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
     app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)

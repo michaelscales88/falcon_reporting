@@ -58,17 +58,19 @@ def query_model(model_name, report_date, page, per_page):
 
         if per_page is None:
             per_page = 20
-
+        print('my page is', page)
         offset = (page - 1) * per_page
 
         if report_date:
             query = query.filter(func.date(report_date))
 
-        if offset > 0:  # only need to offset if we need more than one page?
-            query = query.offset(offset)
-
-        if per_page > 0:
-            query = query.limit(per_page)
+        # if offset > 0:  # only need to offset if we need more than one page?
+        #     print('offsetting', offset)
+        #     query = query.offset(offset)
+        #
+        # if per_page > 0:
+        #     print('limiting query to', per_page)
+        #     query = query.limit(per_page)
 
     return query
 
