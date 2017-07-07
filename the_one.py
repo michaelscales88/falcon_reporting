@@ -1,19 +1,20 @@
-from app import db
-from app.report.models import Base, User
+from app.database import db_session, init_db
+from app.user.models import User
 
 
 def make_only_one(user_name, **kwargs):
-    Base.metadata.create_all(db.engine)
+    # Base.metadata.create_all(db.engine)
+    init_db()
 
     uu = User.query.all()
     # sometimes there can be only one
     for u in uu:
-        db.session.delete(u)
-    db.session.commit()
+        db_session.delete(u)
+    db_session.commit()
 
     u = User(nickname=user_name, email='{name}@admin.com'.format(name=user_name), **kwargs)
-    db.session.add(u)
-    db.session.commit()
+    db_session.add(u)
+    db_session.commit()
 
 if __name__ == '__main__':
     import argparse

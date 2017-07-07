@@ -3,9 +3,9 @@ from __future__ import unicode_literals
 from flask_login import LoginManager
 from os import environ
 
-from app.database import init_db
-from app.report.models import ModelRegistry
-from app.report.src.flask_extended import Flask
+# from app.database import init_db
+from app.report.src.model_registry import ModelRegistry
+from app.src.flask_extended import Flask
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -24,7 +24,7 @@ if not app.debug:
 
 # Connection to db
 # db = SQLAlchemy(app)
-init_db()
+# init_db()
 
 
 # Get a model/session registry
@@ -35,7 +35,7 @@ if not app.debug or environ.get('WERKZEUG_RUN_MAIN') == 'true':
     if isdir(whoosh_dir):
         shutil.rmtree(whoosh_dir)       # fresh index from whoosh prevents errors
     # Need to populate on first request
-    app.model_registry = ModelRegistry()
+    # app.model_registry = ModelRegistry()
 
 
 # Configure logger
@@ -79,6 +79,7 @@ lm.login_view = 'login'
 
 
 # Add views
+from . import view
 from app.report.views import search, report, index, builder
 
 app.register_blueprint(index.mod)

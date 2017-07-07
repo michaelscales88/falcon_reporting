@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 from datetime import datetime
 
 from app.lib.data_center import DataCenter
+from app.resources.index_resource import IndexView
 from app.src.factory import internal_connection, run_logger
 from flask import render_template, g, Blueprint
 from flask_restful import Api
 from os.path import join
 from sqlalchemy.exc import OperationalError
 
-from app.report.src.flask_extended import Flask
-from app.resources.index_resource import IndexView
+from app.src.flask_extended import Flask
 
 # app/__init__.py
 # https://gist.github.com/mattupstate/2046115: extended flask with yaml support

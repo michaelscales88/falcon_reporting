@@ -35,6 +35,7 @@ class ModelRegistry(Registry):
 
     def __setitem__(self, model_name, model):
         print('setting register')
+        print(model.__name__, type(model))
         self._registry[model_name] = model
 
     def print_register(self, base, engine):

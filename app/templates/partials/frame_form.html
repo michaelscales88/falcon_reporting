@@ -1,0 +1,10 @@
+<form style="display: inline;" action="" method="POST" name="form-name">
+    {{ frame_form.hidden_tag() }}
+    Index: {{ frame_form.mode }} |
+    Index: {{ frame_form.index }} |
+    Group: {{ frame_form.group }}
+    <input type="submit" name='form-name' value="frame">
+    {% for error in frame_form.index.errors %}
+        <span style="color: red;">[{{error}}]</span>
+    {% endfor %}<br>
+</form>

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, StringField
+from datetime import datetime
+from wtforms import BooleanField, StringField, SelectField
 from wtforms.validators import DataRequired
 from wtforms.fields.html5 import DateField
 
@@ -13,11 +14,24 @@ class SearchForm(FlaskForm):
     search = StringField('search', validators=[DataRequired()])
 
 
+class FrameForm(FlaskForm):
+    mode = SelectField('Set Mode', default='Index', choices=[('Index', 'Index'), ('Pivot', 'Pivot')])
+    index = SelectField('Set Index', choices=[])
+    group = SelectField('Set group', choices=[])
+
+
 class QueryForm(FlaskForm):
-    model = StringField('model',  validators=[DataRequired()])
-    # this will need js in order to make it a datetime picker
-    start = DateField('Start', format="%m/%d/%Y",  validators=[DataRequired()])
-    end = DateField('End', format="%m/%d/%Y",  validators=[DataRequired()])
+    model = SelectField('Model List', choices=[])
+    start = DateField(
+        'Start', format='%Y-%m-%d',
+        default=datetime.today().date,
+        validators=[DataRequired()]
+    )
+    end = DateField(
+        'End', format='%Y-%m-%d',
+        default=datetime.today().date,
+        validators=[DataRequired()]
+    )
 
 
 class SaveForm(FlaskForm):

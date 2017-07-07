@@ -4,8 +4,8 @@ from pandas import read_sql
 
 from app import app
 from app.core import get_count
-from app.report.models import User
-from app.report.src.pandas_page import PandasPage
+from app.src.pandas_page import PandasPage
+from app.user.models import User
 
 # from app.src.save_widget import SaveWidget
 

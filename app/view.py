@@ -6,6 +6,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import app, lm, si
 from app.core import get_count, redirect_back, get_redirect_target  # , populate_model, print_register
 from app.database import db_session
+from app.database import model_registry
 from app.templates.partials.forms import LoginForm, SearchForm
 from app.user.models import User
 
@@ -19,26 +20,14 @@ def before_request():
         db_session.add(g.user)
         db_session.commit()
         g.session = db_session
-        # if app.model_registry.needs_init:
-        #     print('populating registry')
-        #     populate_model()
-        # else:
-        #     print_register()
-        g.model_registry = app.model_registry
+        g.model_registry = model_registry
         g.report_date = datetime.today().date()
         if app.config['ENABLE_SEARCH']:
             si.register_class(User)  # update whoosh with User information
-            if app.model_registry:
-                for model in app.model_registry:
-                    try:
-                        model.metadata.create_all(g.session.bind)  # Make schema and bind to engine
-                        si.register_class(model)  # update whoosh to any changes to the schema model
-                    except TypeError:
-                        print(model, type(model), dir(model))
-                        raise
-                    except AttributeError:
-                        print(model, type(model), dir(model))
-                        raise
+            if model_registry:
+                for model in model_registry:
+                    print(model)
+                    si.register_class(model)
             g.search_form = SearchForm()
 
 
@@ -57,8 +46,12 @@ def teardown(error):
                 session.commit()
                 print('removed some records')
                 flash('Removed {number} of records from {model_name}'.format(number=len(mm), model_name='sla_report'))
-    if session:
-        session.remove()     # Close scoped session
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    print('i def closed this session')
+    db_session.remove()     # Be certain than the session closes
 
 
 @app.errorhandler(404)

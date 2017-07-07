@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer
 from sqlalchemy_utils import Timestamp, generic_repr
-from sqlalchemy.ext.declarative import declarative_base, declared_attr
+from sqlalchemy.ext.declarative import declared_attr
 
 
 @generic_repr

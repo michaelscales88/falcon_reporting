@@ -3,14 +3,14 @@ from urllib.parse import urlparse, urljoin
 
 import flask_excel as excel
 # from app.models.base import Base
-from app.src.call_center import CallCenter
+from app.report.src.call_center import CallCenter
 from flask import g, flash, redirect, url_for, abort, request
 from pandas import DataFrame, read_sql
 from sqlalchemy import func
 
 from app import app
 from app.database import rebase
-from app.report.models import model_factory
+from app.report.models.custom_model import model_factory
 from app.report.src.query_decoder import QueryDecoder
 
 # Query decoder identifies metadata about an incoming table/subtable

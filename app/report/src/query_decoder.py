@@ -1,16 +1,16 @@
 from pandas import DataFrame
-from sqlalchemy import Column
+from sqlalchemy import Column, Text, DateTime
 import numpy as np
 from datetime import datetime
 
-from app import db
+# from app import db
 
 
 COLUMNS = {
-    np.object_: db.Text,
-    np.int64: db.Text,
-    np.datetime64: db.DateTime,
-    datetime: db.DateTime
+    np.object_: Text,
+    np.int64: Text,
+    np.datetime64: DateTime,
+    datetime: DateTime
 }
 
 
@@ -49,21 +49,21 @@ class QueryDecoder(object):
                 # 'autoload_with': db.engine,
 
             },
-            '__searchable__': [name for name, column in columns.items() if isinstance(column.type, db.Text)]
+            '__searchable__': [name for name, column in columns.items() if isinstance(column.type, Text)]
         }
         return table_info['__tablename__'], columns, table_info
 
     @staticmethod
     def make_searchable(model):
-        search_attributes = [name for name, column in {}.items() if isinstance(column.type, db.Text)]
+        search_attributes = [name for name, column in {}.items() if isinstance(column.type, Text)]
         return setattr(model, '__searchable__', search_attributes)
 
     @staticmethod
     def model_info(model):
         print(model)
-        print(model.__name__)
-        print(model.__base__)
-        print(model.__tablename__)
-        print(model.__searchable__)
+        print('name', model.__name__)
+        print('base', model.__base__)
+        print('tablename', model.__tablename__)
+        print('searchable', model.__searchable__)
         print(model.__table_args__)
         print(model.__table__.columns.keys())
