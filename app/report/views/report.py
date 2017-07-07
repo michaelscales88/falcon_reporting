@@ -33,6 +33,7 @@ def report(page=1):
         return redirect(url_for('index.index', page=1))
 
     cached_list = cache(query.all(), pk='call_id', subkey='event_id')
+    print(cached_list)
     test_report = sla_report(
         cached_list, 
         client_list=list(app.config['CLIENTS'])  # if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie']
@@ -45,7 +46,7 @@ def report(page=1):
         [col for col in test_report_content.items()]
     )
     df.name = 'sla_report'
-    df.index = [''] + list(app.config['CLIENTS'])  # if app.config.get('CLIENTS', None) else ['Torie', 'Sean', 'Susan', 'Debbie'])
+    df.index = list(app.config['CLIENTS']) + ['Summary']
 
     # Count the total number of records in the query
     # If query is None total is 0

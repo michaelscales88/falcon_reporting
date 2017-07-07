@@ -97,7 +97,7 @@ def sla_report(records, client_list=None):
 
     # Process Step
     for record in records:
-        row_name = str(record.get('Unique Id1'))  # This is how we bind our client settings
+        row_name = str(record.get('Unique Id1')).replace("'", '')  # This is how we bind our client settings
         if row_name in test_output.rownames and time(hour=7) <= record.get('Start Time').time() <= time(hour=19):
             call_duration = record.get('End Time') - record.get('Start Time')
             talking_time = record.get('Event Summary').get('4', timedelta(0))
@@ -189,7 +189,7 @@ def sla_report(records, client_list=None):
 
         try:
             test_output[row_name, 'Incoming Lost (%)'] = '{0:.1%}'.format(
-                (test_output[row_name, 'I/C Lost'] + test_output[row_name, 'I/C Lost'])
+                (test_output[row_name, 'I/C Lost'] + test_output[row_name, 'Voice Mails'])
                 / test_output[row_name, 'I/C Presented']
             )
         except ZeroDivisionError:

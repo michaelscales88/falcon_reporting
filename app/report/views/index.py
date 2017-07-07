@@ -25,13 +25,18 @@ def index(page=1):
     model_name = query_form.model.data
     print(g.model_registry[model_name])
     # if request.method == 'GET':
-    query = query_model(app.config['DEFAULT_MODEL'], g.report_date, page, app.config['POSTS_PER_PAGE'])
+    query = query_model(
+        app.config['DEFAULT_MODEL'] if query_form.model.data == 'None' else query_form.model.data,
+        query_form.start.data,
+        page,
+        app.config['POSTS_PER_PAGE']
+    )
     # print('GET', app.config['DEFAULT_MODEL'], query)
 
     if not query:
         print(not query)
         print('added records. query:', query)
-        records = get_connection(g.report_date)
+        records = get_connection(query_form.start.data)
         insert_records(g.session, 'sla_report', records)
         # return redirect(url_for('builder.records', back='index.index'))
         return redirect(url_for('index.index', page=1))
@@ -40,18 +45,16 @@ def index(page=1):
     # If query is None df is an empty frame
     df = get_frame(query, name='sla_report')
     if frame_form.is_submitted():
-        if frame_form.mode.data == 'Index':
-            print(frame_form.mode.data)
+        form_name = request.form.get('form-name')
+        if form_name == 'frame' and frame_form.mode.data == 'Index':
             df.set_index([frame_form.index.data, frame_form.group.data], inplace=True)
-        elif frame_form.mode.data == 'Pivot':
+        elif form_name == 'frame' and frame_form.mode.data == 'Pivot':
             df.unstack()
             # df = df.pivot(index=str(frame_form.index.data), columns=frame_form.group.data)['event_id']
             df = pivot_table(df, index=frame_form.index.data, columns=frame_form.group.data)
             df.name = 'sla_report'
         else:
             pass
-
-
 
     # Count the total number of records in the query
     # If query is None total is 0
@@ -68,6 +71,9 @@ def index(page=1):
             #     query, offset, total = query_model(query_form.model.data, g.report_date, page, app.config['POSTS_PER_PAGE'])
 
     query_form.model.choices = [(c.__name__, c.__name__) for c in g.model_registry]
+    query_form.model.data = (query_form.model.id
+                             if query_form.model
+                             else app.config['DEFAULT_MODEL'])
     frame_form.index.choices = [(l, l) for l in list(df)]
     frame_form.group.choices = frame_form.index.choices
     pf = PandasPage(df, page, app.config['POSTS_PER_PAGE'], total)
