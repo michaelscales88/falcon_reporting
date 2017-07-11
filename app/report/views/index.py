@@ -3,7 +3,7 @@ from flask_login import login_required
 from pandas import pivot_table
 
 from app import app
-from app.core import query_model, insert_records, get_connection, save, get_count, get_frame
+from app.core import query_model, insert_records, get_connection, save, get_count
 from app.src.pandas_page import PandasPage
 from app.templates.partials.forms import QueryForm, SaveForm, FrameForm
 
@@ -25,6 +25,7 @@ def index(page=1):
     model_name = query_form.model.data
     print(g.model_registry[model_name])
     # if request.method == 'GET':
+    print('trying to get records for date', query_form.start.data)
     query = query_model(
         app.config['DEFAULT_MODEL'] if query_form.model.data == 'None' else query_form.model.data,
         query_form.start.data,
