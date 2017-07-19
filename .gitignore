@@ -89,13 +89,15 @@ celerybeat-schedule
 venv/
 ENV/
 
-# Spyder project settings
+# Spyder project user
 .spyderproject
 
-# Rope project settings
+# Rope project user
 .ropeproject
 
 # dB Stuff
 *.db
 db_repository/
 tmp/
+.idea/codeStyleSettings.xml
+clutter/

@@ -18,8 +18,8 @@ from app.src.flask_extended import Flask
 app = Flask(__name__)
 api = Api(app=app)
 api_bp = Blueprint('api', __name__)
-app.config.from_pyfile('settings/default_config.py')
-app.config.from_yaml(join(app.root_path, 'settings/clients.yml'))
+app.config.from_pyfile('user/default_config.py')
+app.config.from_yaml(join(app.root_path, 'user/clients.yml'))
 # app.debug = config.DEBUG
 # app.secret_key = config.SECRET_KEY
 
@@ -57,7 +57,7 @@ def before_request():
 def teardown(error):
     db = getattr(g, 'db', None)
     if db:
-        db.remove()     # Close scoped session
+        db.remove_image()     # Close scoped session
 
 
 @app.errorhandler(OperationalError)     # Give this it's own page eventually
@@ -78,4 +78,4 @@ app.register_blueprint(api_bp)
 
 # read the SO below -> modify views and how they're being rendered
 # https://stackoverflow.com/questions/15501518/dynamic-navigation-in-flask/15525226#15525226
-# TODO extending blueprints: http://flask.pocoo.org/docs/0.12/patterns/appfactories/
+# TODO extending views: http://flask.pocoo.org/docs/0.12/patterns/appfactories/

@@ -51,7 +51,7 @@ def teardown(error):
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     print('i def closed this session')
-    db_session.remove()     # Be certain than the session closes
+    db_session.remove_image()     # Be certain than the session closes
 
 
 @app.errorhandler(404)

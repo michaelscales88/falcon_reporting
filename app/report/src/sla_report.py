@@ -98,7 +98,7 @@ def sla_report(records, client_list=None):
     # Process Step
     for record in records:
         print('passing records')
-        row_name = str(record.get('Unique Id1')).replace("'", '')  # This is how we bind our client settings
+        row_name = str(record.get('Unique Id1')).replace("'", '')  # This is how we bind our client user
         print(row_name)
         print(time(hour=7) <= record.get('Start Time').time() <= time(hour=19))
         print(row_name in test_output.rownames)

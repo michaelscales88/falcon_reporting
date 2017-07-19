@@ -2,29 +2,19 @@ from __future__ import unicode_literals
 
 from flask_login import LoginManager
 from os import environ
-
-# from app.database import init_db
 from app.report.src.model_registry import ModelRegistry
 from app.src.flask_extended import Flask
 
 app = Flask(__name__, instance_relative_config=True)
 
 
-# Load default settings
+# Load default user
 app.config.from_object('app.default_config.DevelopmentConfig')
 
 # Load the configuration from the instance folder
 app.config.from_pyfile('app.cfg', silent=True)
 if not app.debug:
     app.config.from_yaml('clients.yml', silent=True)
-
-# Create api
-# api = Api(app=app)
-# api_bp = Blueprint('api', __name__)
-
-# Connection to db
-# db = SQLAlchemy(app)
-# init_db()
 
 
 # Get a model/session registry
@@ -84,10 +74,3 @@ app.register_blueprint(index.mod)
 app.register_blueprint(report.mod)
 app.register_blueprint(search.mod)
 app.register_blueprint(builder.mod)
-
-# Add api resources
-# api.add_resource(IndexView, '/df/<int:offset>/<int:per_page>')
-
-# Register the API to the app
-# app.register_blueprint(api_bp)
-

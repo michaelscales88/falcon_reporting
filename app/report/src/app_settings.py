@@ -7,8 +7,8 @@ from time import sleep
 
 
 # http://www.voidspace.org.uk/python/articles/configobj.shtml <- this has examples of configspec
-# TODO add config writer interface E.g. adding clients, modify settings, etc
-# TODO 2 make this class "static" so that it could produce settings dictionaries for multiple instances
+# TODO add config writer interface E.g. adding clients, modify user, etc
+# TODO 2 make this class "static" so that it could produce user dictionaries for multiple instances
 class AppSettings(ConfigObj):
 
     def __init__(self, app=None, file_name=None):
@@ -30,7 +30,7 @@ class AppSettings(ConfigObj):
                 self.init_and_validate()
         else:
             sleep(.5)
-            raise SystemError('No application or settings for AppSettings')
+            raise SystemError('No application or user for AppSettings')
 
     @property
     def f_name(self):
@@ -46,13 +46,13 @@ class AppSettings(ConfigObj):
 
     @property
     def settings_directory(self):
-        return join(dirname(dirname(__file__)), 'settings')
+        return join(dirname(dirname(__file__)), 'user')
 
     def setting(self, *keys, rtn_val=()):
         try:
             rtn_val = reduce(dict.__getitem__, keys, self)
         except (KeyError, TypeError):
-            print('Could not find settings: {settings}'.format(settings=keys))
+            print('Could not find user: {settings}'.format(settings=keys))
         return rtn_val
 
     def init_and_validate(self):

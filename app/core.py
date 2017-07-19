@@ -17,18 +17,6 @@ from app.report.src.query_decoder import QueryDecoder
 decoder = QueryDecoder()
 
 
-# def populate_model():
-#     model_registry = getattr(app, 'model_registry', None)
-#     if model_registry:
-#         model_registry.init_register(Base, db.engine)
-#
-#
-# def print_register():
-#     model_registry = getattr(app, 'model_registry', None)
-#     if model_registry:
-#         model_registry.print_register(Base, db.engine)
-
-
 def get_connection(date):
     print(app.config['CLIENTS'])
     return CallCenter.example(
